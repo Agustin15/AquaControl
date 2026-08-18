@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">aquacontrol.json</string>
+    <string name="title_activity_main">aquacontrol.json</string>
+    <string name="package_name">aguacontrol.app</string>
+    <string name="custom_url_scheme">aguacontrol.app</string>
+</resources>

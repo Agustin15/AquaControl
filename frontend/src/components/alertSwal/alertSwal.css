@@ -1,0 +1,78 @@
+.titleCustom,
+.msg {
+    font-size: 16px;
+    margin-top: -1rem;
+}
+
+.titleLoading {
+    font-size: 13px;
+}
+
+.msg {
+    margin-top: -0.3rem;
+}
+
+.confirmButtonSuccessCustom,
+.confirmButtonErrorCustom,
+.confirmButtonWarningCustom {
+    height: 2.2rem;
+    width: 5rem;
+    font-size: 13px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    margin-top: -0.3rem;
+}
+
+.confirmButtonSuccessCustom {
+    background: rgb(21, 174, 44);
+}
+
+.confirmButtonSuccessCustom:hover {
+    background: rgb(21, 152, 41);
+}
+
+.confirmButtonErrorCustom {
+    background: rgb(231, 10, 10);
+}
+
+.confirmButtonErrorCustom:hover {
+    background: rgb(213, 10, 10);
+}
+
+.confirmButtonWarningCustom {
+    background: rgb(232, 186, 59);
+}
+
+.confirmButtonWarningCustom:hover {
+    background: rgb(208, 166, 51);
+}
+
+
+.iconCustom {
+    transform: scale(0.7);
+    margin-top: 0.5rem;
+}
+
+.confirmDeleteButton,
+.cancelDeleteButton {
+    height: 2.2rem;
+    width: 9rem;
+    font-size: 13px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    margin-top: -0.3rem;
+    border-radius: 4px;
+}
+
+.cancelDeleteButton {
+    background: rgb(162, 162, 162);
+}
+
+.confirmDeleteButton {
+    background: rgb(247, 39, 39);
+}
+

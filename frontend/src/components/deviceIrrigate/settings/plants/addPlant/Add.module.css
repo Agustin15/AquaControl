@@ -1,0 +1,59 @@
+.add {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 55%;
+    height: 85%;
+    border-radius: 5px;
+    background: white;
+    padding-bottom: 2rem;
+}
+
+.add .header {
+    width: 100%;
+    height: 3.5rem;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 0.4rem;
+    position: relative;
+    color: white;
+    font-size: 12px;
+    background: rgb(1, 32, 60);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.add .header img {
+    width: 21px;
+    height: 21px;
+    margin-left: 0.5rem;
+}
+
+.add .header button {
+    background: none;
+    height: auto;
+    width: auto;
+    font-size: 12px;
+    font-weight: bold;
+    border: none;
+    position: absolute;
+    color: white;
+    top: 0.2rem;
+    right: 0.3rem;
+}
+
+.add.option {
+    width: 95%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 0.5rem;
+}
+
+.add .option button {
+    color: rgb(18, 113, 185);
+    background: none;
+    border: none;
+    font-size: 12px;
+}

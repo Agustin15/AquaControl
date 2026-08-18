@@ -1,0 +1,189 @@
+.containSignUp,
+.title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    gap: 1rem;
+
+}
+
+.containSignUp {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    width: 100vw;
+    height: auto;
+    padding-bottom: 1rem;
+}
+
+.containSignUp .title {
+    gap: 0.5rem;
+    font-size: 17px;
+}
+
+.containSignUp .title img {
+    width: 66px;
+    height: 66px;
+}
+
+.containSignUp form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: auto;
+    gap: 1rem;
+}
+
+.containSignUp form h4 {
+    font-size: 18px;
+}
+
+.containSignUp form .columnInput,
+.containSignUp .columnInputPassword {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    width: 70%;
+    height: auto;
+    position: relative;
+}
+
+.containSignUp form .columnInput input,
+.containSignUp form .columnInputPassword input {
+    width: 90%;
+    height: 3rem;
+    border: none;
+    border-radius: 5px;
+    background: rgb(255, 255, 255);
+    outline: none;
+    font-size: 16px;
+    padding-left: 2rem;
+}
+
+.containSignUp form .columnInput input::placeholder,
+.containSignUp form .columnInputPassword input::placeholder {
+    font-size: 13px;
+}
+
+.containSignUp form .columnInput label,
+.containSignUp form .columnInputPassword label {
+    width: 95%;
+    font-size: 15px;
+}
+
+.containSignUp form .columnInput input[type="text"] {
+    background-image: url("../../assets/img/user.png");
+    background-size: 21px;
+    background-position-x: 7px;
+    background-position-y: 15px;
+    background-repeat: no-repeat;
+}
+
+.containSignUp form .columnInputPassword input {
+    background-image: url("../../assets/img/lock.png");
+    background-size: 21px;
+    background-position-x: 7px;
+    background-position-y: 15px;
+    background-repeat: no-repeat;
+}
+
+.containSignUp form .viewPassword {
+    width: 23px;
+    height: 23px;
+    position: absolute;
+    right: 1.3rem;
+    top: 2.7rem;
+}
+
+.containSignUp form .inputError {
+    border: 3px solid rgb(226, 79, 79);
+}
+
+.containSignUp form .msjError {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    width: 95%;
+    height: 2rem;
+    border-radius: 5px;
+}
+
+.containSignUp form .msjError img {
+    width: 18px;
+    height: 18px;
+}
+
+.containSignUp form .msjError p {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 0.3rem;
+    color: white;
+    background: rgb(202, 77, 77);
+    width: auto;
+    padding: 0.3rem;
+    border-radius: 5px;
+    font-size: 12px;
+}
+
+.containSignUp form button {
+    width: 15rem;
+    height: 2.3rem;
+    background: rgb(53, 53, 53);
+    color: white;
+    border: none;
+    border-radius: 7px;
+    font-weight: bold;
+}
+
+.containSignUp form button:hover {
+    background: rgb(46, 46, 46);
+}
+
+.validationPassword {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 96%;
+    list-style: none;
+    font-size: 13px;
+    gap: 1rem;
+}
+
+.validationPassword li {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: start;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.validationPassword img {
+    width: 21px;
+    height: 21px;
+}
+
+.validationPassword p {
+    background: none;
+}
+
+.alreadyHaveAccount {
+    font-size: 14px;
+}
+
+.alreadyHaveAccount a {
+    text-decoration: none;
+    color: white;
+}
+
+.alreadyHaveAccount a:hover {
+    text-decoration: underline;
+    color: white;
+}

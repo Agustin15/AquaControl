@@ -1,0 +1,50 @@
+.takePhoto {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    width: 85%;
+    gap: 0.7rem;
+    font-size: 13px;
+}
+
+.takePhoto img {
+    width: 250px;
+    height: 130px;
+    border-radius: 10px;
+}
+
+.takePhoto .row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.takePhoto .row button {
+    color: white;
+    font-weight: bold;
+    border: none;
+    font-size: 12px;
+    width: 8rem;
+    height: 1.8rem;
+    border-radius: 5px;
+}
+
+
+.takePhoto .btnTake {
+    background: rgb(3, 142, 234);
+}
+
+.takePhoto .btnTake:hover {
+    background: rgb(4, 131, 215);
+
+}
+
+
+.takePhoto .btnDelete {
+    background: rgb(205, 51, 51);
+}
+
+.takePhoto .btnDelete:hover {
+    background: rgb(139, 32, 32);
+}

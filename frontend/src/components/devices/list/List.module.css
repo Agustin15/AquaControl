@@ -1,0 +1,70 @@
+.listDevices {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: start;
+    justify-content: start;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+
+}
+
+.listDevices li {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    width: auto;
+    height: auto;
+    border-radius: 5px;
+    background-color: rgba(2, 34, 67, 0.416);
+    font-size: 13px;
+    font-weight: bold;
+
+}
+
+.listDevices li img {
+    width: 49px;
+    height: 49px;
+}
+
+.options {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.options button {
+    background: none;
+    border: none;
+
+}
+
+.options button img {
+    width: 20px;
+    height: 20px;
+}
+
+.options button .iconDelete {
+    width: 25px;
+    height: 25px;
+}
+
+.listDevices li .watch {
+    width: 5rem;
+    height: 1.5rem;
+    background: rgb(22, 169, 22);
+    border: none;
+    font-weight: bold;
+    color: white;
+    font-size: 12px;
+    border-radius: 4px;
+}
+
+.listDevices li .watch:hover {
+    background: rgb(21, 157, 21);
+
+}

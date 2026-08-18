@@ -1,0 +1,55 @@
+.formEdit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: black;
+    width: 100%;
+    overflow-y: scroll;
+    padding-bottom: 1rem;
+}
+
+.formEdit .info {
+    font-size: 10px;
+    width: 85%;
+    margin-top: 0.5rem;
+}
+
+.formEdit .columnInput {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 0.4rem;
+    margin-top: 1rem;
+    font-size: 13px;
+    width: 85%;
+}
+
+
+
+.formEdit .columnInput input {
+    width: 100%;
+    height: 2.2rem;
+    border: 1px solid rgb(104, 104, 104);
+    border-radius: 5px;
+    padding-left: 0.5rem;
+}
+
+.formEdit .columnInput .inputError {
+    border: 2px solid rgb(252, 62, 62);
+}
+
+.formEdit .columnInput p {
+    color: red;
+    font-size: 11px;
+}
+
+.formEdit button {
+    margin-top: 1rem;
+    width: 12rem;
+    padding: 0.4rem 0 0.4rem 0;
+    background: rgb(16, 109, 195);
+    border: none;
+    color: white;
+    border-radius: 5px;
+    font-weight: bold;
+}

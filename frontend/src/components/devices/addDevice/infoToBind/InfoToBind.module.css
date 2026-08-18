@@ -1,0 +1,11 @@
+.infoToBind {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 0.6rem;
+    width: 95%;
+    height: 95%;
+    overflow-y: scroll;
+    color: black;
+    font-size: 12px;
+}

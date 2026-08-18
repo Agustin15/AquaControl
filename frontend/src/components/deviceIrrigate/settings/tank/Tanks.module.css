@@ -1,0 +1,186 @@
+.containTanks {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+
+.addTank {
+    width: 95%;
+    height: auto;
+}
+
+.addTank button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    width: 9rem;
+    padding: 0.3rem;
+    height: 2.2rem;
+    background: rgba(4, 27, 71, 0.374);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 12px;
+}
+
+.addTank button img {
+    width: 19px;
+    height: 19px;
+}
+
+.loadingFilter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+    font-size: 13px;
+}
+
+.loadingFilter p,
+.noTanks p {
+    margin: 0;
+    padding: 0;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+}
+
+.noTanks {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    color: white;
+    font-weight: bold;
+    width: 99%;
+    margin-top: 1rem;
+    font-size: 13px;
+}
+
+.noTanks img {
+    width: 60px;
+    height: 60px;
+}
+
+.loader {
+    --color-1: #fff;
+    --color-2: #311e81;
+    --size: 1px;
+    width: calc(30 * var(--size));
+    height: calc(30 * var(--size));
+    border: calc(2 * var(--size)) solid var(--color-1);
+    border-bottom-color: var(--color-2);
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.tanks {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    width: 95%;
+    gap: 1.5rem;
+    margin-top: 0rem;
+    padding-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.tanks li {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 0 0.2rem 0 0.2rem;
+    width: auto;
+    height: auto;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: bold;
+    color: white;
+
+}
+
+.tanks li img {
+    width: 35px;
+    height: 35px;
+}
+
+.tanks li .edit {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.tanks li .edit button {
+    background: none;
+    border: none;
+}
+
+.tanks li .edit button img {
+    width: 22px;
+    height: 22px;
+}
+
+.tanks li .edit input {
+    width: 2.7rem;
+    height: 1.3rem;
+    font-size: 11px;
+    padding-left: 0.4rem;
+    background: none;
+    color: white;
+    border: none;
+    background: #133368;
+    border-radius: 5px;
+}
+
+.tanks li .edit input::placeholder {
+    color: white;
+    opacity: 55%;
+    font-size: 10px;
+}
+
+.options {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0;
+}
+
+.options button {
+    background: none;
+    box-shadow: none;
+    border: none;
+    width: auto;
+}
+
+.options button img {
+    width: 19px;
+    height: 19px;
+}
+
+.options .iconDelete {
+    width: 22px;
+    height: 22px;
+}

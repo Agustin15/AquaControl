@@ -1,0 +1,28 @@
+.humidityPlant {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 0.5rem;
+    font-size: 12px;
+    color: white;
+}
+
+.humidityPlant .row {
+    display: flex;
+    justify-content: center;
+    align-items: end;
+}
+
+
+.humidityPlant img {
+    width: 85px;
+    height: 85px;
+}
+
+.humidityPlant .details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}

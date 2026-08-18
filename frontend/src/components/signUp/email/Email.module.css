@@ -1,0 +1,66 @@
+.columnEmailInput {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    width: 70%;
+    height: auto;
+}
+
+.columnEmailInput input {
+    width: 90%;
+    height: 3rem;
+    border: none;
+    border-radius: 5px;
+    background: rgb(255, 255, 255);
+    outline: none;
+    font-size: 16px;
+    padding-left: 2rem;
+}
+.columnEmailInput input::placeholder {
+    font-size: 13px;
+}
+
+.columnEmailInput label {
+    width: 95%;
+    font-size: 15px;
+}
+
+.columnEmailInput input {
+    background-image: url("../../../assets/img/email.png");
+    background-size: 21px;
+    background-position-x: 7px;
+    background-position-y: 15px;
+    background-repeat: no-repeat;
+}
+
+.columnEmailInput .inputError {
+    border: 3px solid rgb(226, 79, 79);
+}
+
+.columnEmailInput .msjError {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    width: 95%;
+    height: 2rem;
+    border-radius: 5px;
+}
+.columnEmailInput .msjError img {
+    width: 18px;
+    height: 18px;
+}
+
+.columnEmailInput .msjError p {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 0.3rem;
+    color: white;
+    background: rgb(202, 77, 77);
+    width: auto;
+    padding: 0.3rem;
+    border-radius: 5px;
+    font-size: 12px;
+}

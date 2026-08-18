@@ -1,0 +1,47 @@
+
+.weekdays {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 99%;
+}
+
+.weekdays ul {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 0.7rem;
+    width: 99%;
+    overflow-x: scroll;
+    scrollbar-width: none;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.weekdays ul li {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 7rem;
+    width: auto;
+    height: 1.6rem;
+    background-color: rgba(32, 32, 32, 0.267);
+    color: white;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+.weekdays ul .selected {
+    background-color: rgba(0, 0, 0, 0.404);
+}
+
+.weekdays ul li button {
+    background: none;
+    width: auto;
+    height: auto;
+    border: none;
+    color: white;
+    font-size: 13px;
+}

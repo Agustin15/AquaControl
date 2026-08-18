@@ -1,0 +1,28 @@
+.currentIrrigate {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: auto;
+    border-radius: 9px;
+    padding-bottom: 1rem;
+
+
+}
+
+.currentIrrigate .startIrrigate {
+    width: 10rem;
+    height: 2.2rem;
+    border-radius: 20px;
+    border: none;
+    color: white;
+    background: rgb(36, 161, 46);
+    font-weight: bold;
+    box-shadow: 2px 2px 2px #22547c;
+}
+
+.currentIrrigate .startIrrigate:hover,
+.currentIrrigate .disabled {
+    background: rgb(30, 127, 38);
+    box-shadow: none;
+}

@@ -1,0 +1,21 @@
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    font-size: 14px;
+    color: white;
+
+}
+
+.pagination input {
+    font-size: 13px;
+    border: 1px solid white;
+    width: 2rem;
+    height: 1.7rem;
+    background: none;
+    color: white;
+    border-radius: 3px;
+    padding-left: 0.3rem;
+}
