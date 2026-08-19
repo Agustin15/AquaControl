@@ -23,8 +23,11 @@ dist-ssr
 *.sln
 *.sw?
 
-.bin
-.obj
+# Carpetas de compilación de ASP.NET / .NET
+[Bb]in/
+[Oo]bj/
+
+#archivo de declaraciond de variables de entorno
 .env
-mqttCloud.txt
+
 

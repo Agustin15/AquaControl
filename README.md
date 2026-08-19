@@ -1,13 +1,12 @@
 # AquaControl
  
- <img src="https://img.shields.io/badge/v11.16.0-636363?style=flat&logo=NPM&logoColor=%23FFFFFF&logoSize=25&label=NPM&labelColor=%2329A345&color=%23636363">
+ <img src="https://img.shields.io/badge/v11.16.0-636363?style=flat&logo=NPM&logoColor=%23FFFFFF&logoSize=25&label=NPM&labelColor=%2329A345&color=%23636363"> <img src="https://img.shields.io/badge/Framework%208.0-512BD4?style=flat&logo=.NET&logoColor=%23FFFFFF&logoSize=25&label=%20&labelColor=%23512BD4&color=%23512BD4">
 
-  <img src="https://img.shields.io/badge/Framework%208.0-512BD4?style=flat&logo=.NET&logoColor=%23FFFFFF&logoSize=25&label=%20&labelColor=%23512BD4&color=%23512BD4">
 
 Consiste en un sistema inteligente de riego automatizado basado en el microcontrolador ESP32 y tecnologías IoT (Internet de las Cosas).
 El sistema está diseñado para optimizar el recurso hídrico y asegurar el cuidado autónomo de las plantas. Sus funciones principales son:
 
-Control del nivel del tanque:Mide de forma constante el nivel de agua disponible en el depósito de reserva para prevenir el funcionamiento en seco de la bomba.
+Control del nivel del tanque: Mide de forma constante el nivel de agua disponible en el depósito de reserva para prevenir el funcionamiento en seco de la bomba.
 
 Datos periodicos cada 1 hora durante la semana sobre el estado del tanque y de la humedad de planta
 
@@ -70,12 +69,24 @@ Conectividad en tiempo real:Se transfieren datos constantemente usando el protoc
 
 > Navegar a backend
 
-    cd backend/AquaControl/Api
+    cd backend/AquaControlApi
       
+> Instalar dependencias proyecto Api  
+
+       dotnet restore
+    
 #### Dependencias en Api.csproj para instalar con NuGet
 
 - [@dotenv.net 4.0.2](https://www.nuget.org/packages/dotenv.net)
 - [@Microsoft.AspNetCore.Authentication.JwtBearer 8.0.29](https://www.nuget.org/packages/Microsoft.AspNetCore.Authentication.JwtBearer/8.0.29)
+
+> Instalar dependencias en proyecto DAL
+
+       dotnet restore
+    
+#### Dependencias en DAL.csproj
+
+- [@Microsoft.Data.SqlClient 7.0.2](https://www.nuget.org/packages/microsoft.data.sqlclient)
 
 ### Variables de entorno
 
