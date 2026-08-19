@@ -2,6 +2,8 @@
  
  <img src="https://img.shields.io/badge/v11.16.0-636363?style=flat&logo=NPM&logoColor=%23FFFFFF&logoSize=25&label=NPM&labelColor=%2329A345&color=%23636363">
 
+  <img src="https://img.shields.io/badge/Framework%208.0-512BD4?style=flat&logo=.NET&logoColor=%23FFFFFF&logoSize=25&label=%20&labelColor=%23512BD4&color=%23512BD4">
+
 Consiste en un sistema inteligente de riego automatizado basado en el microcontrolador ESP32 y tecnologías IoT (Internet de las Cosas).
 El sistema está diseñado para optimizar el recurso hídrico y asegurar el cuidado autónomo de las plantas. Sus funciones principales son:
 
