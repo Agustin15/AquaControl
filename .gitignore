@@ -11,8 +11,6 @@ node_modules
 dist
 dist-ssr
 *.local
-bin
-obj
 
 # Editor directories and files
 .vscode/*
@@ -25,6 +23,8 @@ obj
 *.sln
 *.sw?
 
+bin
+obj
 .env
 mqttCloud.txt
 

@@ -55,6 +55,7 @@ Conectividad en tiempo real:Se transfieren datos constantemente usando el protoc
 - [@react-router](https://github.com/remix-run/react-router)
 - [@mqtt](https://github.com/mqttjs/MQTT.js)
 
+
 ### Variables de entorno
 
      VITE_BACKEND_LOCALHOST=<url of backend>
@@ -65,6 +66,10 @@ Conectividad en tiempo real:Se transfieren datos constantemente usando el protoc
 
 #### Backend
 
+> Navegar a backend
+
+    cd backend/AquaControl/Api
+      
 #### Dependencias en Api.csproj para instalar con NuGet
 
 - [@dotenv.net 4.0.2](https://www.nuget.org/packages/dotenv.net)
