@@ -50,10 +50,10 @@ Conectividad en tiempo real:Se transfieren datos constantemente usando el protoc
 
 #### Dependencias
 
-- [@capacitor](https://capacitorjs.com/docs/getting-started)
+- [@capacitorjs](https://capacitorjs.com/docs/getting-started)
 - [@sweetalert2](https://sweetalert2.github.io/)
 - [@react-router](https://github.com/remix-run/react-router)
-- [@mqtt](https://github.com/mqttjs/MQTT.js)
+- [@mqtt.js](https://github.com/mqttjs/MQTT.js)
 
 
 ### Variables de entorno

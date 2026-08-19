@@ -23,8 +23,8 @@ dist-ssr
 *.sln
 *.sw?
 
-bin
-obj
+.bin
+.obj
 .env
 mqttCloud.txt
 
