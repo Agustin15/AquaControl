@@ -13,3 +13,4 @@ C:\develop\AquaControl\backend\AquaControlApi\DAL\obj\Debug\net8.0\DAL.dll
 C:\develop\AquaControl\backend\AquaControlApi\DAL\obj\Debug\net8.0\refint\DAL.dll
 C:\develop\AquaControl\backend\AquaControlApi\DAL\obj\Debug\net8.0\DAL.pdb
 C:\develop\AquaControl\backend\AquaControlApi\DAL\obj\Debug\net8.0\ref\DAL.dll
+C:\develop\AquaControl\backend\AquaControlApi\DAL\obj\Debug\net8.0\DAL.sourcelink.json

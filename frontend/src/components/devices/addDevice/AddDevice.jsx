@@ -31,7 +31,8 @@ export const AddDevice = () => {
     if (Object.values(valuesForm).some((value) => value.length == 0))
       return alertWarning("Debe completar los campos correctamente");
 
-    await fetchPostOrPut("POST", true);
+    const result = await fetchPostOrPut("POST", true);
+    if (result) getUserDevices();
   };
 
   return (

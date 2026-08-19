@@ -9,3 +9,4 @@ C:\develop\AquaControl\backend\AquaControlApi\Entities\obj\Debug\net8.0\Entities
 C:\develop\AquaControl\backend\AquaControlApi\Entities\obj\Debug\net8.0\refint\Entities.dll
 C:\develop\AquaControl\backend\AquaControlApi\Entities\obj\Debug\net8.0\Entities.pdb
 C:\develop\AquaControl\backend\AquaControlApi\Entities\obj\Debug\net8.0\ref\Entities.dll
+C:\develop\AquaControl\backend\AquaControlApi\Entities\obj\Debug\net8.0\Entities.sourcelink.json
