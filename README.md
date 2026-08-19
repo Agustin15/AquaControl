@@ -1,4 +1,6 @@
 # AquaControl
+ 
+ <img src="https://img.shields.io/badge/v11.16.0-636363?style=flat&logo=NPM&logoColor=%23FFFFFF&logoSize=25&label=NPM&labelColor=%2329A345&color=%23636363">
 
 Consiste en un sistema inteligente de riego automatizado basado en el microcontrolador ESP32 y tecnologías IoT (Internet de las Cosas).
 El sistema está diseñado para optimizar el recurso hídrico y asegurar el cuidado autónomo de las plantas. Sus funciones principales son:
@@ -16,9 +18,9 @@ Conectividad en tiempo real:Se transfieren datos constantemente usando el protoc
 
 - <img src="https://img.shields.io/badge/React.js--0c979c?style=flat&labelColor=0c979c&logo=react&logoColor=white&logoSize=auto" alt="React.js">
 - <img src="https://img.shields.io/badge/Javascript--f5ff0e?style=flat&labelColor=f5ff0e&logo=javascript&logoColor=black&logoSize=auto" alt="Javascript">
-- <img src="https://img.shields.io/badge/CSS--0c379c?style=flat&labelColor=0c379c&logo=css3&logoColor=white&logoSize=auto" alt="CSS">
-- <img src="https://img.shields.io/badge/.NET-5C2D91?style=for-the-badge&logo=.net&logoColor=white" alt=".NET badge">
-- <img src="https://github.com/mqttjs/MQTT.js/workflows/MQTT.js%20CI/badge.svg" >
+- <img src="https://img.shields.io/badge/CSS-2254C9?style=flat&logo=CSS&logoColor=%23FFFFFF&logoSize=25&label=%20&labelColor=%232254C9&color=%232254C9">
+- <img src="https://img.shields.io/badge/ASP.NET%20CORE%20-512BD4?style=flat&logo=.NET&logoColor=%23FFFFFF&logoSize=25&label=%20&labelColor=%23512BD4&color=%23512BD4">
+- <img src="https://img.shields.io/badge/MQTT-660066?style=flat&logo=mqtt&logoColor=%23FFFFFF&logoSize=25&label=%20&labelColor=%23660066&color=%23660066">
 - <img src="https://img.shields.io/badge/Microsoft_SQL_Server-CC2927" alt="SQL Server">
 
 
@@ -55,8 +57,26 @@ Conectividad en tiempo real:Se transfieren datos constantemente usando el protoc
 
 ### Variables de entorno
 
- VITE_BACKEND_LOCALHOST=<LOCALHOST_BACKEND_URL>
- VITE_FRONTEND_LOCALHOST=<LOCALHOST_FRONTEND_URL>
- VITE_URL_MQTT_BROKER=<MQTT_URL_BROKER>
- VITE_BROKER_USERNAME=<MQTT_ACCOUNT_USERNAME_BROKER>
- VITE_BROKER_PASSWORD=<MQTT_ACCOUNT_PASSWORD_BROKER>
+     VITE_BACKEND_LOCALHOST=<url of backend>
+     VITE_FRONTEND_LOCALHOST=<url of frontend>
+     VITE_URL_MQTT_BROKER=<url of your broker mqtt>
+     VITE_BROKER_USERNAME=<account username to access to your broker mqtt>
+     VITE_BROKER_PASSWORD=<account password to access to your broker mqtt>
+
+#### Backend
+
+#### Dependencias en Api.csproj para instalar con NuGet
+
+- [@dotenv.net 4.0.2](https://www.nuget.org/packages/dotenv.net)
+- [@Microsoft.AspNetCore.Authentication.JwtBearer 8.0.29](https://www.nuget.org/packages/Microsoft.AspNetCore.Authentication.JwtBearer/8.0.29)
+
+### Variables de entorno
+
+     STRING_CONNECTION=<string connection to connect SQL Server database >
+     ACCESS_TOKEN_SECRET_KEY=<secret key of token that will use the app to access to api>
+     REFRESH_TOKEN_SECRET_KEY=<secret key of token that will use the app to create new access token>
+     DEVICE_TOKEN_SECRET_KEY=<secret key that will use the Esp32 to access to api>
+     ACCESS_TOKEN_EXPIRED_MINUTES=<minutes access token expiration>
+     REFRESH_TOKEN_EXPIRED_MINUTES=<minutes refresh token expiration>
+     LOCALHOST_FRONTEND=<url of frontend>
+     LOCALHOST_BACKEND=<url of backend>
