@@ -84,7 +84,7 @@ export const LogsWeekdayProvider = ({ children }) => {
         : datetime.getHours();
 
     const minutes =
-      datetime.getHours() < 10
+      datetime.getMinutes() < 10
         ? "0" + datetime.getMinutes()
         : datetime.getMinutes();
 

@@ -65,7 +65,7 @@
 }
 
 .containDevices .addDevice {
-    width: 95%;
+    width: 91%;
     height: auto;
     margin-top: 1rem;
 }
@@ -78,7 +78,7 @@
     width: 13rem;
     padding: 0.3rem;
     height: 2.2rem;
-    background: rgba(4, 27, 71, 0.374);
+    background-color: rgba(23, 82, 140, 0.416);
     color: white;
     border: none;
     border-radius: 25px;

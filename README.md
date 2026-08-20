@@ -80,6 +80,16 @@ Conectividad en tiempo real:Se transfieren datos constantemente usando el protoc
 - [@dotenv.net 4.0.2](https://www.nuget.org/packages/dotenv.net)
 - [@Microsoft.AspNetCore.Authentication.JwtBearer 8.0.29](https://www.nuget.org/packages/Microsoft.AspNetCore.Authentication.JwtBearer/8.0.29)
 
+> Instalar dependencias proyecto Logic 
+
+       dotnet restore
+    
+#### Dependencias en Logic.csproj para instalar con NuGet
+
+- [@BCrypt.Net-Next 4.2.0](https://www.nuget.org/packages/BCrypt.Net-Next/)
+- [@System.IdentityModel.Tokens.Jwt 8.21.0](https://www.nuget.org/packages/system.identitymodel.tokens.jwt/)
+
+
 > Instalar dependencias en proyecto DAL
 
        dotnet restore
@@ -87,6 +97,7 @@ Conectividad en tiempo real:Se transfieren datos constantemente usando el protoc
 #### Dependencias en DAL.csproj
 
 - [@Microsoft.Data.SqlClient 7.0.2](https://www.nuget.org/packages/microsoft.data.sqlclient)
+- [@MQTTnet 5.2.0.1603](https://www.nuget.org/packages/mqttnet/)
 
 ### Variables de entorno
 

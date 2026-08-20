@@ -22,7 +22,7 @@ namespace Logic
         public async Task<object> Signup(User user)
         {
 
-            SqlConnection connection = new SqlConnection(Connection.Cnn);
+            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
             SqlTransaction transaction = null;
 
             try

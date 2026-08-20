@@ -52,7 +52,11 @@ export const WaterTankLogs = () => {
         {!loadingTanks && tanks.length > 0 && (
           <ul className={styles.tankList}>
             {tanks.map((tank, index) => (
-              <li key={index} onClick={() => handleClickTank(tank)}>
+              <li
+                className={tankSelected.id == tank.id ? styles.selected : ""}
+                key={index}
+                onClick={() => handleClickTank(tank)}
+              >
                 Tanque
               </li>
             ))}

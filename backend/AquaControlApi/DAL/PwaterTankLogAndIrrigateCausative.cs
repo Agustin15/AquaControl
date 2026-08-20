@@ -18,7 +18,7 @@ namespace DAL
             List<WaterTankLogAndIrrigateCausative> waterTankLogsWithIrrigateCausativeLastWeek =
                 new List<WaterTankLogAndIrrigateCausative>();
 
-            SqlConnection connection = new SqlConnection(Connection.Cnn);
+            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
             try
             {
                 SqlCommand command = new SqlCommand("WaterTankLogsWithIrrigateCausativeLastWeek", connection);

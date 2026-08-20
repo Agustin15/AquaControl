@@ -1,11 +1,16 @@
 ﻿using Entities;
 using Microsoft.Data.SqlClient;
+using MQTTnet;
+using MQTTnet.Formatter;
+using MQTTnet.Protocol;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace DAL
 {
@@ -14,7 +19,8 @@ namespace DAL
         public async Task Add(Tank tank)
         {
 
-            SqlConnection connection = new SqlConnection(Connection.Cnn);
+            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
+            SqlTransaction transaction = null;
 
             try
             {
@@ -27,11 +33,20 @@ namespace DAL
 
                 await connection.OpenAsync();
 
+                transaction = (SqlTransaction)await connection.BeginTransactionAsync();
+                command.Transaction = transaction;
+
                 await command.ExecuteNonQueryAsync();
+
+                await MqttClient.Instance.PublishMessage("device/tank", new { idDevice = tank.Device.Id, height = tank.Height });
+
+                await transaction.CommitAsync();
+
             }
             catch (Exception ex)
             {
-
+                if (transaction != null)
+                    await transaction.RollbackAsync();
                 throw new Exception(ex.Message);
             }
             finally
@@ -43,7 +58,8 @@ namespace DAL
         public async Task Update(Tank tank)
         {
 
-            SqlConnection connection = new SqlConnection(Connection.Cnn);
+            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
+            SqlTransaction transaction = null;
 
             try
             {
@@ -57,16 +73,25 @@ namespace DAL
 
                 await connection.OpenAsync();
 
+                transaction = (SqlTransaction)await connection.BeginTransactionAsync();
+
+                command.Transaction = transaction;
+
                 await command.ExecuteNonQueryAsync();
 
+                await MqttClient.Instance.PublishMessage("device/tank", new { idDevice = tank.Device.Id, height = tank.Height });
+
+                await transaction.CommitAsync();
             }
             catch (Exception ex)
             {
-
+                if (transaction != null)
+                    await transaction.RollbackAsync();
                 throw new Exception(ex.Message);
             }
             finally
             {
+
                 await connection.CloseAsync();
             }
         }
@@ -74,8 +99,8 @@ namespace DAL
         public async Task Delete(Tank tank)
         {
 
-            SqlConnection connection = new SqlConnection(Connection.Cnn);
-
+            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
+            SqlTransaction transaction = null;
             try
             {
 
@@ -85,8 +110,15 @@ namespace DAL
                 command.Parameters.AddWithValue("@idDevice", tank.Device.Id);
 
                 await connection.OpenAsync();
+
+                transaction = (SqlTransaction)await connection.BeginTransactionAsync();
+                command.Transaction = transaction;
+
                 await command.ExecuteNonQueryAsync();
 
+                await MqttClient.Instance.PublishMessage("device/tank", new { idDevice = tank.Device.Id, height = 0 });
+
+                await transaction.CommitAsync();
             }
             catch (Exception ex)
             {
@@ -95,6 +127,8 @@ namespace DAL
             }
             finally
             {
+                if (transaction != null)
+                    await transaction.RollbackAsync();
                 await connection.CloseAsync();
             }
         }
@@ -105,7 +139,7 @@ namespace DAL
 
             Tank tank = null;
 
-            SqlConnection connection = new SqlConnection(Connection.Cnn);
+            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
 
             try
             {
@@ -150,7 +184,7 @@ namespace DAL
 
             List<Tank> tanks = new List<Tank>();
 
-            SqlConnection connection = new SqlConnection(Connection.Cnn);
+            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
 
             try
             {

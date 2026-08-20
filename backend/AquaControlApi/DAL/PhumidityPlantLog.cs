@@ -14,7 +14,7 @@ namespace DAL
         public async Task Add(HumidityPlantLog humidityPlantLog)
         {
 
-            SqlConnection connection = new SqlConnection(Connection.Cnn);
+            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
             try
             {
                 SqlCommand command = new SqlCommand("AddHumidityPlantLog", connection);
@@ -43,7 +43,7 @@ namespace DAL
         {
 
             List<HumidityPlantLog> humidityPlantLogs = new List<HumidityPlantLog>();
-            SqlConnection connection = new SqlConnection(Connection.Cnn);
+            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
 
             try
             {

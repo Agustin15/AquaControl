@@ -3,9 +3,11 @@ using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace DAL
 {
@@ -15,7 +17,8 @@ namespace DAL
         public async Task Add(Plant plant)
         {
 
-            SqlConnection connection = new SqlConnection(Connection.Cnn);
+            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
+            SqlTransaction transaction = null;
 
             try
             {
@@ -34,11 +37,19 @@ namespace DAL
 
                 await connection.OpenAsync();
 
+                transaction = (SqlTransaction)await connection.BeginTransactionAsync();
+                command.Transaction = transaction;
+
                 await command.ExecuteNonQueryAsync();
+
+                await MqttClient.Instance.PublishMessage("device/plant", new { idDevice = plant.Device.Id, umbralHumidity = plant.UmbralHumidity });
+
+                await transaction.CommitAsync();
 
             }
             catch (Exception ex)
             {
+                if (transaction != null) await transaction.RollbackAsync();
 
                 throw new Exception(ex.Message);
             }
@@ -51,7 +62,8 @@ namespace DAL
         public async Task Update(Plant plant)
         {
 
-            SqlConnection connection = new SqlConnection(Connection.Cnn);
+            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
+            SqlTransaction transaction = null;
 
             try
             {
@@ -70,12 +82,18 @@ namespace DAL
 
                 await connection.OpenAsync();
 
+                transaction = (SqlTransaction)await connection.BeginTransactionAsync();
+                command.Transaction = transaction;
+
                 await command.ExecuteNonQueryAsync();
 
+                await MqttClient.Instance.PublishMessage("device/plant", new { idDevice = plant.Device.Id, umbralHumidity = plant.UmbralHumidity });
+
+                await transaction.CommitAsync();
             }
             catch (Exception ex)
             {
-
+                if (transaction != null) await transaction.RollbackAsync();
                 throw new Exception(ex.Message);
             }
             finally
@@ -87,7 +105,8 @@ namespace DAL
         public async Task Delete(Plant plant)
         {
 
-            SqlConnection connection = new SqlConnection(Connection.Cnn);
+            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
+            SqlTransaction transaction = null;
 
             try
             {
@@ -98,13 +117,19 @@ namespace DAL
                 command.Parameters.AddWithValue("@idDevice", plant.Device.Id);
 
                 await connection.OpenAsync();
+                transaction = (SqlTransaction)await connection.BeginTransactionAsync();
+                command.Transaction = transaction;
 
                 await command.ExecuteNonQueryAsync();
+
+                await MqttClient.Instance.PublishMessage("device/plant", new { idDevice = plant.Device.Id, umbralHumidity = 0 });
+
+                await transaction.CommitAsync();
 
             }
             catch (Exception ex)
             {
-
+                if (transaction != null) await transaction.RollbackAsync();
                 throw new Exception(ex.Message);
             }
             finally
@@ -118,7 +143,7 @@ namespace DAL
 
             Plant plant = null;
 
-            SqlConnection connection = new SqlConnection(Connection.Cnn);
+            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
 
             try
             {
@@ -138,7 +163,7 @@ namespace DAL
 
                     await reader.ReadAsync();
 
-                    plant = new Plant(Convert.ToInt16(reader["codeLand"]),Convert.ToInt16(reader["limitHumidity"]),
+                    plant = new Plant(Convert.ToInt16(reader["codeLand"]), Convert.ToInt16(reader["limitHumidity"]),
                                            reader["capture"] is DBNull ? null : (byte[])reader["capture"],
                                            reader["info"] is DBNull ? null : Convert.ToString(reader["info"]), deviceFound);
 
@@ -165,7 +190,7 @@ namespace DAL
 
             List<Plant> plants = new List<Plant>();
 
-            SqlConnection connection = new SqlConnection(Connection.Cnn);
+            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
 
             try
             {
@@ -184,9 +209,9 @@ namespace DAL
 
                     while (await reader.ReadAsync())
                     {
-                       Plant plant = new Plant(Convert.ToInt16(reader["codeLand"]), Convert.ToInt16(reader["limitHumidity"]),
-                                            reader["capture"] is DBNull ? null : (byte[])reader["capture"],
-                                            reader["info"] is DBNull ? null : Convert.ToString(reader["info"]), deviceFound);
+                        Plant plant = new Plant(Convert.ToInt16(reader["codeLand"]), Convert.ToInt16(reader["limitHumidity"]),
+                                             reader["capture"] is DBNull ? null : (byte[])reader["capture"],
+                                             reader["info"] is DBNull ? null : Convert.ToString(reader["info"]), deviceFound);
 
                         plants.Add(plant);
 

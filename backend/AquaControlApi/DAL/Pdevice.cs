@@ -15,7 +15,7 @@ namespace DAL
         public async Task Add(Device device)
         {
 
-            SqlConnection connection = new SqlConnection(Connection.Cnn);
+            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
 
             try
             {
@@ -42,7 +42,7 @@ namespace DAL
         public async Task UpdatePlaceNameDevice(Device device)
         {
 
-            SqlConnection connection = new SqlConnection(Connection.Cnn);
+            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
 
             try
             {
@@ -71,7 +71,7 @@ namespace DAL
         public async Task Delete(Device device)
         {
 
-            SqlConnection connection = new SqlConnection(Connection.Cnn);
+            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
 
             try
             {
@@ -104,7 +104,7 @@ namespace DAL
 
             List<Device> devices = new List<Device>();
 
-            SqlConnection connection = new SqlConnection(Connection.Cnn);
+            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
 
             try
             {
@@ -151,7 +151,7 @@ namespace DAL
 
             Device device = null;
 
-            SqlConnection connection = new SqlConnection(Connection.Cnn);
+            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
 
             try
             {

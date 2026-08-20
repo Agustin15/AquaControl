@@ -95,8 +95,9 @@ namespace Entities
         }
         public WaterPlantLog() { }
 
+
         public WaterPlantLog(int id, Tank tank, Plant plant, DateTime datetimeStart, DateTime datetimeEnd, string type, string state,
-            double levelTankBefore, double levelTankAfter, int humidityBefore, int humidityAfter)
+         double levelTankBefore, double levelTankAfter, int humidityBefore, int humidityAfter)
         {
 
             Id = id;
@@ -112,6 +113,7 @@ namespace Entities
             HumidityAfter = humidityAfter;
 
         }
+
     }
 
 }

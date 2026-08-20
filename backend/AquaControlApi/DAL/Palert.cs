@@ -3,6 +3,7 @@ using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,7 +16,7 @@ namespace DAL
         public async Task Add(Alert alert)
         {
 
-            SqlConnection connection = new SqlConnection(Connection.Cnn);
+            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
             try
             {
                 SqlCommand command = new SqlCommand("AddAlert");
@@ -42,7 +43,7 @@ namespace DAL
         public async Task UpdateAlertState(Alert alert)
         {
 
-            SqlConnection connection = new SqlConnection(Connection.Cnn);
+            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
             try
             {
                 SqlCommand command = new SqlCommand("AddAlert");
@@ -71,7 +72,7 @@ namespace DAL
         {
 
             int amount = 0;
-            SqlConnection connection = new SqlConnection(Connection.Cnn);
+            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
             try
             {
 
@@ -110,7 +111,7 @@ namespace DAL
 
             List<Alert> alertsOffset = new List<Alert>();
 
-            SqlConnection connection = new SqlConnection(Connection.Cnn);
+            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
             try
             {
 

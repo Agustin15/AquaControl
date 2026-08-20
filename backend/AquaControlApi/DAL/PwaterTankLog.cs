@@ -14,7 +14,7 @@ namespace DAL
         public async Task Add(WaterTankLog waterTankLog)
         {
 
-            SqlConnection connection = new SqlConnection(Connection.Cnn);
+            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
             try
             {
                 SqlCommand command = new SqlCommand("AddWaterTankLog", connection);

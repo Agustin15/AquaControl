@@ -4,6 +4,7 @@
     align-items: center;
     width: 100%;
     height: auto;
+    padding-bottom: 1rem;
     gap: 1rem;
 }
 
@@ -26,14 +27,14 @@ td {
     font-size: 11px;
     color: white;
     padding: 0.5rem;
-    background: rgba(18, 18, 18, 0.4);
+    background: rgba(121, 178, 221, 0.3);
 }
 
 .record table td {
     font-size: 11px;
     color: white;
     padding: 0.5rem;
-    background: rgba(44, 44, 44, 0.277);
+    background: rgba(90, 144, 185, 0.401);
     text-align: center;
 }
 

@@ -1,4 +1,5 @@
-﻿using Entities;
+﻿using Api.Model;
+using Entities;
 using Logic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,7 +28,7 @@ namespace Api.Controllers
 
                 if (plantFound is null) return StatusCode(404, new { message = "No se encontro este registro de planta en el dispositivo" });
 
-                Tank tankFound = await new Ltank().GetTankOfDeviceById(waterPlantLog.Tank.Id, waterPlantLog.Tank.Device.Id);
+                Tank tankFound = await new Ltank().GetTankOfDeviceById(waterPlantLog.Plant.Id, waterPlantLog.Plant.Device.Id);
 
                 if (tankFound is null) return StatusCode(404, new { message = "No se encontro este registro de tanque en el dispositivo" });
 
@@ -48,7 +49,7 @@ namespace Api.Controllers
         }
 
         [Authorize(AuthenticationSchemes = "Esp32Bearer")]
-        [HttpPut("api/waterPlantLog/{idWaterPlantLog}")]
+        [HttpPut("api/waterPlantLog/")]
         public async Task<ActionResult> UpdateStateWaterPlantLog([FromBody] WaterPlantLog waterPlantLog)
         {
             try
@@ -57,7 +58,7 @@ namespace Api.Controllers
 
                 if (plantFound is null) return StatusCode(404, new { message = "No se encontro este registro de planta en el dispositivo" });
 
-                Tank tankFound = await new Ltank().GetTankOfDeviceById(waterPlantLog.Tank.Id, waterPlantLog.Tank.Device.Id);
+                Tank tankFound = await new Ltank().GetTankOfDeviceById(waterPlantLog.Plant.Id, waterPlantLog.Plant.Device.Id);
 
                 if (tankFound is null) return StatusCode(404, new { message = "No se encontro este registro de tanque en el dispositivo" });
 

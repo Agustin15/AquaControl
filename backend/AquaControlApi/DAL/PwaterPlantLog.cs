@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace DAL
 {
@@ -14,7 +15,8 @@ namespace DAL
         public async Task<int> Add(WaterPlantLog waterPlantLog)
         {
 
-            SqlConnection connection = new SqlConnection(Connection.Cnn);
+            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
+           
             try
             {
                 SqlCommand command = new SqlCommand("AddWaterPlantLog", connection);
@@ -30,7 +32,6 @@ namespace DAL
                 command.Parameters.Add(parameterIdGenerated);
 
                 await connection.OpenAsync();
-
                 await command.ExecuteNonQueryAsync();
 
                 return (int)parameterIdGenerated.Value;
@@ -48,7 +49,7 @@ namespace DAL
         public async Task UpdateStateWaterPlantLog(WaterPlantLog waterPlantLog)
         {
 
-            SqlConnection connection = new SqlConnection(Connection.Cnn);
+            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
             try
             {
                 SqlCommand command = new SqlCommand("UpdateStateWaterPlantLog", connection);
@@ -79,7 +80,7 @@ namespace DAL
         {
 
             WaterPlantLog waterPlantLog = null;
-            SqlConnection connection = new SqlConnection(Connection.Cnn);
+            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
             try
             {
 
@@ -128,7 +129,7 @@ namespace DAL
         {
 
             int amount = 0;
-            SqlConnection connection = new SqlConnection(Connection.Cnn);
+            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
 
             try
             {
@@ -171,7 +172,7 @@ namespace DAL
 
             List<WaterPlantLog> waterPlantLogs = new List<WaterPlantLog>();
 
-            SqlConnection connection = new SqlConnection(Connection.Cnn);
+            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
             try
             {
 

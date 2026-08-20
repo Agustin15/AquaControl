@@ -4,7 +4,7 @@
     justify-content: start;
     align-items: center;
     gap: 1rem;
-    width: 90%; 
+    width: 90%;
     height: auto;
     gap: 1rem;
     padding-bottom: 1rem;
@@ -34,8 +34,9 @@
     width: 100%;
     height: auto;
     gap: 1rem;
-    background: rgba(4, 27, 71, 0.374);
+    background: none;
     border-radius: 5px;
+    border: 1px solid rgb(24, 86, 145);
 }
 
 .settings .menu {
@@ -46,7 +47,7 @@
     gap: 1rem;
     width: 98%;
     height: 2rem;
-    border-bottom: 1px solid rgb(20, 65, 108);
+    border-bottom: 1px solid rgb(24, 86, 145);
     padding-bottom: 0.3rem;
     font-size: 12px;
     list-style: none;

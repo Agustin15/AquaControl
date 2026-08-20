@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DAL
 {
-    public class Connection
+    public class DBConnection
     {
         static string cnn = Environment.GetEnvironmentVariable("STRING_CONNECTION");
 

@@ -351,12 +351,17 @@ GO
 CREATE OR ALTER PROCEDURE AddTank @id INT,@idDevice INT,@height DECIMAL(4,1) AS
 BEGIN
 
+IF EXISTS(select * from Tanks)
+BEGIN
+RAISERROR('Solo puede haber un tanque',16,1)
+RETURN
+END
+
 IF(@id<=0)
 BEGIN
 RAISERROR('Numero de tanque debe ser mayor a cero',16,1)
 RETURN
 END
-
 
 IF(@height<=0)
 BEGIN
@@ -460,6 +465,12 @@ GO
 
 CREATE OR ALTER PROCEDURE AddPlant @id INT, @idDevice INT,@umbralHumidity INT, @image VARBINARY(MAX)=NULL,@description VARCHAR(500)=NULL AS
 BEGIN
+
+IF EXISTS(select * from Plants)
+BEGIN
+RAISERROR('Solo puede haber una planta',16,1)
+RETURN
+END
 
 IF(@id<=0)
 BEGIN
@@ -749,7 +760,7 @@ GO
 CREATE OR ALTER PROCEDURE LastWaterPlantLog @idBowl INT,@idLand INT,@codePlaque INT AS
 BEGIN
 
-select TOP 1 * from PlantWateringRecords where idBowl=@idBowl and idLand=@idLand and idPlaque=@codePlaque 
+select TOP 1 * from PlantWateringRecords where momentEnd is not null and idBowl=@idBowl and idLand=@idLand and idPlaque=@codePlaque 
 ORDER BY momentStart
 
 END
@@ -759,7 +770,7 @@ GO
 CREATE OR ALTER PROCEDURE AmountLogsWaterPlant @idBowl INT,@idLand INT,@codePlaque INT AS
 BEGIN
 
-select COUNT(*) as amount from PlantWateringRecords where idBowl=@idBowl and idLand=@idLand and idPlaque=@codePlaque 
+select COUNT(*) as amount from PlantWateringRecords where momentEnd is not null and idBowl=@idBowl and idLand=@idLand and idPlaque=@codePlaque 
 
 END
 
@@ -768,7 +779,7 @@ GO
 CREATE OR ALTER PROCEDURE RecordWaterPlantOffset @idBowl INT,@idLand INT,@codePlaque INT,@offset INT AS
 BEGIN
 
-select * from PlantWateringRecords where idBowl=@idBowl and idLand=@idLand and idPlaque=@codePlaque 
+select * from PlantWateringRecords where  momentEnd is not null and idBowl=@idBowl and idLand=@idLand and idPlaque=@codePlaque 
 ORDER BY momentStart OFFSET @offset ROWS FETCH NEXT 5 ROWS ONLY
 END
 
@@ -880,4 +891,3 @@ EXEC AddHumidityPlantLog @percentege = 40,  @idPlant = 1,@idDevice= 1;
 EXEC AddWaterPlantLog @type='Automatico',@levelTankBefore=82,@humidityBefore=40, @idTank=1, @idPlant=1,@idDevice= 1;
 
 EXEC UpdateStateWaterPlantLog @id=3, @state='Completado',@levelTankAfter=76, @humidityAfter=50;
-

@@ -15,7 +15,7 @@ namespace DAL
         public async Task<int> Add(User user)
         {
 
-            SqlConnection connection = new SqlConnection(Connection.Cnn);
+            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
 
             try
             {
@@ -80,7 +80,7 @@ namespace DAL
         public async Task UpdateUsername(User user)
         {
 
-            SqlConnection connection = new SqlConnection(Connection.Cnn);
+            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
 
             try
             {
@@ -107,7 +107,7 @@ namespace DAL
         public async Task UpdatePasswordUser(User user)
         {
 
-            SqlConnection connection = new SqlConnection(Connection.Cnn);
+            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
 
             try
             {
@@ -138,7 +138,7 @@ namespace DAL
 
             List<User> users = new List<User>();
 
-            SqlConnection connection = new SqlConnection(Connection.Cnn);
+            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
 
             try
             {
@@ -182,7 +182,7 @@ namespace DAL
 
             User user = null;
 
-            SqlConnection connection = new SqlConnection(Connection.Cnn);
+            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
 
             try
             {
@@ -223,7 +223,7 @@ namespace DAL
 
             User user = null;
 
-            SqlConnection connection = new SqlConnection(Connection.Cnn);
+            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
 
             try
             {
@@ -264,7 +264,7 @@ namespace DAL
 
             User user = null;
 
-            SqlConnection connection = new SqlConnection(Connection.Cnn);
+            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
 
             try
             {
