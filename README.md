@@ -3,19 +3,19 @@
  <img src="https://img.shields.io/badge/v11.16.0-636363?style=flat&logo=NPM&logoColor=%23FFFFFF&logoSize=25&label=NPM&labelColor=%2329A345&color=%23636363"> <img src="https://img.shields.io/badge/Framework%208.0-512BD4?style=flat&logo=.NET&logoColor=%23FFFFFF&logoSize=25&label=%20&labelColor=%23512BD4&color=%23512BD4">
 
 
-Consiste en un sistema inteligente de riego automatizado basado en el microcontrolador ESP32 y tecnologías IoT (Internet de las Cosas).
-El sistema está diseñado para optimizar el recurso hídrico y asegurar el cuidado autónomo de las plantas. Sus funciones principales son:
+It consists of an intelligent automated irrigation system based on the ESP32 microcontroller and IoT (Internet of Things) technologies.
+The system is designed to optimize water usage and ensure autonomous plant care. Its main functions are:
 
-Control del nivel del tanque: Mide de forma constante el nivel de agua disponible en el depósito de reserva para prevenir el funcionamiento en seco de la bomba.
+Tank level monitoring: Continuously measures the available water level in the reservoir to prevent the pump from running dry.
 
-Datos periodicos cada 1 hora durante la semana sobre el estado del tanque y de la humedad de planta
+Periodic data reporting: Provides hourly updates throughout the week on the tank status and plant moisture levels.
 
-Riego automatico/manual: Funcion para iniciar la bomba de agua para comenzar el riego, en caso de que los niveles de humedad de la planta estan por debajo de su umbral estimado.
+Automatic/manual irrigation: A function to activate the water pump and begin irrigation when plant moisture levels fall below the established threshold.
 
-Conectividad en tiempo real:Se transfieren datos constantemente usando el protocolo MQTT, publicandolos en un Broker para que la app y el microcontrolador esten recibiendo datos instantaneamente.
+Real-time connectivity: Data is continuously transmitted using the MQTT protocol and published to a broker, ensuring that both the app and the microcontroller receive information instantly.
 
 
-### Desarrollado con
+### Developed with
 
 - <img src="https://img.shields.io/badge/React.js--0c979c?style=flat&labelColor=0c979c&logo=react&logoColor=white&logoSize=auto" alt="React.js">
 - <img src="https://img.shields.io/badge/Javascript--f5ff0e?style=flat&labelColor=f5ff0e&logo=javascript&logoColor=black&logoSize=auto" alt="Javascript">
@@ -26,30 +26,30 @@ Conectividad en tiempo real:Se transfieren datos constantemente usando el protoc
 
 
 
-### Clonar repositorio
+### Clone repository
 
      git clone https://github.com/Agustin15/AquaControl.git
 
-### Requisitos
+### Requirements
 
 - NPM v11.16.0
 - ASP.NET CORE (.NET FRAMEWORK 8.0)
 - SQL SERVER (>=2019)
 - Broker MQTT
 
-### Instalacion ⚙
+### Installation ⚙
 
 #### Frontend
 
-> Navegar a frontend
+> Browse to frontend
 
     cd frontend
 
-> Instalar dependencias
+> Install dependences
 
     npm install
 
-#### Dependencias
+#### Dependences
 
 - [@capacitorjs](https://capacitorjs.com/docs/getting-started)
 - [@sweetalert2](https://sweetalert2.github.io/)
@@ -57,7 +57,7 @@ Conectividad en tiempo real:Se transfieren datos constantemente usando el protoc
 - [@mqtt.js](https://github.com/mqttjs/MQTT.js)
 
 
-### Variables de entorno
+### Environment Variables
 
      VITE_BACKEND_LOCALHOST=<url of backend>
      VITE_FRONTEND_LOCALHOST=<url of frontend>
@@ -67,39 +67,39 @@ Conectividad en tiempo real:Se transfieren datos constantemente usando el protoc
 
 #### Backend
 
-> Navegar a backend
+> Browse to backend
 
     cd backend/AquaControlApi
       
-> Instalar dependencias proyecto Api  
+> Install dependences Api proyect  
 
        dotnet restore
     
-#### Dependencias en Api.csproj para instalar con NuGet
+#### Dependences for install in Api.csproj with NuGet
 
 - [@dotenv.net 4.0.2](https://www.nuget.org/packages/dotenv.net)
 - [@Microsoft.AspNetCore.Authentication.JwtBearer 8.0.29](https://www.nuget.org/packages/Microsoft.AspNetCore.Authentication.JwtBearer/8.0.29)
 
-> Instalar dependencias proyecto Logic 
+> Install dependences Logic proyect  
 
        dotnet restore
     
-#### Dependencias en Logic.csproj para instalar con NuGet
+#### Dependences for install in Logic.csproj with NuGet
 
 - [@BCrypt.Net-Next 4.2.0](https://www.nuget.org/packages/BCrypt.Net-Next/)
 - [@System.IdentityModel.Tokens.Jwt 8.21.0](https://www.nuget.org/packages/system.identitymodel.tokens.jwt/)
 
 
-> Instalar dependencias en proyecto DAL
+> Install dependences DAL proyect 
 
        dotnet restore
     
-#### Dependencias en DAL.csproj
+#### Dependences for install in DAL.csproj with NuGet
 
 - [@Microsoft.Data.SqlClient 7.0.2](https://www.nuget.org/packages/microsoft.data.sqlclient)
 - [@MQTTnet 5.2.0.1603](https://www.nuget.org/packages/mqttnet/)
 
-### Variables de entorno
+### Environment Variables
 
      STRING_CONNECTION=<string connection to connect SQL Server database >
      ACCESS_TOKEN_SECRET_KEY=<secret key of token that will use the app to access to api>
@@ -109,3 +109,16 @@ Conectividad en tiempo real:Se transfieren datos constantemente usando el protoc
      REFRESH_TOKEN_EXPIRED_MINUTES=<minutes refresh token expiration>
      LOCALHOST_FRONTEND=<url of frontend>
      LOCALHOST_BACKEND=<url of backend>
+
+
+![Devices](/captures/screenApp1.jpg)
+
+![Humidity week logs ](/captures/screenApp2.jpg)
+
+![Water level tank week logs ](/captures/screenApp3.jpg)
+
+![Irrigate](/captures/screenApp4.jpg)
+
+![Irrigates record](/captures/screenApp5.jpg)
+
+![Irrigate details](/captures/screenApp6.jpg)
