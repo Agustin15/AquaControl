@@ -101,11 +101,14 @@ export const TankProvider = ({ children }) => {
 
   const getLiveReloadWaterLevel = () => {
     mqttClient.on("message", (topic, message) => {
-      if (topic != "device/tank/waterLevel") return;
+      if (
+        topic !=
+        `device/${deviceSelected.id}/tank/${tankSelected.id}/waterLevel`
+      )
+        return;
 
-      const { idDevice, waterLevel } = JSON.parse(message.toString());
+      const { waterLevel } = JSON.parse(message.toString());
 
-      if (idDevice != deviceSelected.id) return;
       setCurrentLevelTank(waterLevel);
     });
   };
@@ -118,6 +121,7 @@ export const TankProvider = ({ children }) => {
         errorTanks,
         getTanks,
         fetchPostOrPut,
+        loadingForm,
         valuesForm,
         setValuesForm,
         errorsForm,

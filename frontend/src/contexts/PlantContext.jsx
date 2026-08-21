@@ -105,10 +105,13 @@ export const PlantProvider = ({ children }) => {
 
   const getLiveReloadHumidityPlant = () => {
     mqttClient.on("message", (topic, message) => {
-      if (topic != "device/plant/humidity") return;
-      const { idDevice, idPlant, humidity } = JSON.parse(message.toString());
+      if (
+        topic != `device/${deviceSelected.id}/plant/${plantSelected}/humidity`
+      )
+        return;
 
-      if (idDevice != deviceSelected.id || idPlant != plantSelected.id) return;
+      const { humidity } = JSON.parse(message.toString());
+
       setCurrentHumidityPlant(humidity);
     });
   };
