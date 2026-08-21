@@ -18,6 +18,7 @@ Real-time connectivity: Data is continuously transmitted using the MQTT protocol
 ### Developed with
 
 - <img src="https://img.shields.io/badge/React.js--0c979c?style=flat&labelColor=0c979c&logo=react&logoColor=white&logoSize=auto" alt="React.js">
+- <img src="https://img.shields.io/badge/Capacitor-119EFF?style=flat&logo=Capacitor&logoColor=%23119EFF&label=%20&color=white">
 - <img src="https://img.shields.io/badge/Javascript--f5ff0e?style=flat&labelColor=f5ff0e&logo=javascript&logoColor=black&logoSize=auto" alt="Javascript">
 - <img src="https://img.shields.io/badge/CSS-2254C9?style=flat&logo=CSS&logoColor=%23FFFFFF&logoSize=25&label=%20&labelColor=%232254C9&color=%232254C9">
 - <img src="https://img.shields.io/badge/ASP.NET%20CORE%20-512BD4?style=flat&logo=.NET&logoColor=%23FFFFFF&logoSize=25&label=%20&labelColor=%23512BD4&color=%23512BD4">
@@ -57,7 +58,7 @@ Real-time connectivity: Data is continuously transmitted using the MQTT protocol
 - [@mqtt.js](https://github.com/mqttjs/MQTT.js)
 
 
-### Environment Variables
+#### Environment Variables
 
      VITE_BACKEND_LOCALHOST=<url of backend>
      VITE_FRONTEND_LOCALHOST=<url of frontend>
@@ -99,7 +100,7 @@ Real-time connectivity: Data is continuously transmitted using the MQTT protocol
 - [@Microsoft.Data.SqlClient 7.0.2](https://www.nuget.org/packages/microsoft.data.sqlclient)
 - [@MQTTnet 5.2.0.1603](https://www.nuget.org/packages/mqttnet/)
 
-### Environment Variables
+#### Environment Variables
 
      STRING_CONNECTION=<string connection to connect SQL Server database >
      ACCESS_TOKEN_SECRET_KEY=<secret key of token that will use the app to access to api>
