@@ -18,13 +18,7 @@ export const MqttProvider = ({ children }) => {
     if (!mqttClient) return;
 
     mqttClient.on("connect", () => {
-      mqttClient.subscribe("device/plant/humidity", { qos: 0 }, (error) => {
-        if (!error) console.log("Subscripcion humedad planta realizada");
-      });
-
-      mqttClient.subscribe("device/tank/waterLevel", { qos: 0 }, (error) => {
-        if (!error) console.log("Subscripcion nivel del agua tanque realizada");
-      });
+      console.log("Connectado al broker");
     });
 
     mqttClient.on("error", (error) => {

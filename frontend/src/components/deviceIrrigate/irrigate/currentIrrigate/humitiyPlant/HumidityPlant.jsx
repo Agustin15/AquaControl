@@ -7,11 +7,7 @@ import { detailsHumidity } from "./function.js";
 import { AnimationIrrigate } from "./animationIrrigate/AnimationIrrigate.jsx";
 
 export const HumidityPlant = ({ plantSelected }) => {
-  const { currentHumidityPlant, getLiveReloadHumidityPlant } = usePlant();
-
-  useEffect(() => {
-    getLiveReloadHumidityPlant();
-  }, []);
+  const { currentHumidityPlant } = usePlant();
 
   let optimePercentege =
     (currentHumidityPlant * 100) / plantSelected.umbralHumidity;

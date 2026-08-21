@@ -32,7 +32,7 @@
               "RelativeDocumentMoniker": "DAL\\MqttClient.cs",
               "ToolTip": "C:\\develop\\AquaControl\\backend\\AquaControlApi\\DAL\\MqttClient.cs",
               "RelativeToolTip": "DAL\\MqttClient.cs",
-              "ViewState": "AgIAAC8AAAAAAAAAAAAgwEUAAABmAAAAAAAAAA==",
+              "ViewState": "AgIAAC8AAAAAAAAAAAAgwEgAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-08-20T23:14:01.779Z",
               "EditorCaption": ""
@@ -47,8 +47,7 @@
               "RelativeToolTip": "Api\\Program.cs",
               "ViewState": "AgIAAAwAAAAAAAAAAAAAACoAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-20T21:39:06.719Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-08-20T21:39:06.719Z"
             }
           ]
         }

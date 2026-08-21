@@ -65,7 +65,7 @@ namespace DAL
                     .WithTopic(topic)
                     .WithPayload(JsonSerializer.Serialize(payload))
                     .WithQualityOfServiceLevel(MqttQualityOfServiceLevel.ExactlyOnce)
-                    .WithRetainFlag(false).Build();
+                    .WithRetainFlag(true).Build();
 
                 var result = await mqttClient.PublishAsync(applicationMessage, CancellationToken.None);
 

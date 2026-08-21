@@ -9,7 +9,6 @@ import {
 import { usePlant } from "../../../contexts/PlantContext";
 import { useDevice } from "../../../contexts/DeviceContext";
 import { LogsWeekday } from "./logsWeekday/LogsWeekday";
-import { LevelHumidity } from "./logs/levelHumidity/LevelHumidity";
 
 export const HumidityPlantLogs = () => {
   const {

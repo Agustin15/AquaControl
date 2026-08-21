@@ -5,11 +5,7 @@ import { useState, useEffect } from "react";
 import { useTank } from "../../../../../contexts/TankContext.jsx";
 
 export const WaterTank = ({ tankSelected }) => {
-  const { getLiveReloadWaterLevel, currentLevelTank } = useTank();
-
-  useEffect(() => {
-    getLiveReloadWaterLevel();
-  }, []);
+  const { currentLevelTank } = useTank();
 
   let colorLevel, state;
   switch (true) {
