@@ -25,7 +25,18 @@ export const MqttProvider = ({ children }) => {
       console.log(error);
       mqttClient.end();
     });
+
+    if (mqttClient.disconnected) connect();
   }, [mqttClient]);
+
+  const connect = async () => {
+    const connection = mqtt.connect(mqttUrlBroker, {
+      username: brokerUsername,
+      password: brokerPassword,
+    });
+
+    setMqttClient(connection);
+  };
 
   return (
     <MqttContext.Provider value={{ mqttClient }}>

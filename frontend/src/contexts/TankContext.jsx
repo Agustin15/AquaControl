@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { getTokenSaved } from "../securityStorage.js";
 import { useAuth } from "./AuthContext";
 import { useMqtt } from "./MqttContext.jsx";
@@ -29,6 +29,20 @@ export const TankProvider = ({ children }) => {
   const { mqttClient } = useMqtt();
   const { updateAccessToken } = useAuth();
   const { deviceSelected } = useDevice();
+
+  useEffect(() => {
+    if (!tankSelected || !mqttClient.connected) return;
+
+    mqttClient.subscribe(
+      `device/${deviceSelected.id}/tank/${tankSelected.id}/waterLevel`,
+      { qos: 0 },
+      (error) => {
+        if (!error) {
+          getLiveReloadWaterLevel();
+        }
+      },
+    );
+  }, [mqttClient.connected, tankSelected]);
 
   const fetchGet = async (url, retry) => {
     let result;

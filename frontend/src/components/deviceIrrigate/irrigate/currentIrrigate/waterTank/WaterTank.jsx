@@ -1,10 +1,9 @@
 import styles from "./WaterTank.module.css";
 import { Recipient } from "./recipient/Recipient.jsx";
 import { Liquid } from "./liquid/Liquid.jsx";
-import { useState, useEffect } from "react";
 import { useTank } from "../../../../../contexts/TankContext.jsx";
 
-export const WaterTank = ({ tankSelected }) => {
+export const WaterTank = () => {
   const { currentLevelTank } = useTank();
 
   let colorLevel, state;
@@ -32,12 +31,14 @@ export const WaterTank = ({ tankSelected }) => {
       <div className={styles.levelTank}>
         <svg width="120" height="180" viewBox="0 0 110 180">
           {/* base del recipiente */}
+
           <ellipse
             rx={58}
             ry={20}
             cx={55}
             cy={160}
-            fill={"rgba(43, 42, 42, 0.8)"}
+            opacity={0.1}
+            fill={"rgb(240, 240, 240)"}
           />
 
           {/* agua del recipiente */}

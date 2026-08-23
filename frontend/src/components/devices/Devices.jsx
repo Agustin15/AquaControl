@@ -6,24 +6,14 @@ import iconAdd from "../../assets/img/add.png";
 import { useDevice } from "../../contexts/DeviceContext";
 import { useAuth } from "../../contexts/AuthContext";
 import { useCrudDevice } from "../../contexts/CrudDeviceContext.jsx";
-import { getInfoSaved } from "../../securityStorage.js";
 import { useEffect, useState } from "react";
 import { List } from "./list/List.jsx";
-import { createPortal } from "react-dom";
 import { Modal } from "../modal/Modal.jsx";
 import { AddDevice } from "./addDevice/AddDevice.jsx";
 import { SubMenuProfile } from "./subMenuProfile/SubMenuProfile.jsx";
 
 export const Devices = () => {
-  const {
-    devices,
-    loadingDevices,
-    errorDevices,
-    getUserDevices,
-    deviceSelected,
-    setDeviceSelected,
-  } = useDevice();
-
+  const { devices, loadingDevices, errorDevices, getUserDevices } = useDevice();
   const { setAddDevice, addDevice } = useCrudDevice();
   const { userAuth } = useAuth();
   const [showMenu, setShowMenu] = useState(false);

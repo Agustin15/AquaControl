@@ -1,13 +1,9 @@
 import styles from "./HumidityPlantLogs.module.css";
 import iconHumidityPlantTitle from "../../../assets/img/humidity.png";
 import iconNoPlants from "../../../assets/img/noPlants.png";
-import { useEffect, useState } from "react";
-import {
-  LogsWeekdayProvider,
-  useWeekdayLogs,
-} from "../../../contexts/LogsWeekdayContext";
+import { useEffect } from "react";
+import { useWeekdayLogs } from "../../../contexts/LogsWeekdayContext";
 import { usePlant } from "../../../contexts/PlantContext";
-import { useDevice } from "../../../contexts/DeviceContext";
 import { LogsWeekday } from "./logsWeekday/LogsWeekday";
 
 export const HumidityPlantLogs = () => {
@@ -19,8 +15,7 @@ export const HumidityPlantLogs = () => {
     setPlantSelected,
     plantSelected,
   } = usePlant();
-  const { getWeekdayLogs, setWeekdaySelected } = useWeekdayLogs();
-  const { deviceSelected } = useDevice();
+  const { getWeekdayLogs } = useWeekdayLogs();
 
   useEffect(() => {
     loadPlants();
@@ -50,7 +45,8 @@ export const HumidityPlantLogs = () => {
         <div className={styles.title}>
           <img src={iconHumidityPlantTitle} />
           <h3>
-           Historial de los niveles de humedad planta N° {plantSelected ? plantSelected.id : ""}
+            Historial de los niveles de humedad planta N°{" "}
+            {plantSelected ? plantSelected.id : ""}
           </h3>
         </div>
 

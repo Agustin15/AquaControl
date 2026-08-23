@@ -16,35 +16,16 @@ export const WaterPlantProvider = ({ children }) => {
   const [waterPlantLogs, setWaterPlantLogs] = useState([]);
   const [loadingLogs, setLoadingLogs] = useState(true);
   const [errorWaterPlant, setErrorWaterPlant] = useState(null);
+  const [waterPlantInProgress, setWaterPlantInProgress] = useState(false);
   const { deviceSelected } = useDevice();
-  const { tankSelected, getLiveReloadWaterLevel } = useTank();
-  const { plantSelected, getLiveReloadHumidityPlant } = usePlant();
+  const { tankSelected } = useTank();
+  const { plantSelected } = usePlant();
   const { updateAccessToken } = useAuth();
   const { mqttClient } = useMqtt();
 
   useEffect(() => {
-    if (!mqttClient.connected) return;
-
-    mqttClient.subscribe(
-      `device/${deviceSelected.id}/plant/${plantSelected.id}/humidity`,
-      { qos: 0 },
-      (error) => {
-        if (!error) {
-          getLiveReloadHumidityPlant();
-        }
-      },
-    );
-
-    mqttClient.subscribe(
-      `device/${deviceSelected.id}/tank/${tankSelected.id}/waterLevel`,
-      { qos: 0 },
-      (error) => {
-        if (!error) {
-          getLiveReloadWaterLevel();
-        }
-      },
-    );
-
+    console.log(mqttClient.connected);
+    if (!deviceSelected || !mqttClient.connected) return;
     mqttClient.subscribe(
       `device/${deviceSelected.id}/waterPlant`,
       { qos: 2 },
@@ -54,7 +35,7 @@ export const WaterPlantProvider = ({ children }) => {
         }
       },
     );
-  }, [mqttClient]);
+  }, [mqttClient.connected, deviceSelected]);
 
   const fetchGetLogs = async (idTank, idPlant, offset, retry) => {
     setErrorWaterPlant(null);
@@ -101,18 +82,27 @@ export const WaterPlantProvider = ({ children }) => {
     mqttClient.on("message", (topic, message) => {
       if (topic != `device/${deviceSelected.id}/waterPlant`) return;
       const { state } = JSON.parse(message.toString());
+      if (state == "En curso" && !waterPlantInProgress)
+        setWaterPlantInProgress(true);
+      else setWaterPlantInProgress(false);
     });
   };
 
   const sendStartWaterPlant = async () => {
     const result = await mqttClient.publishAsync(
       `device/${deviceSelected.id}/waterPlant`,
-      JSON.stringify({ idPlant: plantSelected.id, idTank: tankSelected.id }),
-      { qos: 2 },
+      JSON.stringify({
+        idPlant: plantSelected.id,
+        idTank: tankSelected.id,
+        state: "En curso",
+      }),
+      { qos: 2, retain: true },
     );
 
     if (!result)
       return alertWarning("Ups,no se pudo conectar con el sistema de riego");
+
+    setWaterPlantInProgress(true);
   };
 
   return (
@@ -127,6 +117,7 @@ export const WaterPlantProvider = ({ children }) => {
         setIndex,
         index,
         sendStartWaterPlant,
+        waterPlantInProgress,
       }}
     >
       {children}

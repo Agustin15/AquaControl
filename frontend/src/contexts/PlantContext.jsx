@@ -1,9 +1,8 @@
-import { createContext, useContext, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { useDevice } from "./DeviceContext";
 import { useAuth } from "./AuthContext";
 import { useMqtt } from "./MqttContext.jsx";
 import { getTokenSaved } from "../securityStorage.js";
-import { alertError } from "../components/alertSwal/alertSwal.js";
 const localhostBackend = import.meta.env.VITE_BACKEND_LOCALHOST;
 
 const PlantContext = createContext();
@@ -34,6 +33,20 @@ export const PlantProvider = ({ children }) => {
   const { mqttClient } = useMqtt();
   const { updateAccessToken } = useAuth();
   const { deviceSelected } = useDevice();
+
+  useEffect(() => {
+    if (!plantSelected || !mqttClient.connected) return;
+
+    mqttClient.subscribe(
+      `device/${deviceSelected.id}/plant/${plantSelected.id}/humidity`,
+      { qos: 0 },
+      (error) => {
+        if (!error) {
+          getLiveReloadHumidityPlant();
+        }
+      },
+    );
+  }, [mqttClient.connected, plantSelected]);
 
   const fetchGet = async (url, retry) => {
     setErrorPlants();
@@ -106,7 +119,8 @@ export const PlantProvider = ({ children }) => {
   const getLiveReloadHumidityPlant = () => {
     mqttClient.on("message", (topic, message) => {
       if (
-        topic != `device/${deviceSelected.id}/plant/${plantSelected}/humidity`
+        topic !=
+        `device/${deviceSelected.id}/plant/${plantSelected.id}/humidity`
       )
         return;
 

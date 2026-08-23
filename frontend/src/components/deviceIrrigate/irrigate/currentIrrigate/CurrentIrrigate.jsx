@@ -1,6 +1,6 @@
 import styles from "./CurrentIrrigate.module.css";
 import { HumidityPlant } from "./humitiyPlant/HumidityPlant";
-import { WaterTank } from "./WaterTank/WaterTank";
+import { WaterTank } from "./waterTank/WaterTank";
 import { usePlant } from "../../../../contexts/PlantContext";
 import { useTank } from "../../../../contexts/TankContext";
 import { useWaterPlant } from "../../../../contexts/WaterPlantContext";
@@ -8,8 +8,8 @@ import { alertWarning } from "../../../alertSwal/alertSwal";
 
 export const CurrentIrrigate = () => {
   const { plantSelected, currentHumidityPlant } = usePlant();
-  const { tankSelected, currentLevelTank } = useTank();
-  const { sendStartWaterPlant } = useWaterPlant();
+  const { currentLevelTank } = useTank();
+  const { sendStartWaterPlant, waterPlantInProgress } = useWaterPlant();
 
   const handleClick = () => {
     if (currentHumidityPlant >= plantSelected.umbralHumidity)
@@ -25,9 +25,9 @@ export const CurrentIrrigate = () => {
 
   return (
     <div className={styles.currentIrrigate}>
-      <WaterTank tankSelected={tankSelected} />
+      <WaterTank />
       <button onClick={() => handleClick()} className={styles.startIrrigate}>
-        Iniciar riego
+        {waterPlantInProgress ? "Riego en progreso" : "Iniciar riego"}
       </button>
       <HumidityPlant plantSelected={plantSelected} />
     </div>
