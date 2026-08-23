@@ -11,6 +11,7 @@ export const MqttProvider = ({ children }) => {
     mqtt.connect(mqttUrlBroker, {
       username: brokerUsername,
       password: brokerPassword,
+      reconnectPeriod: 1000,
     }),
   );
 
@@ -23,20 +24,9 @@ export const MqttProvider = ({ children }) => {
 
     mqttClient.on("error", (error) => {
       console.log(error);
-      mqttClient.end();
+      setMqttClient(mqttClient.reconnect());
     });
-
-    if (mqttClient.disconnected) connect();
   }, [mqttClient]);
-
-  const connect = async () => {
-    const connection = mqtt.connect(mqttUrlBroker, {
-      username: brokerUsername,
-      password: brokerPassword,
-    });
-
-    setMqttClient(connection);
-  };
 
   return (
     <MqttContext.Provider value={{ mqttClient }}>
