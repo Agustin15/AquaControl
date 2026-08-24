@@ -1,5 +1,4 @@
 import styles from "./DeviceIrrigate.module.css";
-import iconLogo from "../../assets/img/logo.png";
 import iconDevice from "../../assets/img/device.png";
 import { useState } from "react";
 import { useDevice } from "../../contexts/DeviceContext";
@@ -13,6 +12,7 @@ import { WaterTankLogs } from "./waterTankLogs/WaterTankLogs";
 import { Settings } from "./settings/Settings";
 import { Irrigate } from "./irrigate/Irrigate";
 import { WaterPlantProvider } from "../../contexts/WaterPlantContext";
+import { StateMqttConnection } from "./stateMqttConnection/StateMqttConnection";
 
 export const DeviceIrrigate = () => {
   const [optionSelected, setOptionSelected] = useState("Irrigate");
@@ -22,9 +22,12 @@ export const DeviceIrrigate = () => {
   return (
     <div id="contentBody" className={styles.contentBody}>
       <div className={styles.menuDevice}>
+        <StateMqttConnection />
         <img src={iconDevice}></img>
         <h3>{deviceSelected.placeName}</h3>
-        <button onClick={() => navigate("/devices")}>Volver</button>
+        <button className={styles.back} onClick={() => navigate("/devices")}>
+          Volver
+        </button>
       </div>
 
       <div className={styles.row}>

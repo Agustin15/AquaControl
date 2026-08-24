@@ -857,7 +857,6 @@ EXEC AddPlant 1,1,50,
 
 --------------------------------------------------simulation day---------------------------------------------------------- 
 
-
 EXEC AddHumidityPlantLog @percentege = 50, @idPlant = 1,@idDevice= 1;
 EXEC AddWaterTankLog @percentege = 100, @idTank = 1,@idDevice= 1;
 EXEC AddHumidityPlantLog @percentege = 40,  @idPlant = 1,@idDevice= 1;

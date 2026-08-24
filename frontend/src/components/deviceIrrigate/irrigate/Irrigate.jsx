@@ -26,14 +26,13 @@ export const Irrigate = () => {
       const tanks = await getTanks();
       const plants = await getPlants();
 
-      if (plants) setPlantSelected(plants[0]);
       if (tanks) setTankSelected(plants[0]);
+      if (plants) setPlantSelected(plants[0]);
     } catch (error) {
     } finally {
       setLoadingInit(false);
     }
   };
-
 
   return (
     <div className={styles.irrigate}>

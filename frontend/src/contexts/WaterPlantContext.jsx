@@ -17,6 +17,7 @@ export const WaterPlantProvider = ({ children }) => {
   const [loadingLogs, setLoadingLogs] = useState(true);
   const [errorWaterPlant, setErrorWaterPlant] = useState(null);
   const [waterPlantInProgress, setWaterPlantInProgress] = useState(false);
+  const [lastWaterPlant, setLastWaterPlant] = useState(null);
   const { deviceSelected } = useDevice();
   const { tankSelected } = useTank();
   const { plantSelected } = usePlant();
@@ -24,7 +25,6 @@ export const WaterPlantProvider = ({ children }) => {
   const { mqttClient } = useMqtt();
 
   useEffect(() => {
-    console.log(mqttClient.connected);
     if (!deviceSelected || !mqttClient.connected) return;
     mqttClient.subscribe(
       `device/${deviceSelected.id}/waterPlant`,
@@ -43,13 +43,13 @@ export const WaterPlantProvider = ({ children }) => {
 
     if (!loadingLogs) setLoadingLogs(true);
 
-    const accessToken = await getTokenSaved("accessToken");
-
     let url =
       localhostBackend +
       `/api/waterPlantLog/tank/${idTank}/plant/${idPlant}/pagination/${offset}`;
 
     try {
+      const accessToken = await getTokenSaved("accessToken");
+
       const response = await fetch(url, {
         method: "GET",
         credentials: "include",
@@ -78,13 +78,48 @@ export const WaterPlantProvider = ({ children }) => {
     }
   };
 
+  const fetchGetLastWaterPlant = async (retry) => {
+    let url =
+      localhostBackend +
+      `/api/waterPlantLog/tank/${tankSelected.id}/plant/${plantSelected.id}/lastWaterPlantLog`;
+
+    try {
+      const accessToken = await getTokenSaved("accessToken");
+
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      const result = await response.json();
+
+      if (response.status == 401 && retry == true) {
+        await updateAccessToken();
+        return fetchGetLastWaterPlant(true);
+      }
+
+      if (!response.ok) throw new Error(result.message);
+
+      if (result) {
+        setLastWaterPlant(result);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const getStateWaterPlant = async () => {
-    mqttClient.on("message", (topic, message) => {
+    mqttClient.on("message", async (topic, message) => {
       if (topic != `device/${deviceSelected.id}/waterPlant`) return;
       const { state } = JSON.parse(message.toString());
-      if (state == "En curso" && !waterPlantInProgress)
+
+      if (state == "En curso" && !waterPlantInProgress) {
         setWaterPlantInProgress(true);
-      else setWaterPlantInProgress(false);
+      } else setWaterPlantInProgress(false);
+
+      await fetchGetLastWaterPlant();
     });
   };
 
@@ -100,9 +135,28 @@ export const WaterPlantProvider = ({ children }) => {
     );
 
     if (!result)
-      return alertWarning("Ups,no se pudo conectar con el sistema de riego");
+      return alertWarning(
+        "Ups,la conexion con el sistema de riego no se pudo establecer",
+      );
 
     setWaterPlantInProgress(true);
+  };
+
+  const sendStopWaterPlant = async () => {
+    const result = await mqttClient.publishAsync(
+      `device/${deviceSelected.id}/waterPlant`,
+      JSON.stringify({
+        state: "Cancelado",
+      }),
+      { qos: 2, retain: true },
+    );
+
+    if (!result)
+      return alertWarning(
+        "Ups,la conexion con el sistema de riego no se pudo establecer",
+      );
+
+    setWaterPlantInProgress(false);
   };
 
   return (
@@ -117,7 +171,10 @@ export const WaterPlantProvider = ({ children }) => {
         setIndex,
         index,
         sendStartWaterPlant,
+        sendStopWaterPlant,
         waterPlantInProgress,
+        fetchGetLastWaterPlant,
+        lastWaterPlant,
       }}
     >
       {children}

@@ -27,7 +27,7 @@
 
 }
 
-.menuDevice button {
+.menuDevice .back {
   position: absolute;
   left: 0.5rem;
   width: auto;
@@ -38,6 +38,7 @@
   font-weight: bold;
 
 }
+
 
 .menuDevice img {
   width: 37px;

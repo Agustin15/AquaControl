@@ -10,7 +10,7 @@ export const Recipient = () => {
         ry={20}
         cx={55}
         cy={30}
-        opacity={0.1}
+        opacity={0.2}
         fill={"rgb(240, 240, 240)"}
       />
 
@@ -21,7 +21,7 @@ export const Recipient = () => {
         ry={1}
         width={110}
         height={130}
-        opacity={0.1}
+        opacity={0.2}
         fill={"rgb(174, 171, 171)"}
       ></rect>
     </>

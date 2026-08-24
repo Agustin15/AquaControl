@@ -15,7 +15,7 @@ export const detailsHumidity = (optimePercentege) => {
       state = "Seco";
       break;
     case optimePercentege < 40:
-      colorLevel = " rgb(209, 29, 29)";
+      colorLevel = " rgb(215, 66, 66)";
       state = "¡Debe regarse!";
       break;
     case optimePercentege > 100:

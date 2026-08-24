@@ -21,7 +21,7 @@ export const WaterTank = () => {
       state = "Bajo, recomendable llenar";
       break;
     case currentLevelTank < 20:
-      colorLevel = " rgb(209, 29, 29)";
+      colorLevel = " rgb(215, 66, 66)";
       state = "¡Reponga el tanque!";
       break;
   }
@@ -37,7 +37,7 @@ export const WaterTank = () => {
             ry={20}
             cx={55}
             cy={160}
-            opacity={0.1}
+            opacity={0.2}
             fill={"rgb(240, 240, 240)"}
           />
 

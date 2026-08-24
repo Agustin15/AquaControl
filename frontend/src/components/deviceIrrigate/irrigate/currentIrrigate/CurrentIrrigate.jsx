@@ -1,17 +1,25 @@
 import styles from "./CurrentIrrigate.module.css";
 import { HumidityPlant } from "./humitiyPlant/HumidityPlant";
 import { WaterTank } from "./waterTank/WaterTank";
+import { LastWaterPlant } from "./lastWaterPlant/LastWaterPlant.jsx";
 import { usePlant } from "../../../../contexts/PlantContext";
 import { useTank } from "../../../../contexts/TankContext";
 import { useWaterPlant } from "../../../../contexts/WaterPlantContext";
 import { alertWarning } from "../../../alertSwal/alertSwal";
+import { useEffect } from "react";
 
 export const CurrentIrrigate = () => {
   const { plantSelected, currentHumidityPlant } = usePlant();
   const { currentLevelTank } = useTank();
-  const { sendStartWaterPlant, waterPlantInProgress } = useWaterPlant();
+  const {
+    sendStartWaterPlant,
+    sendStopWaterPlant,
+    waterPlantInProgress,
+    fetchGetLastWaterPlant,
+    lastWaterPlant,
+  } = useWaterPlant();
 
-  const handleClick = () => {
+  const handleStartIrrigation = () => {
     if (currentHumidityPlant >= plantSelected.umbralHumidity)
       return alertWarning("La planta ya esta en su nivel optimo de humedad");
 
@@ -22,13 +30,37 @@ export const CurrentIrrigate = () => {
 
     sendStartWaterPlant();
   };
+  const handleStopIrrigation = () => {
+    sendStopWaterPlant();
+  };
+
+  useEffect(() => {
+    fetchGetLastWaterPlant(false);
+  }, []);
 
   return (
     <div className={styles.currentIrrigate}>
       <WaterTank />
-      <button onClick={() => handleClick()} className={styles.startIrrigate}>
-        {waterPlantInProgress ? "Riego en progreso" : "Iniciar riego"}
-      </button>
+      <div className={styles.column}>
+        <button
+          disabled={waterPlantInProgress}
+          onClick={() => handleStartIrrigation()}
+          className={styles.startIrrigate}
+        >
+          {waterPlantInProgress ? "Riego en progreso" : "Iniciar riego"}
+        </button>
+
+        {lastWaterPlant && <LastWaterPlant lastWaterPlant={lastWaterPlant} />}
+        {waterPlantInProgress && (
+          <button
+            onClick={() => handleStopIrrigation()}
+            className={styles.cancelIrrigate}
+          >
+            Detener riego
+          </button>
+        )}
+      </div>
+
       <HumidityPlant plantSelected={plantSelected} />
     </div>
   );
