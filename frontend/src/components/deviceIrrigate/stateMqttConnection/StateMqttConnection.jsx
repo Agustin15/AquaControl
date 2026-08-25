@@ -1,6 +1,6 @@
 import styles from "./StateMqttConnection.module.css";
 import iconConnected from "../../../assets/img/connected.png";
-import iconWarning from "../../../assets/img/warningConnection.png";
+import iconNoConnected from "../../../assets/img/noConnected.png";
 import { useMqtt } from "../../../contexts/MqttContext";
 import { useState } from "react";
 
@@ -13,10 +13,10 @@ export const StateMqttConnection = () => {
       <button
         onClick={() => (showState ? setShowState(false) : setShowState(true))}
       >
-        {mqttClient.connected == false && (
-          <img className={styles.iconWarning} src={iconWarning}></img>
-        )}
-        <img className={styles.iconConnected} src={iconConnected}></img>
+        <img
+          className={styles.iconConnected}
+          src={mqttClient.connected == false ? iconNoConnected : iconConnected}
+        ></img>
       </button>
 
       {showState && (

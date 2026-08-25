@@ -1,4 +1,5 @@
-﻿using Entities;
+﻿using DAL;
+using Entities;
 using Logic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +20,13 @@ namespace Api.Controllers
         {
             try
             {
+                if (!User.Identity.IsAuthenticated || User.FindFirst("IdDevice") is null)
+                    return Unauthorized();
+
+                int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
+
+                if (idDevice != humidityPlantLog.Plant.Device.Id)
+                    throw new Exception("El registro de humedad que quiere agregar no pertence al dispositivo que esta usando en este momento");
 
                 Plant plantFound = await new Lplant().GetPlantOfDeviceById(humidityPlantLog.Plant.Id, humidityPlantLog.Plant.Device.Id);
 

@@ -20,8 +20,6 @@ var refreshTokenSecretKey = Environment.GetEnvironmentVariable("REFRESH_TOKEN_SE
 var deviceTokenSecretKey = Environment.GetEnvironmentVariable("DEVICE_TOKEN_SECRET_KEY");
 
 
-//builder.Services.AddSingleton<MqttClient>();
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: "AllowedHost",

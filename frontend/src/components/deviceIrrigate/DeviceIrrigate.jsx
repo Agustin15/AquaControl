@@ -55,9 +55,7 @@ export const DeviceIrrigate = () => {
           {optionSelected == "Irrigate" && (
             <PlantProvider>
               <TankProvider>
-                <WaterPlantProvider>
-                  <Irrigate />
-                </WaterPlantProvider>
+                <Irrigate />
               </TankProvider>
             </PlantProvider>
           )}

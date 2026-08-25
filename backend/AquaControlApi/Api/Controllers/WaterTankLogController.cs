@@ -1,4 +1,5 @@
-﻿using Entities;
+﻿using DAL;
+using Entities;
 using Logic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +18,13 @@ namespace Api.Controllers
         {
             try
             {
+                if (!User.Identity.IsAuthenticated || User.FindFirst("IdDevice") is null)
+                    return Unauthorized();
+
+                int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
+
+                if (idDevice != waterTankLog.Tank.Device.Id)
+                    throw new Exception("El registro de nivel de agua que quiere agregar no pertence al dispositivo que esta usando en este momento");
 
                 if (waterTankLog is null) return StatusCode(400, new { message = "Debe indicar un registro de agua sobre un tanque para agregar" });
 

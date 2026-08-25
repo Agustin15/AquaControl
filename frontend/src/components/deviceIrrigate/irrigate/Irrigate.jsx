@@ -4,17 +4,17 @@ import iconNoTanks from "../../../assets/img/noTanks.png";
 import { useEffect, useState } from "react";
 import { usePlant } from "../../../contexts/PlantContext";
 import { useTank } from "../../../contexts/TankContext";
-import { useWaterPlant } from "../../../contexts/WaterPlantContext";
 import { CurrentIrrigate } from "./currentIrrigate/CurrentIrrigate";
 import { Record } from "./record/Record";
 import { Menu } from "./menu/Menu";
+import { WaterPlantProvider } from "../../../contexts/WaterPlantContext";
 
 export const Irrigate = () => {
   const [optionSelected, setOptionSelected] = useState("Irrigate");
   const [loadingInit, setLoadingInit] = useState(true);
   const { getPlants, errorPlants, plants, plantSelected, setPlantSelected } =
     usePlant();
-  const { getTanks, errorTanks, setTankSelected, tankSelected } = useTank();
+  const { getTanks, errorTanks, setTankSelected } = useTank();
 
   useEffect(() => {
     loadInit();
@@ -64,7 +64,15 @@ export const Irrigate = () => {
               </option>
             ))}
           </select>
-          {optionSelected == "Irrigate" ? <CurrentIrrigate /> : <Record />}
+          {optionSelected == "Irrigate" ? (
+            <WaterPlantProvider>
+              <CurrentIrrigate />
+            </WaterPlantProvider>
+          ) : (
+            <WaterPlantProvider>
+              <Record />
+            </WaterPlantProvider>
+          )}
         </div>
       )}
     </div>

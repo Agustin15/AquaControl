@@ -16,9 +16,8 @@ export const HumidityPlant = ({ plantSelected }) => {
 
   return (
     <div className={styles.humidityPlant}>
-      <AnimationIrrigate />
       <div className={styles.row}>
-        <img src={iconPlant}></img>
+        <AnimationIrrigate />
         <HumidityLevel
           optimePercentege={optimePercentege}
           colorLevel={colorLevel}

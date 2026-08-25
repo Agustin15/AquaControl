@@ -28,6 +28,9 @@ namespace Api.Controllers
 
                 int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
 
+                if (idDevice != tank.Device.Id)
+                    throw new Exception("El tanque que quiere agregar no pertence al dispositivo que esta usando en este momento");
+
                 Device deviceFound = await new Ldevice().GetDeviceById(idDevice);
 
                 if (deviceFound is null) return StatusCode(404, new { message = "Dispositivo no encontado" });
@@ -63,6 +66,9 @@ namespace Api.Controllers
 
                 int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
 
+                if (idDevice != tank.Device.Id)
+                    throw new Exception("El tanque que quiere actualizar no pertence al dispositivo que esta usando en este momento");
+
                 Device deviceFound = await new Ldevice().GetDeviceById(idDevice);
 
                 if (deviceFound is null) return StatusCode(404, new { message = "Dispositivo no encontado" });
@@ -92,6 +98,9 @@ namespace Api.Controllers
                     return Unauthorized();
 
                 int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
+
+                if (idDevice != tank.Device.Id)
+                    throw new Exception("El tanque que quiere eliminar no pertence al dispositivo que esta usando en este momento");
 
                 Tank tankFound = await new Ltank().GetTankOfDeviceById(tank.Id, idDevice);
 

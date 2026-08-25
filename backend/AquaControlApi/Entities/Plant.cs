@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace Entities
 {
@@ -48,10 +49,12 @@ namespace Entities
         public void Validar()
         {
 
-            if (UmbralHumidity > 100 || UmbralHumidity < 0) throw new Exception("Umbral de humedad debe estar entre 0 y 100");
+            if (umbralHumidity > 100 || umbralHumidity < 0) throw new Exception("Umbral de humedad debe estar entre 0 y 100");
 
             if (!String.IsNullOrWhiteSpace(Description) && Description.Length > 500)
                 throw new Exception("Descripcion debe contener como maximo 500 caracteres");
+
+            if (image != null && image.Length == 0) throw new Exception("Debe indicar una imagen");
 
             if (Device is null)
                 throw new Exception("Planta debe pertenecer a un dispositivo de riego");
