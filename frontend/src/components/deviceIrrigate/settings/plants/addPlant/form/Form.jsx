@@ -1,12 +1,10 @@
 import styles from "./Form.module.css";
-import iconAdd from "../../../../../../assets/img/add.png";
-import { useState } from "react";
 import { TakePhoto } from "./takePhoto/TakePhoto";
-import { usePlant } from "../../../../../../contexts/PlantContext";
+import { useFormPlant } from "../../../../../../contexts/plantContext/FormPlantContext";
 
 export const Form = ({ handleSubmit, method }) => {
   const { valuesForm, setValuesForm, errorsForm, setErrorsForm, loadingForm } =
-    usePlant();
+    useFormPlant();
 
   const handleChange = (event) => {
     const { name, value } = event.target;

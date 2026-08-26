@@ -4,14 +4,13 @@ import { useState } from "react";
 import { useDevice } from "../../contexts/DeviceContext";
 import { useNavigate } from "react-router";
 import { LogsWeekdayProvider } from "../../contexts/LogsWeekdayContext";
-import { PlantProvider } from "../../contexts/PlantContext";
-import { TankProvider } from "../../contexts/TankContext";
+import { PlantProvider } from "../../contexts/plantContext/PlantContext";
+import { TankProvider } from "../../contexts/tankContext/TankContext";
 import { HumidityPlantLogs } from "./humidityPlantLogs/HumidityPlantLogs";
 import { Menu } from "./menu/Menu";
 import { WaterTankLogs } from "./waterTankLogs/WaterTankLogs";
 import { Settings } from "./settings/Settings";
 import { Irrigate } from "./irrigate/Irrigate";
-import { WaterPlantProvider } from "../../contexts/WaterPlantContext";
 import { StateMqttConnection } from "./stateMqttConnection/StateMqttConnection";
 
 export const DeviceIrrigate = () => {

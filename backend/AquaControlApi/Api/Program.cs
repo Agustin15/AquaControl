@@ -20,6 +20,11 @@ var refreshTokenSecretKey = Environment.GetEnvironmentVariable("REFRESH_TOKEN_SE
 var deviceTokenSecretKey = Environment.GetEnvironmentVariable("DEVICE_TOKEN_SECRET_KEY");
 
 
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.SuppressModelStateInvalidFilter = true;
+});
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: "AllowedHost",
@@ -33,8 +38,6 @@ builder.Services.AddCors(options =>
 
                       });
 });
-
-builder.Services.Configure<ApiBehaviorOptions>(option => { option.SuppressModelStateInvalidFilter = true; });
 
 builder.Services.AddAuthentication()
     .AddJwtBearer("Bearer", options =>

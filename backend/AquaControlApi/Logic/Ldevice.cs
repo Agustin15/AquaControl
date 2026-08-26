@@ -41,13 +41,6 @@ namespace Logic
 
         }
 
-        public async Task<Device> GetDeviceById(int idDevice)
-        {
-            Device device = await new Pdevice().GetDeviceById(idDevice);
-
-            return device;
-
-        }
     }
 
 }

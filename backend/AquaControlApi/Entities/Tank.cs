@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +20,9 @@ namespace Entities
             get { return id; }
         }
 
+
+        [Required(ErrorMessage = "Debe indicar altura del tanque")]
+        [Range(15, 800, ErrorMessage = "Altura del tanque debe estar entre 15 y 800 CM")]
         public double Height
         {
             set { height = value; }
@@ -26,15 +30,7 @@ namespace Entities
         }
 
 
-        public void Validar()
-        {
-            if (Height <= 0)
-                throw new Exception("Altura del tanque debe ser al menos mayor a cero");
-
-            if (Device is null)
-                throw new Exception("Tanque debe pertenecer a un dispositivo de riego");
-        }
-
+        [Required(ErrorMessage = "Tanque debe pertenecer a un dispositivo de riego")]
         public Device Device
         {
             set { device = value; }

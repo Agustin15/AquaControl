@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,12 +26,16 @@ namespace Entities
             set { id = value; }
             get { return id; }
         }
+
+
+        [Required(ErrorMessage = "Debe ingresar un tanque")]
         public Tank Tank
         {
             set { tank = value; }
             get { return tank; }
         }
 
+        [Required(ErrorMessage = "Debe ingresar una planta")]
         public Plant Plant
         {
             set { plant = value; }
@@ -49,50 +54,56 @@ namespace Entities
             get { return datetimeEnd; }
         }
 
+        [Required(ErrorMessage = "Debe indicar el tipo de riego")]
+        [AllowedValues(["Automatico", "Manual"], ErrorMessage = "Tipo de riego debe ser manual o automatico")]
         public string Type
         {
             set { type = value; }
             get { return type; }
         }
 
+        [Required(ErrorMessage = "Debe indicar el estado del riego")]
+        [AllowedValues(["En curso", "Completado", "Fallido", "Interrumpido"],
+            ErrorMessage = "Estado de riego solo acepta los valores:Completado - En curso - Fallido - Interrumpido")]
         public string State
         {
             set { state = value; }
             get { return state; }
         }
 
+        [Required(ErrorMessage = "Debe indicar el nivel que tiene el tanque previo al riego")]
+        [Range(0, 100, ErrorMessage = "Nivel del tanque debe estar entre 0 y 100")]
         public double LevelTankBefore
         {
             set { levelTankBefore = value; }
             get { return levelTankBefore; }
         }
 
+        [Required(ErrorMessage = "Debe indicar el nivel que tiene el tanque posterior al riego")]
+        [Range(0, 100, ErrorMessage = "Nivel del tanque debe estar entre 0 y 100")]
         public double LevelTankAfter
         {
             set { levelTankAfter = value; }
             get { return levelTankAfter; }
         }
 
+        [Required(ErrorMessage = "Debe indicar el nivel de humedad de la planta previo al riego")]
+        [Range(0, 100, ErrorMessage = "Nivel de humedad debe estar entre 0 y 100")]
         public int HumidityBefore
         {
             set { humidityBefore = value; }
             get { return humidityBefore; }
         }
+
+        [Required(ErrorMessage = "Debe indicar el nivel de humedad de la planta posterior del riego")]
+        [Range(0, 100, ErrorMessage = "Nivel de humedad debe estar entre 0 y 100")]
         public int HumidityAfter
         {
             set { humidityAfter = value; }
             get { return humidityAfter; }
         }
 
-        public void Validar()
-        {
-            if (tank is null) throw new Exception("Debe indicar un tanque para el riego");
-            if (plant is null) throw new Exception("Debe indicar una planta para el riego");
-            if (type != "Automatico" && type != "Manual") throw new Exception("Tipo de riego debe ser manual o automatico");
-            if (state != "Completado" && state != "En curso" && state != "Fallido")
-                throw new Exception("Estado de riego solo acepta los valores:completado o en curso o fallido");
 
-        }
         public WaterPlantLog() { }
 
 
@@ -105,8 +116,8 @@ namespace Entities
             Plant = plant;
             DatetimeStart = datetimeStart;
             DatetimeEnd = datetimeEnd;
-            State = state;
-            Type = type;
+            State = state.Trim();
+            Type = type.Trim();
             LevelTankBefore = levelTankBefore;
             LevelTankAfter = levelTankAfter;
             HumidityBefore = humidityBefore;

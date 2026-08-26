@@ -1,9 +1,7 @@
 import styles from "./EditPlace.module.css";
-import { useAuth } from "../../../../contexts/AuthContext";
-import { useDevice } from "../../../../contexts/DeviceContext";
-import { getTokenSaved } from "../../../../securityStorage.js";
 import { alertWarning } from "../../../alertSwal/alertSwal.js";
 import { useCrudDevice } from "../../../../contexts/CrudDeviceContext.jsx";
+import { useDevice } from "../../../../contexts/DeviceContext.jsx";
 
 export const EditPlace = () => {
   const {
@@ -12,11 +10,10 @@ export const EditPlace = () => {
     valuesForm,
     setValuesForm,
     setErrorsForm,
-    getUserDevices,
     fetchPostOrPut,
-  } =  useCrudDevice();
+  } = useCrudDevice();
 
-  const { updateAccessToken } = useAuth();
+  const { getUserDevices } = useDevice();
 
   const handleChange = (event) => {
     setValuesForm({ ...valuesForm, placeName: event.target.value });
@@ -36,7 +33,8 @@ export const EditPlace = () => {
     if (valuesForm.placeName.length == 0)
       return alertWarning("Nombre de lugar no puede estar vacio");
 
-    await fetchPostOrPut("PUT", true);
+    const result = await fetchPostOrPut("PUT", true);
+    if (result) await getUserDevices();
   };
 
   return (

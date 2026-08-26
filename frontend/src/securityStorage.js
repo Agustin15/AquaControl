@@ -34,5 +34,7 @@ export const cleanInfo = async () => {
   await SecureStoragePlugin.remove({ key: "accessToken" });
   await SecureStoragePlugin.remove({ key: "refreshToken" });
   await SecureStoragePlugin.remove({ key: "userLogued" });
-  await SecureStoragePlugin.remove({ key: "deviceSelected" });
+
+  if (await getInfoSaved("deviceSelected"))
+    await SecureStoragePlugin.remove({ key: "deviceSelected" });
 };

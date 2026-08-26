@@ -1,8 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { useDevice } from "./DeviceContext";
-import { useAuth } from "./AuthContext";
-import { useMqtt } from "./MqttContext.jsx";
-import { getTokenSaved } from "../securityStorage.js";
+import { useDevice } from "../DeviceContext";
+import { useAuth } from "../AuthContext";
+import { useMqtt } from "../MqttContext.jsx";
+import { getTokenSaved } from "../../securityStorage.js";
 const localhostBackend = import.meta.env.VITE_BACKEND_LOCALHOST;
 
 const PlantContext = createContext();
@@ -13,23 +13,11 @@ export const PlantProvider = ({ children }) => {
   const [errorPlants, setErrorPlants] = useState();
   const [currentHumidityPlant, setCurrentHumidityPlant] = useState(0);
   const [plantSelected, setPlantSelected] = useState(null);
-  const [addPlant, setAddPlant] = useState(false);
+  const [showFormAdd, setShowFormAdd] = useState(false);
   const [infoPlant, setInfoPlant] = useState(null);
   const [editPlant, setEditPlant] = useState(null);
   const [deletePlant, setDeletePlant] = useState(null);
-  const [valuesForm, setValuesForm] = useState({
-    id: 0,
-    image: null,
-    umbralHumidity: 0,
-    description: "",
-  });
-  const [loadingForm, setLoadingForm] = useState(false);
-  const [errorsForm, setErrorsForm] = useState({
-    image: "",
-    umbralHumidity: "",
-    description: "",
-  });
-
+  
   const { mqttClient } = useMqtt();
   const { updateAccessToken } = useAuth();
   const { deviceSelected } = useDevice();
@@ -79,36 +67,6 @@ export const PlantProvider = ({ children }) => {
     }
   };
 
-  const fetchPostOrPut = async (method, retry) => {
-    setLoadingForm(true);
-    try {
-      const accessToken = await getTokenSaved("accessToken");
-
-      const response = await fetch(localhostBackend + "/api/plant", {
-        method: method,
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify(valuesForm),
-      });
-
-      if (response.status === 401 && retry == true) {
-        await updateAccessToken();
-        return fetchPostOrPut(method, false);
-      }
-      const result = await response.json();
-
-      if (!response.ok) throw new Error(result.message);
-
-      return result;
-    } catch (error) {
-      throw error;
-    } finally {
-      setLoadingForm(false);
-    }
-  };
-
   const getPlants = async () => {
     setPlants([]);
     const plants = await fetchGet(localhostBackend + "/api/plant", true);
@@ -137,20 +95,14 @@ export const PlantProvider = ({ children }) => {
         loadingPlants,
         errorPlants,
         getPlants,
-        fetchPostOrPut,
-        setAddPlant,
-        addPlant,
+        setShowFormAdd,
+        showFormAdd,
         setEditPlant,
         editPlant,
         infoPlant,
         setInfoPlant,
         deletePlant,
         setDeletePlant,
-        valuesForm,
-        setValuesForm,
-        errorsForm,
-        setErrorsForm,
-        loadingForm,
         getLiveReloadHumidityPlant,
         currentHumidityPlant,
         plantSelected,

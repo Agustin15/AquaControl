@@ -155,7 +155,7 @@ namespace DAL
                     while (await reader.ReadAsync())
                     {
                         User user = new User(Convert.ToInt16(reader["code"]), Convert.ToString(reader["entity"]),
-                         Convert.ToString("email"), "", Convert.ToDateTime(reader["created"]));
+                         Convert.ToString(reader["correspondence"]), "", Convert.ToDateTime(reader["created"]));
 
                         users.Add(user);
                     }
@@ -200,7 +200,8 @@ namespace DAL
                     await reader.ReadAsync();
 
                     user = new User(Convert.ToInt16(reader["code"]), Convert.ToString(reader["entity"]),
-                         Convert.ToString("email"), Convert.ToString(reader["entityKey"]), Convert.ToDateTime(reader["created"]));
+                         Convert.ToString(reader["correspondence"]), Convert.ToString(reader["entityKey"]), 
+                         Convert.ToDateTime(reader["created"]));
                 }
                 await reader.CloseAsync();
 
@@ -241,7 +242,7 @@ namespace DAL
                     await reader.ReadAsync();
 
                     user = new User(Convert.ToInt16(reader["code"]), Convert.ToString(reader["entity"]),
-                              Convert.ToString("email"), "", Convert.ToDateTime(reader["created"]));
+                              Convert.ToString(reader["correspondence"]), "", Convert.ToDateTime(reader["created"]));
                 }
                 await reader.CloseAsync();
 
@@ -259,7 +260,7 @@ namespace DAL
             return user;
         }
 
-        public async Task<User> GetUserById(int idUser)
+        internal async Task<User> GetUserById(int idUser)
         {
 
             User user = null;
@@ -282,7 +283,7 @@ namespace DAL
                     await reader.ReadAsync();
 
                     user = new User(Convert.ToInt16(reader["code"]), Convert.ToString(reader["entity"]),
-                         Convert.ToString("email"), "", Convert.ToDateTime(reader["created"]));
+                         Convert.ToString(reader["correspondence"]), "", Convert.ToDateTime(reader["created"]));
                 }
                 await reader.CloseAsync();
 

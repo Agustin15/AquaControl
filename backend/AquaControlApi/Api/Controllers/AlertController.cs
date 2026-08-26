@@ -18,7 +18,7 @@ namespace Api.Controllers
     [ApiController]
     public class AlertController : ControllerBase
     {
-        [Authorize(AuthenticationSchemes = "Bearer")]
+        [Authorize(AuthenticationSchemes = "Esp32Bearer")]
         [HttpPost]
         [Route("api/alert")]
         public async Task<ActionResult> Add([FromBody] Alert alert)
@@ -30,12 +30,8 @@ namespace Api.Controllers
 
                 int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
 
-                Tank tankFound = await new Ltank().GetTankOfDeviceById(alert.Tank.Id, idDevice);
-
-                if (tankFound is null) return StatusCode(404, new { message = "No se encontro el registro de este tanque en el dispositivo" });
-
-                alert.Tank = tankFound;
-                alert.Validar();
+                if (idDevice != alert.Device.Id)
+                    throw new Exception("El dispositivo vinculado a la alerta es distinto al dispositivo actual");
 
                 await new Lalert().Add(alert);
 
@@ -49,7 +45,7 @@ namespace Api.Controllers
             }
         }
 
-        [Authorize(AuthenticationSchemes = "Bearer")]
+        [Authorize(AuthenticationSchemes = "Esp32Bearer")]
         [HttpPut("api/alert")]
         public async Task<ActionResult> UpdateAlertState([FromBody] Alert alert)
         {
@@ -61,12 +57,8 @@ namespace Api.Controllers
 
                 int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
 
-                Tank tankFound = await new Ltank().GetTankOfDeviceById(alert.Tank.Id, idDevice);
-
-                if (tankFound is null) return StatusCode(404, new { message = "No se encontro el registro de este tanque en el dispositivo" });
-
-                alert.Tank = tankFound;
-                alert.Validar();
+                if (idDevice != alert.Device.Id)
+                    throw new Exception("El dispositivo vinculado a la alerta es distinto al dispositivo actual");
 
                 await new Lalert().UpdateAlertState(alert);
 

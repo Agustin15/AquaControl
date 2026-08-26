@@ -1,13 +1,12 @@
 import styles from "./EditDevice.module.css";
 import iconEdit from "../../../assets/img/edit.png";
-import { useDevice } from "../../../contexts/DeviceContext";
 import { useState } from "react";
 import { EditPlace } from "./editPlace/EditPlace";
 import { EditWifiCredentials } from "./editWifiCredentials/EditWifiCredentials";
 import { useCrudDevice } from "../../../contexts/CrudDeviceContext";
 
 export const EditDevice = () => {
-  const { handleClose, loadingForm, setEditDevice, editDevice } =
+  const { handleClose, loadingForm, setEditDevice } =
     useCrudDevice();
   const [optionSelected, setOptionSelected] = useState("editPlace");
 

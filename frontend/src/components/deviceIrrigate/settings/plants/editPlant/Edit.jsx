@@ -1,7 +1,8 @@
 import styles from "./Edit.module.css";
 import iconEdit from "../../../../../assets/img/edit.png";
 import { Form } from "../addPlant/form/Form.jsx";
-import { usePlant } from "../../../../../contexts/PlantContext.jsx";
+import { usePlant } from "../../../../../contexts/plantContext/PlantContext.jsx";
+import { useFormPlant } from "../../../../../contexts/plantContext/FormPlantContext.jsx";
 import {
   alertError,
   alertSuccess,
@@ -9,16 +10,15 @@ import {
 } from "../../../../alertSwal/alertSwal.js";
 
 export const Edit = () => {
+  const { setEditPlant, editPlant, getPlants } = usePlant();
+
   const {
-    setEditPlant,
-    editPlant,
     fetchPostOrPut,
     valuesForm,
     setValuesForm,
     errorsForm,
     setErrorsForm,
-    getPlants,
-  } = usePlant();
+  } = useFormPlant();
 
   const handleSubmit = async (event) => {
     event.preventDefault();

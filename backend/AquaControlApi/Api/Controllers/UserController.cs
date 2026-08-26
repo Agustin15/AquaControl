@@ -29,9 +29,7 @@ namespace Api.Controllers
 
             try
             {
-                if (user is null) return StatusCode(400, new { message = "Debe indicar datos de usuario para registrar" });
-
-                user.Validar();
+                user.ValidationPassword();
 
                 var result = await new Luser().Signup(user);
 

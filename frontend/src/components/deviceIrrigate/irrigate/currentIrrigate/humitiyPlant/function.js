@@ -1,5 +1,5 @@
 export const detailsHumidity = (optimePercentege) => {
-  let colorLevel, state, background;
+  let colorLevel, state;
 
   switch (true) {
     case optimePercentege > 70 && optimePercentege <= 100:

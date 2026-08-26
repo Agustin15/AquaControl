@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,11 +20,15 @@ namespace Entities
             get { return id; }
         }
 
+        [Required(ErrorMessage = "Debe indicar planta a la que pertenece el registro de humedad")]
         public Plant Plant
         {
             set { plant = value; }
             get { return plant; }
         }
+
+        [Required(ErrorMessage = "Debe indicar el porcentaje de humedad de la planta")]
+        [Range(0, 100, ErrorMessage = "Porcentaje de humedad debe estar entre 0 y 100")]
         public double Percentege
         {
             set { percentege = value; }
@@ -35,16 +40,7 @@ namespace Entities
             get { return datetimeLog; }
         }
 
-        public void Validar()
-        {
 
-            if (Plant is null)
-                throw new Exception("Debe indicar un planta");
-
-            if (percentege < 0 || percentege > 100)
-                throw new Exception("Porcentaje de humedad debe estar entre 0 y 100");
-
-        }
 
         public HumidityPlantLog() { }
 

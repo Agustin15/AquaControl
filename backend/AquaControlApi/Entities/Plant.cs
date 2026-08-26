@@ -21,6 +21,8 @@ namespace Entities
             get { return id; }
         }
 
+        [Required(ErrorMessage = "Debe indicar un umbral de humedad")]
+        [Range(0, 100, ErrorMessage = "Umbral de humedad debe estar entre 0 y 100")]
         public int UmbralHumidity
         {
             set { umbralHumidity = value; }
@@ -39,6 +41,7 @@ namespace Entities
             get { return description; }
         }
 
+        [Required(ErrorMessage = "Planta debe pertenecer a un dispositivo de riego")]
         public Device Device
         {
             set { device = value; }
@@ -48,16 +51,10 @@ namespace Entities
 
         public void Validar()
         {
-
-            if (umbralHumidity > 100 || umbralHumidity < 0) throw new Exception("Umbral de humedad debe estar entre 0 y 100");
-
             if (!String.IsNullOrWhiteSpace(Description) && Description.Length > 500)
                 throw new Exception("Descripcion debe contener como maximo 500 caracteres");
 
             if (image != null && image.Length == 0) throw new Exception("Debe indicar una imagen");
-
-            if (Device is null)
-                throw new Exception("Planta debe pertenecer a un dispositivo de riego");
         }
 
         public Plant() { }
@@ -68,10 +65,21 @@ namespace Entities
             Id = id;
             UmbralHumidity = umbralHumidity;
             Image = image;
-            Description = description;
+            Description = description.Trim();
             Device = device;
 
         }
+
+        public Plant(int id, int umbralHumidity, string description, Device device)
+        {
+
+            Id = id;
+            UmbralHumidity = umbralHumidity;
+            Description = description.Trim();
+            Device = device;
+
+        }
+
     }
 
 }

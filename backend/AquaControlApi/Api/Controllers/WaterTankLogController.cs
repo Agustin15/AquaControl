@@ -24,17 +24,7 @@ namespace Api.Controllers
                 int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
 
                 if (idDevice != waterTankLog.Tank.Device.Id)
-                    throw new Exception("El registro de nivel de agua que quiere agregar no pertence al dispositivo que esta usando en este momento");
-
-                if (waterTankLog is null) return StatusCode(400, new { message = "Debe indicar un registro de agua sobre un tanque para agregar" });
-
-                Tank tankFound = await new Ltank().GetTankOfDeviceById(waterTankLog.Tank.Id, waterTankLog.Tank.Device.Id);
-
-                if (tankFound is null) return StatusCode(404, new { message = "No se encontro registro de este tanque en el dispositivo" });
-
-                waterTankLog.Tank = tankFound;
-
-                waterTankLog.Validar();
+                    throw new Exception("El tanque del registro de nivel de agua que quiere agregar no pertence a este dispositivo");
 
                 await new LwaterTankLog().Add(waterTankLog);
 

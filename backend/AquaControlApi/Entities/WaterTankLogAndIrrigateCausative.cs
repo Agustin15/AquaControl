@@ -35,10 +35,5 @@ namespace Entities
             IrrigateCausative = irrigateCausative;
         }
 
-        public void Validar()
-        {
-            if (WaterTankLog is null) throw new Exception("Registro de nivel de agua del tanque no puede ser nulo");
-
-        }
     }
 }

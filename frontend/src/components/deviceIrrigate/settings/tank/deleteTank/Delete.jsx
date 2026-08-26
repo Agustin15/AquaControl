@@ -9,7 +9,7 @@ import {
 import { getTokenSaved } from "../../../../../securityStorage.js";
 import { useEffect } from "react";
 import { useAuth } from "../../../../../contexts/AuthContext.jsx";
-import { useTank } from "../../../../../contexts/TankContext.jsx";
+import { useTank } from "../../../../../contexts/tankContext/TankContext.jsx";
 
 export const Delete = ({}) => {
   const { updateAccessToken } = useAuth();

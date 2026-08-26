@@ -34,7 +34,10 @@ namespace DAL
                 if (reader.HasRows)
                 {
 
-                    Tank tankFound = await new Ptank().GetTankByIdAndDevice(idTank, idDevice);
+
+                    List<Tank> tanks = await new Ptank().GetAllTanksByDevice(idDevice);
+                    Tank tankFound = tanks.Find(tank => tank.Id == idTank);
+
                     List<Plant> plants = await new Pplant().GetAllPlantsByDevice(idDevice);
 
                     while (await reader.ReadAsync())

@@ -4,11 +4,9 @@ import { useEffect, useState } from "react";
 import { useWeekdayLogs } from "../../../../contexts/LogsWeekdayContext";
 import { Weekdays } from "../../weekdays/Weekdays.jsx";
 import { Logs } from "../logs/Logs.jsx";
-const localhostBackend = import.meta.env.VITE_BACKEND_LOCALHOST;
 
 export const LogsWeekday = () => {
   const {
-    getWeekdayLogs,
     weekdayLogs,
     loadingLogs,
     errorWeekdayLogs,

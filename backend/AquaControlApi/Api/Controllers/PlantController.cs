@@ -13,7 +13,7 @@ namespace Api.Controllers
     public class PlantController : ControllerBase
     {
 
-        //[Authorize(AuthenticationSchemes = "Bearer")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost]
         [Route("api/plant")]
         public async Task<ActionResult> Add([FromBody] Plant plant)
@@ -26,19 +26,12 @@ namespace Api.Controllers
                 int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
 
                 if (idDevice != plant.Device.Id)
-                    throw new Exception("La planta que quiere agregar no pertence al dispositivo que esta usando en este momento");
-
-                Device deviceFound = await new Ldevice().GetDeviceById(plant.Device.Id);
-
-                if (deviceFound is null) return StatusCode(404, new { message = "Dispositivo no encontado" });
-                plant.Device = deviceFound;
+                    throw new Exception("La planta que quiere agregar no pertence al dispositivo que esta usando");
 
                 List<Plant> plantsOfDevice = await new Lplant().GetAllPlantsByDevice(plant.Device.Id);
 
                 if (plantsOfDevice.Count == 0) plant.Id = 1;
                 else plant.Id = plantsOfDevice.Count + 1;
-
-                plant.Validar();
 
                 await new Lplant().Add(plant);
 
@@ -63,16 +56,9 @@ namespace Api.Controllers
                 int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
 
                 if (idDevice != plant.Device.Id)
-                    throw new Exception("La planta que quiere actualizar sus datos no pertence al dispositivo que esta usando en este momento");
+                    throw new Exception("La planta que quiere actualizar sus datos no pertence al dispositivo que esta usando");
 
-                Device deviceFound = await new Ldevice().GetDeviceById(idDevice);
-
-                if (deviceFound is null) return StatusCode(404, new { message = "Dispositivo no encontado" });
-
-                plant.Device = deviceFound;
-
-                plant.Validar();
-
+             
                 await new Lplant().Update(plant);
 
                 return Ok(plant);
@@ -96,13 +82,9 @@ namespace Api.Controllers
                 int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
 
                 if (idDevice != plant.Device.Id)
-                    throw new Exception("La planta que quiere eliminar no pertence al dispositivo que esta usando en este momento");
+                    throw new Exception("La planta que quiere eliminar no pertence al dispositivo que esta usando");
 
-                Plant plantFound = await new Lplant().GetPlantOfDeviceById(plant.Id, idDevice);
-
-                if (plantFound is null) throw new Exception("Planta no encontrada");
-
-                await new Lplant().Delete(plantFound);
+                await new Lplant().Delete(plant);
 
                 return Ok(plant);
             }

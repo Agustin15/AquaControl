@@ -1,7 +1,7 @@
 import styles from "./WaterTank.module.css";
 import { Recipient } from "./recipient/Recipient.jsx";
 import { Liquid } from "./liquid/Liquid.jsx";
-import { useTank } from "../../../../../contexts/TankContext.jsx";
+import { useTank } from "../../../../../contexts/tankContext/TankContext.jsx";
 
 export const WaterTank = () => {
   const { currentLevelTank } = useTank();

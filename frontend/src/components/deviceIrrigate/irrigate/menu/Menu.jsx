@@ -1,6 +1,5 @@
 import styles from "./Menu.module.css";
-import { useWaterPlant } from "../../../../contexts/WaterPlantContext";
-import { usePlant } from "../../../../contexts/PlantContext";
+import { usePlant } from "../../../../contexts/plantContext/PlantContext";
 import { useEffect } from "react";
 
 export const Menu = ({ optionSelected, setOptionSelected }) => {

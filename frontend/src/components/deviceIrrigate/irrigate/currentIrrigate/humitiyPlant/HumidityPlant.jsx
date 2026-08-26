@@ -1,7 +1,5 @@
 import styles from "./HumidityPlant.module.css";
-import iconPlant from "../../../../../assets/img/plant.png";
-import { usePlant } from "../../../../../contexts/PlantContext.jsx";
-import { useEffect } from "react";
+import { usePlant } from "../../../../../contexts/plantContext/PlantContext.jsx";
 import { HumidityLevel } from "./humidityLevel/HumidityLevel.jsx";
 import { detailsHumidity } from "./function.js";
 import { AnimationIrrigate } from "./animationIrrigate/AnimationIrrigate.jsx";

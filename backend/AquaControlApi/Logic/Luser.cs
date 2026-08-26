@@ -58,9 +58,10 @@ namespace Logic
                 {
                     user = new
                     {
-                        idUser = idGenerated,
+                        id = idGenerated,
                         username = user.Username,
                         email = user.Email,
+                        password = "",
                         joined = user.Joined,
                     },
                     accessToken = jwtAccessTokenSerialized,
@@ -104,9 +105,10 @@ namespace Logic
             {
                 user = new
                 {
-                    idUser = userFound.Id,
+                    id = userFound.Id,
                     username = userFound.Username,
                     email = userFound.Email,
+                    password = "",
                     joined = userFound.Joined,
                 },
                 accessToken = jwtAccessTokenSerialized,
@@ -151,13 +153,6 @@ namespace Logic
         {
             User user = await new Puser().GetUserByEmail(email);
 
-            return user;
-
-        }
-
-        public async Task<User> GetUserById(int idUser)
-        {
-            User user = await new Puser().GetUserById(idUser);
             return user;
 
         }

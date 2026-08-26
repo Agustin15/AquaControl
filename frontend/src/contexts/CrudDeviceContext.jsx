@@ -8,11 +8,12 @@ const CrudDeviceContext = createContext();
 
 export const CrudDeviceProvider = ({ children }) => {
   const [loadingForm, setLoadingForm] = useState(false);
-  const [addDevice, setAddDevice] = useState(false);
+  const [showFormAdd, setShowFormAdd] = useState(false);
   const [infoDevice, setInfoDevice] = useState(null);
   const [editDevice, setEditDevice] = useState(null);
   const [deleteDevice, setDeleteDevice] = useState(null);
   const [valuesForm, setValuesForm] = useState({
+    id: 0,
     placeName: "",
     wifi: "",
     wifiPassword: "",
@@ -22,7 +23,7 @@ export const CrudDeviceProvider = ({ children }) => {
     wifi: "",
     wifiPassword: "",
   });
-  const { accessToken, updateAccessToken } = useAuth();
+  const { updateAccessToken, userAuth } = useAuth();
 
   const fetchPostOrPut = async (method, retry) => {
     setLoadingForm(true);
@@ -38,8 +39,9 @@ export const CrudDeviceProvider = ({ children }) => {
           Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({
-          ...editDevice,
+          id: valuesForm.id,
           placeName: valuesForm.placeName,
+          user: userAuth,
         }),
       });
 
@@ -84,15 +86,15 @@ export const CrudDeviceProvider = ({ children }) => {
       wifiPassword: "",
     });
 
-    if (addDevice) setAddDevice(false);
+    if (showFormAdd) setShowFormAdd(false);
   };
 
   return (
     <CrudDeviceContext.Provider
       value={{
         fetchPostOrPut,
-        setAddDevice,
-        addDevice,
+        setShowFormAdd,
+        showFormAdd,
         setEditDevice,
         editDevice,
         infoDevice,

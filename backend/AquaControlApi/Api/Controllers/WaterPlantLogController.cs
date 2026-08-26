@@ -1,4 +1,5 @@
 ﻿using Api.Model;
+using DAL;
 using Entities;
 using Logic;
 using Microsoft.AspNetCore.Authorization;
@@ -24,18 +25,14 @@ namespace Api.Controllers
         {
             try
             {
-                Plant plantFound = await new Lplant().GetPlantOfDeviceById(waterPlantLog.Plant.Id, waterPlantLog.Plant.Device.Id);
 
-                if (plantFound is null) return StatusCode(404, new { message = "No se encontro este registro de planta en el dispositivo" });
+                if (!User.Identity.IsAuthenticated || User.FindFirst("IdDevice") is null)
+                    return Unauthorized();
 
-                Tank tankFound = await new Ltank().GetTankOfDeviceById(waterPlantLog.Plant.Id, waterPlantLog.Plant.Device.Id);
+                int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
 
-                if (tankFound is null) return StatusCode(404, new { message = "No se encontro este registro de tanque en el dispositivo" });
-
-                waterPlantLog.Tank = tankFound;
-                waterPlantLog.Plant = plantFound;
-
-                waterPlantLog.Validar();
+                if (idDevice != waterPlantLog.Plant.Device.Id || idDevice != waterPlantLog.Tank.Device.Id)
+                    throw new Exception("Solo se puede dar de alta monitoreos de riegos que pertenezcan al dispositivo que se esta usando");
 
                 int idGenerated = await new LwaterPlantLog().Add(waterPlantLog);
 
@@ -54,18 +51,13 @@ namespace Api.Controllers
         {
             try
             {
-                Plant plantFound = await new Lplant().GetPlantOfDeviceById(waterPlantLog.Plant.Id, waterPlantLog.Plant.Device.Id);
+                if (!User.Identity.IsAuthenticated || User.FindFirst("IdDevice") is null)
+                    return Unauthorized();
 
-                if (plantFound is null) return StatusCode(404, new { message = "No se encontro este registro de planta en el dispositivo" });
+                int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
 
-                Tank tankFound = await new Ltank().GetTankOfDeviceById(waterPlantLog.Plant.Id, waterPlantLog.Plant.Device.Id);
-
-                if (tankFound is null) return StatusCode(404, new { message = "No se encontro este registro de tanque en el dispositivo" });
-
-                waterPlantLog.Tank = tankFound;
-                waterPlantLog.Plant = plantFound;
-
-                waterPlantLog.Validar();
+                if (idDevice != waterPlantLog.Plant.Device.Id || idDevice != waterPlantLog.Tank.Device.Id)
+                    throw new Exception("Solo se puede actualizar monitoreos de riegos que pertenezcan al dispositivo que se esta usando");
 
                 await new LwaterPlantLog().UpdateStateWaterPlantLog(waterPlantLog);
 
@@ -118,14 +110,14 @@ namespace Api.Controllers
 
                 int amount = await new LwaterPlantLog().GetAmountWaterPlantLogs(idTank, idPlant, idDevice);
 
-                if (amount == 0) throw new Exception("No se encontraron registros riegos aun");
+                if (amount == 0) throw new Exception("No se han realizado riegos aun");
 
                 int pages = (int)Math.Ceiling(Convert.ToDecimal(amount) / 5);
 
                 List<WaterPlantLog> waterPlantLogs = await new LwaterPlantLog().GetWaterPlantLogsOffset(idTank, idPlant, idDevice, offset);
 
                 if (waterPlantLogs.Count == 0)
-                    throw new Exception("No se encontraron registros de riegos aun");
+                    throw new Exception("No se han realizado riegos aun");
 
                 return Ok(new
                 {

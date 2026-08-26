@@ -5,8 +5,9 @@ import iconDelete from "../../../../assets/img/delete.png";
 import iconInfo from "../../../../assets/img/info.png";
 import iconEdit from "../../../../assets/img/edit.png";
 import iconPlant from "../../../../assets/img/plant.png";
-import { usePlant } from "../../../../contexts/PlantContext";
+import { usePlant } from "../../../../contexts/plantContext/PlantContext";
 import { useEffect } from "react";
+import { useFormPlant } from "../../../../contexts/plantContext/FormPlantContext";
 import { Options } from "./options/Options";
 
 export const Plants = () => {
@@ -15,12 +16,13 @@ export const Plants = () => {
     loadingPlants,
     errorPlants,
     getPlants,
-    setAddPlant,
+    setShowFormAdd,
     setInfoPlant,
     setEditPlant,
-    setValuesForm,
     setDeletePlant,
   } = usePlant();
+
+  const { setValuesForm } = useFormPlant();
 
   useEffect(() => {
     getPlants();
@@ -35,6 +37,15 @@ export const Plants = () => {
         </div>
       )}
 
+      {!loadingPlants && plants.length == 0 && (
+        <div className={styles.addPlant}>
+          <button onClick={() => setShowFormAdd(true)}>
+            Nueva planta
+            <img src={iconAdd}></img>
+          </button>
+        </div>
+      )}
+
       {!loadingPlants && errorPlants && (
         <div className={styles.noPlants}>
           <img src={iconNoPlants}></img>
@@ -42,20 +53,11 @@ export const Plants = () => {
         </div>
       )}
 
-      {!loadingPlants && plants.length == 0 && (
-        <div className={styles.addPlant}>
-          <button onClick={() => setAddPlant(true)}>
-            Nueva planta
-            <img src={iconAdd}></img>
-          </button>
-        </div>
-      )}
-      
       <ul className={styles.plants}>
         {plants.map((plant, index) => (
           <li key={index}>
             <img src={iconPlant}></img>
-            <span>Planta {plant.id}</span>
+            <span>Planta N°{plant.id}</span>
             <div className={styles.options}>
               <button onClick={() => setDeletePlant(plant)}>
                 <img className={styles.iconDelete} src={iconDelete}></img>

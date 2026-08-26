@@ -14,7 +14,7 @@ import { SubMenuProfile } from "./subMenuProfile/SubMenuProfile.jsx";
 
 export const Devices = () => {
   const { devices, loadingDevices, errorDevices, getUserDevices } = useDevice();
-  const { setAddDevice, addDevice } = useCrudDevice();
+  const { setShowFormAdd, showFormAdd } = useCrudDevice();
   const { userAuth } = useAuth();
   const [showMenu, setShowMenu] = useState(false);
 
@@ -45,7 +45,7 @@ export const Devices = () => {
       </nav>
 
       <div className={styles.addDevice}>
-        <button onClick={() => setAddDevice(true)}>
+        <button onClick={() => setShowFormAdd(true)}>
           Nuevo Dispositivo
           <img src={iconAdd}></img>
         </button>
@@ -69,7 +69,7 @@ export const Devices = () => {
         {!loadingDevices && devices.length > 0 && <List />}
       </div>
 
-      {addDevice && (
+      {showFormAdd && (
         <Modal>
           <AddDevice />
         </Modal>

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Entities
 {
@@ -19,12 +21,15 @@ namespace Entities
             get { return id; }
         }
 
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Debe indicar nombre del lugar al que pertenece el riego")]
+        [MaxLength(15, ErrorMessage = "Nombre del lugar no debe pasar de 15 caracteres")]
         public string PlaceName
         {
             set { placeName = value; }
             get { return placeName; ; }
         }
 
+        [Required(ErrorMessage = "Debe indicar un usuario")]
         public User User
         {
             set { user = value; }
@@ -37,16 +42,6 @@ namespace Entities
             get { return created; }
         }
 
-        public void Validar()
-        {
-
-            if (String.IsNullOrEmpty(PlaceName.Trim())) throw new Exception("Debe ingresar nombre del lugar");
-
-            if (PlaceName.Trim().Length > 15) throw new Exception("Nombre del lugar no debe pasar de 15 caracteres");
-
-            if (User is null) throw new Exception("Usuario no puede estar vacio");
-        }
-
 
         public Device() { }
 
@@ -54,7 +49,7 @@ namespace Entities
         {
 
             Id = id;
-            PlaceName = placeName;
+            PlaceName = placeName.Trim();
             User = user;
             Created = created;
 

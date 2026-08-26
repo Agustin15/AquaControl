@@ -6,18 +6,13 @@ import {
   alertSuccess,
   alertWarning,
 } from "../../../../alertSwal/alertSwal.js";
-import { useTank } from "../../../../../contexts/TankContext.jsx";
+import { useTank } from "../../../../../contexts/tankContext/TankContext.jsx";
+import { useFormTank } from "../../../../../contexts/tankContext/FormTankContext.jsx";
 
 export const Edit = () => {
-  const {
-    setEditTank,
-    fetchPostOrPut,
-    valuesForm,
-    setValuesForm,
-    errorsForm,
-    setErrorsForm,
-    getTanks,
-  } = useTank();
+  const { setEditTank, getTanks } = useTank();
+  const { fetchPostOrPut, valuesForm, setValuesForm, setErrorsForm } =
+    useFormTank();
 
   const handleSubmit = async (event) => {
     event.preventDefault();

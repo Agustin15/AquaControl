@@ -1,31 +1,25 @@
-const localhostBackend = import.meta.env.VITE_BACKEND_LOCALHOST;
 import styles from "./AddDevice.module.css";
 import iconAdd from "../../../assets/img/add.png";
 import { useDevice } from "../../../contexts/DeviceContext";
 import { useState } from "react";
-import { getTokenSaved } from "../../../securityStorage";
 import { InfoToBind } from "./infoToBind/InfoToBind";
 import { Form } from "./form/Form";
 import { alertWarning } from "../../alertSwal/alertSwal.js";
-import { useAuth } from "../../../contexts/AuthContext";
 import { useCrudDevice } from "../../../contexts/CrudDeviceContext.jsx";
 
 export const AddDevice = () => {
   const { getUserDevices } = useDevice();
   const {
-    setAddDevice,
     loadingForm,
-    setLoadingForm,
     valuesForm,
     handleClose,
     fetchPostOrPut,
   } = useCrudDevice();
 
-  const { updateAccessToken } = useAuth();
 
   const [optionSelected, setOptionSelected] = useState("Form");
 
-  const handleSubmit = async (event, retry) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (Object.values(valuesForm).some((value) => value.length == 0))

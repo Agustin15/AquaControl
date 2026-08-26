@@ -21,7 +21,7 @@ idUser INT NOT NULL FOREIGN KEY REFERENCES Users(idUser) ON DELETE CASCADE,
 CREATE TABLE Tanks(
 id INT CHECK(id>0),
 idDevice INT FOREIGN KEY REFERENCES Devices(idDevice) ON DELETE CASCADE,
-height DECIMAL(4,1) NOT NULL CHECK(height>0)
+height DECIMAL(4,1) NOT NULL CHECK(height>=15 and height<=800)
 PRIMARY KEY(id,idDevice)
 )
 
@@ -58,7 +58,7 @@ id INT IDENTITY(1,1) PRIMARY KEY,
 datetimeStart DATETIME NOT NULL DEFAULT GETDATE(),
 datetimeEnd DATETIME,
 type VARCHAR(10) NOT NULL CHECK(type IN ('Automatico','Manual')),
-state VARCHAR(15) NOT NULL CHECK(state IN ('Completado','Fallido','En curso')),
+state VARCHAR(15) NOT NULL CHECK(state IN ('Completado','Fallido','En curso','Interrumpido')),
 levelTankBefore DECIMAL(4,1) NOT NULL CHECK(levelTankBefore>=0 and levelTankBefore<=100),
 levelTankAfter DECIMAL(4,1) CHECK(levelTankAfter>=0 and levelTankAfter<=100),
 humidityBefore INT NOT NULL CHECK(humidityBefore>=0 and humidityBefore<=100),
@@ -76,12 +76,11 @@ CREATE TABLE Alerts(
 id INT IDENTITY(1,1) PRIMARY KEY,
 message VARCHAR(45) NOT NULL,
 datetimeAlert DATETIME NOT NULL DEFAULT GETDATE(),
-state BIT NOT NULL,
-idTank INT NOT NULL,
-idDevice INT NOT NULL,
-FOREIGN KEY (idTank,idDevice) REFERENCES Tanks(id,idDevice) ON DELETE CASCADE
+seen BIT NOT NULL DEFAULT 0,
+idDevice INT NOT NULL FOREIGN KEY (idDevice) REFERENCES Devices(idDevice) ON DELETE CASCADE
 )
  
+
 GO
 
 CREATE OR ALTER  VIEW Entities AS
@@ -119,7 +118,7 @@ idPlant as idLand,idDevice as idPlaque from WaterPlantLogs;
 GO
 
 CREATE OR ALTER VIEW Notifications AS
-select id as code,message as text,datetimeAlert as momentAlert,state as mood,idTank as idBowl,idDevice as idPlaque from Alerts;
+select id as code,message as text,datetimeAlert as momentAlert,seen as observed,idDevice as idPlaque from Alerts;
 GO
 
 
@@ -363,9 +362,9 @@ RAISERROR('Numero de tanque debe ser mayor a cero',16,1)
 RETURN
 END
 
-IF(@height<=0)
+IF(@height<15 OR @height>800)
 BEGIN
-RAISERROR('Altura del tanque debe ser mayor a cero',16,1)
+RAISERROR('Altura del tanque debe estar entre 15 y 800 CM',16,1)
 RETURN
 END
 
@@ -426,9 +425,9 @@ RAISERROR('Tanque no encontrado',16,2)
 RETURN
 END 
 
-IF(@height<=0)
+IF(@height<15 OR @height>800)
 BEGIN
-RAISERROR('Altura del tanque debe ser mayor a cero',16,1)
+RAISERROR('Altura del tanque debe estar entre 15 y 800 CM',16,1)
 RETURN
 END
 
@@ -737,9 +736,9 @@ RETURN
 END 
 
 
-IF (@state NOT IN ('Completado','Fallido','En curso'))
+IF (@state NOT IN ('Completado','Fallido','En curso','Interrumpido'))
 BEGIN
-RAISERROR('Estado solo acepta los valores compleado,fallido o en curso ',16,1)
+RAISERROR('Estado solo acepta los valores:Compleado - Fallido - Interrumpido - En curso',16,1)
 RETURN
 END
 
@@ -788,16 +787,11 @@ GO
 
 --------------------------------------------------------------Alerta-------------------------------------------------------------------
 
-CREATE OR ALTER PROCEDURE AddAlert @message VARCHAR(200),@state BIT,@idTank INT,@idDevice INT AS 
+CREATE OR ALTER PROCEDURE AddAlert @message VARCHAR(200),@idTank INT,@idDevice INT AS 
 BEGIN
 
-IF NOT EXISTS(select * from Tanks where id=@idTank and idDevice=@idDevice)
-BEGIN
-RAISERROR('Tanque no encontrado',16,2)
-RETURN
-END 
+INSERT INTO Alerts(message,idDevice) VALUES(@message,@idDevice)
 
-INSERT INTO Alerts(message,state,idTank,idDevice) VALUES(@message,@state,@idTank,@idDevice)
 IF (@@ERROR<>0)
 BEGIN
 RAISERROR('Error inesperado al agregar alerta',16,4)
@@ -808,7 +802,7 @@ END
 GO
 
 
-CREATE OR ALTER PROCEDURE UpdateAlertState @id INT,@state BIT AS 
+CREATE OR ALTER PROCEDURE UpdateAlertState @id INT,@seen BIT AS 
 BEGIN
 
 IF NOT EXISTS(select * from Alerts where id=@id)
@@ -817,7 +811,7 @@ RAISERROR('Alerta no encontrada',16,2)
 RETURN
 END 
 
-INSERT INTO Alerts(state) VALUES(@state)
+INSERT INTO Alerts(seen) VALUES(@seen)
 IF (@@ERROR<>0)
 BEGIN
 RAISERROR('Error inesperado al actualizar alerta',16,4)
@@ -850,6 +844,7 @@ GO
 
 --------------------------------------------------Tanks---------------------------------------------------------- 
 EXEC AddTank 1,1,30
+
 --------------------------------------------------Plants---------------------------------------------------------- 
 EXEC AddPlant 1,1,50,
     @image = NULL,

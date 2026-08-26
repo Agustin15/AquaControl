@@ -2,8 +2,8 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { getTokenSaved } from "../securityStorage.js";
 import { useAuth } from "./AuthContext";
 import { useDevice } from "./DeviceContext.jsx";
-import { useTank } from "./TankContext.jsx";
-import { usePlant } from "./PlantContext.jsx";
+import { useTank } from "./tankContext/TankContext.jsx";
+import { usePlant } from "./plantContext/PlantContext.jsx";
 import { useMqtt } from "./MqttContext.jsx";
 import { alertWarning } from "../components/alertSwal/alertSwal.js";
 const localhostBackend = import.meta.env.VITE_BACKEND_LOCALHOST;
@@ -146,7 +146,7 @@ export const WaterPlantProvider = ({ children }) => {
     const result = await mqttClient.publishAsync(
       `device/${deviceSelected.id}/waterPlant`,
       JSON.stringify({
-        state: "Cancelado",
+        state: "Interrumpido",
       }),
       { qos: 2, retain: true },
     );

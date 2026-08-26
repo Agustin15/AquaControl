@@ -41,7 +41,11 @@ export const List = () => {
               </button>
               <button
                 onClick={() => {
-                  setValuesForm({ ...valuesForm, placeName: device.placeName });
+                  setValuesForm({
+                    ...valuesForm,
+                    id: device.id,
+                    placeName: device.placeName,
+                  });
                   setEditDevice(device);
                 }}
               >

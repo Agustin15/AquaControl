@@ -1,10 +1,9 @@
 import styles from "./WaterTankLogs.module.css";
 import iconWaterTank from "../../../assets/img/waterTank.png";
 import iconNoTanks from "../../../assets/img/noTanks.png";
-import { useEffect, useState } from "react";
-import { useTank } from "../../../contexts/TankContext";
+import { useEffect } from "react";
+import { useTank } from "../../../contexts/tankContext/TankContext";
 import { LogsWeekday } from "./logsWeekday/LogsWeekday";
-import { useDevice } from "../../../contexts/DeviceContext";
 import { useWeekdayLogs } from "../../../contexts/LogsWeekdayContext";
 
 export const WaterTankLogs = () => {
@@ -16,6 +15,7 @@ export const WaterTankLogs = () => {
     tankSelected,
     setTankSelected,
   } = useTank();
+  
   const { getWeekdayLogs } = useWeekdayLogs();
 
   useEffect(() => {

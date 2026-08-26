@@ -4,9 +4,9 @@ import iconWarningInput from "../../assets/img/warningInput.png";
 import iconShowedPassword from "../../assets/img/showedPassword.png";
 import iconHiddedPassword from "../../assets/img/hiddedPassword.png";
 import { useNavigate } from "react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useLogin } from "../../contexts/LoginContext";
-
+;
 export const Login = () => {
   const { handleSubmit, setValues, values, errors, loading } = useLogin();
   const [showPassword, setShowPassword] = useState(false);

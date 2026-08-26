@@ -1,7 +1,8 @@
 import styles from "./Add.module.css";
 import iconAdd from "../../../../../assets/img/add.png";
 import { Form } from "./form/Form.jsx";
-import { useTank } from "../../../../../contexts/TankContext.jsx";
+import { useTank } from "../../../../../contexts/tankContext/TankContext.jsx";
+import { useFormTank } from "../../../../../contexts/tankContext/FormTankContext.jsx";
 import {
   alertError,
   alertSuccess,
@@ -9,15 +10,9 @@ import {
 } from "../../../../alertSwal/alertSwal.js";
 
 export const Add = () => {
-  const {
-    setAddTank,
-    fetchPostOrPut,
-    valuesForm,
-    setValuesForm,
-    errorsForm,
-    setErrorsForm,
-    getTanks,
-  } = useTank();
+  const { setShowFormAdd, getTanks } = useTank();
+  const { fetchPostOrPut, valuesForm, setValuesForm, setErrorsForm } =
+    useFormTank();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -58,7 +53,7 @@ export const Add = () => {
       height: "",
     });
 
-    setAddTank(null);
+    setShowFormAdd(false);
   };
   return (
     <div className={styles.add}>

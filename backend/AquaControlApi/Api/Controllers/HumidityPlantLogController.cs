@@ -26,15 +26,7 @@ namespace Api.Controllers
                 int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
 
                 if (idDevice != humidityPlantLog.Plant.Device.Id)
-                    throw new Exception("El registro de humedad que quiere agregar no pertence al dispositivo que esta usando en este momento");
-
-                Plant plantFound = await new Lplant().GetPlantOfDeviceById(humidityPlantLog.Plant.Id, humidityPlantLog.Plant.Device.Id);
-
-                if (plantFound is null) return StatusCode(404, new { message = "No hay registro de esta planta en este dispositivo" });
-
-                humidityPlantLog.Plant = plantFound;
-
-                humidityPlantLog.Validar();
+                    throw new Exception("Solo se puede dar de alta monitoreos de humedad de planta que pertenezcan a este dispositivo");
 
                 await new LhumidityPlantLog().Add(humidityPlantLog);
                 return StatusCode(201, true);

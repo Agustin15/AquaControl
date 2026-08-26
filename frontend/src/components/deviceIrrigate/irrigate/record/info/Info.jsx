@@ -2,12 +2,8 @@ import styles from "./Info.module.css";
 import iconInfo from "../../../../../assets/img/info.png";
 import { LevelHumidity } from "../../../humidityPlantLogs/logs/levelHumidity/LevelHumidity";
 import { LevelTank } from "../../../waterTankLogs/logs/levelTank/LevelTank";
-import { useWaterPlant } from "../../../../../contexts/WaterPlantContext";
-import { usePlant } from "../../../../../contexts/PlantContext";
-import { useTank } from "../../../../../contexts/TankContext";
 
 export const Info = ({ info, setInfo }) => {
-  const { plant } = usePlant();
 
   return (
     <div className={styles.info}>

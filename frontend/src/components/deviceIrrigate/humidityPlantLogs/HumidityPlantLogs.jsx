@@ -3,7 +3,7 @@ import iconHumidityPlantTitle from "../../../assets/img/humidity.png";
 import iconNoPlants from "../../../assets/img/noPlants.png";
 import { useEffect } from "react";
 import { useWeekdayLogs } from "../../../contexts/LogsWeekdayContext";
-import { usePlant } from "../../../contexts/PlantContext";
+import { usePlant } from "../../../contexts/plantContext/PlantContext";
 import { LogsWeekday } from "./logsWeekday/LogsWeekday";
 
 export const HumidityPlantLogs = () => {

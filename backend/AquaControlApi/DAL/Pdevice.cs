@@ -24,7 +24,7 @@ namespace DAL
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@placeName", device.PlaceName);
                 command.Parameters.AddWithValue("@idUser", device.User.Id);
-          
+
                 await connection.OpenAsync();
 
                 await command.ExecuteNonQueryAsync();
@@ -146,7 +146,7 @@ namespace DAL
             return devices;
         }
 
-        public async Task<Device> GetDeviceById(int idDevice)
+        internal async Task<Device> GetDeviceById(int idDevice)
         {
 
             Device device = null;

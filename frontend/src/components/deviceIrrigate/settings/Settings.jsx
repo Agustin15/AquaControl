@@ -1,10 +1,13 @@
 import styles from "./Settings.module.css";
 import iconConfig from "../../../assets/img/config.png";
-import { useEffect, useState } from "react";
-import { PlantProvider } from "../../../contexts/PlantContext";
-import { TankProvider } from "../../../contexts/TankContext";
+import { useState } from "react";
+import { PlantProvider } from "../../../contexts/plantContext/PlantContext";
+import { FormPlantProvider } from "../../../contexts/plantContext/FormPlantContext";
+import { TankProvider } from "../../../contexts/tankContext/TankContext";
+import { FormTankProvider } from "../../../contexts/tankContext/FormTankContext";
 import { Tanks } from "./tank/Tanks";
 import { Plants } from "./plants/Plants";
+
 
 export const Settings = () => {
   const [option, setOption] = useState("plants");
@@ -32,13 +35,17 @@ export const Settings = () => {
 
         {option == "plants" && (
           <PlantProvider>
-            <Plants />
+            <FormPlantProvider>
+              <Plants />
+            </FormPlantProvider>
           </PlantProvider>
         )}
 
         {option == "tank" && (
           <TankProvider>
-            <Tanks />
+            <FormTankProvider>
+              <Tanks />
+            </FormTankProvider>
           </TankProvider>
         )}
       </div>

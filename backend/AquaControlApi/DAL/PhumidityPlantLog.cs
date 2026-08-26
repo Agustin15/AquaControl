@@ -56,7 +56,9 @@ namespace DAL
 
                 SqlDataReader reader = await command.ExecuteReaderAsync();
 
-                Plant plantFound = await new Pplant().GetPlantByIdAndDevice(idPlant, idDevice);
+                List<Plant> plants = await new Pplant().GetAllPlantsByDevice(idPlant);
+
+                Plant plantFound = plants.Find(plant => plant.Id == idPlant);
 
                 if (reader.HasRows)
                 {

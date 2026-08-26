@@ -1,9 +1,8 @@
 import { createContext, useContext, useState } from "react";
 import { alertError } from "../components/alertSwal/alertSwal.js";
-import { getInfoSaved, saveInfo, saveTokens } from "../securityStorage.js";
+import { saveInfo, saveTokens } from "../securityStorage.js";
 import { useAuth } from "./AuthContext.jsx";
 const localhostBackend = import.meta.env.VITE_BACKEND_LOCALHOST;
-const localhostFrontend = import.meta.env.VITE_FRONTEND_LOCALHOST;
 
 const LoginContext = createContext();
 

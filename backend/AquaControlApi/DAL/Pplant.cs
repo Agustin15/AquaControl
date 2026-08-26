@@ -42,7 +42,8 @@ namespace DAL
 
                 await command.ExecuteNonQueryAsync();
 
-                await MqttClient.Instance.PublishMessage("device/plant", new { idDevice = plant.Device.Id, umbralHumidity = plant.UmbralHumidity });
+                await MqttClient.Instance.PublishMessage("device/plant",
+                    new { plant = new Plant(plant.Id, plant.UmbralHumidity, plant.Description, plant.Device) });
 
                 await transaction.CommitAsync();
 
@@ -87,7 +88,8 @@ namespace DAL
 
                 await command.ExecuteNonQueryAsync();
 
-                await MqttClient.Instance.PublishMessage("device/plant", new { idDevice = plant.Device.Id, umbralHumidity = plant.UmbralHumidity });
+                await MqttClient.Instance.PublishMessage("device/plant",
+                    new { plant = new Plant(plant.Id, plant.UmbralHumidity, plant.Description, plant.Device) });
 
                 await transaction.CommitAsync();
             }
@@ -122,7 +124,7 @@ namespace DAL
 
                 await command.ExecuteNonQueryAsync();
 
-                await MqttClient.Instance.PublishMessage("device/plant", new { idDevice = plant.Device.Id, umbralHumidity = 0 });
+                await MqttClient.Instance.PublishMessage("device/plant", new { plant = (Plant)null });
 
                 await transaction.CommitAsync();
 
@@ -138,52 +140,6 @@ namespace DAL
             }
         }
 
-        public async Task<Plant> GetPlantByIdAndDevice(int idPlant, int idDevice)
-        {
-
-            Plant plant = null;
-
-            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
-
-            try
-            {
-
-                SqlCommand command = new SqlCommand("PlantByIdAndDevice", connection);
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@code", idPlant);
-                command.Parameters.AddWithValue("@codePlaque", idDevice);
-
-                await connection.OpenAsync();
-
-                SqlDataReader reader = await command.ExecuteReaderAsync();
-
-                if (reader.HasRows)
-                {
-                    Device deviceFound = await new Pdevice().GetDeviceById(idDevice);
-
-                    await reader.ReadAsync();
-
-                    plant = new Plant(Convert.ToInt16(reader["codeLand"]), Convert.ToInt16(reader["limitHumidity"]),
-                                           reader["capture"] is DBNull ? null : (byte[])reader["capture"],
-                                           reader["info"] is DBNull ? null : Convert.ToString(reader["info"]), deviceFound);
-
-                }
-
-                await reader.CloseAsync();
-
-            }
-            catch (Exception ex)
-            {
-
-                throw new Exception(ex.Message);
-            }
-            finally
-            {
-                await connection.CloseAsync();
-            }
-
-            return plant;
-        }
 
         public async Task<List<Plant>> GetAllPlantsByDevice(int idDevice)
         {

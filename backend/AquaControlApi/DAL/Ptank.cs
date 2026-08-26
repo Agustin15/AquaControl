@@ -38,7 +38,7 @@ namespace DAL
 
                 await command.ExecuteNonQueryAsync();
 
-                await MqttClient.Instance.PublishMessage("device/tank", new { idDevice = tank.Device.Id, height = tank.Height });
+                await MqttClient.Instance.PublishMessage("device/tank", new { tank = tank });
 
                 await transaction.CommitAsync();
 
@@ -79,7 +79,7 @@ namespace DAL
 
                 await command.ExecuteNonQueryAsync();
 
-                await MqttClient.Instance.PublishMessage("device/tank", new { idDevice = tank.Device.Id, height = tank.Height });
+                await MqttClient.Instance.PublishMessage("device/tank", new { tank = tank });
 
                 await transaction.CommitAsync();
             }
@@ -116,7 +116,7 @@ namespace DAL
 
                 await command.ExecuteNonQueryAsync();
 
-                await MqttClient.Instance.PublishMessage("device/tank", new { idDevice = tank.Device.Id, height = 0 });
+                await MqttClient.Instance.PublishMessage("device/tank", new { tank = (Tank)tank });
 
                 await transaction.CommitAsync();
             }
@@ -133,51 +133,6 @@ namespace DAL
             }
         }
 
-
-        public async Task<Tank> GetTankByIdAndDevice(int idTank, int idDevice)
-        {
-
-            Tank tank = null;
-
-            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
-
-            try
-            {
-
-                SqlCommand command = new SqlCommand("TankByIdAndDevice", connection);
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@code", idTank);
-                command.Parameters.AddWithValue("@codePlaque", idDevice);
-
-                await connection.OpenAsync();
-
-                SqlDataReader reader = await command.ExecuteReaderAsync();
-
-                if (reader.HasRows)
-                {
-                    Device deviceFound = await new Pdevice().GetDeviceById(idDevice);
-
-                    await reader.ReadAsync();
-                    tank = new Tank(Convert.ToInt16(reader["codeBowl"]), Convert.ToDouble(reader["limit"]),
-                        deviceFound);
-
-                }
-                await reader.CloseAsync();
-
-
-            }
-            catch (Exception ex)
-            {
-
-                throw new Exception(ex.Message);
-            }
-            finally
-            {
-                await connection.CloseAsync();
-            }
-
-            return tank;
-        }
 
         public async Task<List<Tank>> GetAllTanksByDevice(int idDevice)
         {

@@ -2,10 +2,10 @@ import styles from "./TakePhoto.module.css";
 import { Filesystem } from "@capacitor/filesystem";
 import { Camera } from "@capacitor/camera";
 import { alertError } from "../../../../../../alertSwal/alertSwal.js";
-import { usePlant } from "../../../../../../../contexts/PlantContext.jsx";
+import { useFormPlant } from "../../../../../../../contexts/plantContext/FormPlantContext.jsx";
 
 export const TakePhoto = () => {
-  const { loadingForm, setValuesForm, valuesForm } = usePlant();
+  const { loadingForm, setValuesForm, valuesForm } = useFormPlant();
 
   const handleTakePhoto = async () => {
     try {
@@ -21,7 +21,6 @@ export const TakePhoto = () => {
       setValuesForm({ ...valuesForm, image: data });
       return;
     } catch (error) {
-      console.log(error.CapacitorException);
       if (error.indexOf("canceled") > -1) return;
       return alertError("Ups algo salio mal al capturar la foto", "");
     }

@@ -1,8 +1,8 @@
 import styles from "./Record.module.css";
 import { useEffect, useState } from "react";
 import { useWaterPlant } from "../../../../contexts/WaterPlantContext";
-import { usePlant } from "../../../../contexts/PlantContext";
-import { useTank } from "../../../../contexts/TankContext";
+import { usePlant } from "../../../../contexts/plantContext/PlantContext";
+import { useTank } from "../../../../contexts/tankContext/TankContext";
 import { createPortal } from "react-dom";
 import { Info } from "./info/Info.jsx";
 import { Modal } from "../../../modal/Modal.jsx";
@@ -11,7 +11,7 @@ import { Tbody } from "./Tbody.jsx";
 
 export const Record = () => {
   const { fetchGetLogs, index, pages } = useWaterPlant();
-  const { plants, plantSelected } = usePlant();
+  const { plantSelected } = usePlant();
   const { tankSelected } = useTank();
   const [info, setInfo] = useState(null);
 

@@ -29,20 +29,13 @@ namespace Api.Controllers
                 int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
 
                 if (idDevice != tank.Device.Id)
-                    throw new Exception("El tanque que quiere agregar no pertence al dispositivo que esta usando en este momento");
-
-                Device deviceFound = await new Ldevice().GetDeviceById(idDevice);
-
-                if (deviceFound is null) return StatusCode(404, new { message = "Dispositivo no encontado" });
-                tank.Device = deviceFound;
+                    throw new Exception("El tanque que quiere agregar no pertence al dispositivo que esta usando");
 
                 List<Tank> tanksOfDevice = await new Ltank().GetAllTanksByDevice(idDevice);
 
                 if (tanksOfDevice.Count == 0) tank.Id = 1;
                 else tank.Id = tanksOfDevice.Count + 1;
 
-
-                tank.Validar();
 
                 await new Ltank().Add(tank);
 
@@ -67,15 +60,7 @@ namespace Api.Controllers
                 int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
 
                 if (idDevice != tank.Device.Id)
-                    throw new Exception("El tanque que quiere actualizar no pertence al dispositivo que esta usando en este momento");
-
-                Device deviceFound = await new Ldevice().GetDeviceById(idDevice);
-
-                if (deviceFound is null) return StatusCode(404, new { message = "Dispositivo no encontado" });
-
-                tank.Device = deviceFound;
-
-                tank.Validar();
+                    throw new Exception("El tanque que quiere actualizar no pertence al dispositivo que esta usando");
 
                 await new Ltank().Update(tank);
 
@@ -102,11 +87,7 @@ namespace Api.Controllers
                 if (idDevice != tank.Device.Id)
                     throw new Exception("El tanque que quiere eliminar no pertence al dispositivo que esta usando en este momento");
 
-                Tank tankFound = await new Ltank().GetTankOfDeviceById(tank.Id, idDevice);
-
-                if (tankFound is null) throw new Exception("Tanque no encontrado");
-
-                await new Ltank().Delete(tankFound);
+                await new Ltank().Delete(tank);
 
                 return Ok(tank);
             }

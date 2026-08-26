@@ -1,8 +1,10 @@
-﻿using System.Text.RegularExpressions;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 
@@ -22,12 +24,16 @@ namespace Entities
             get { return id; }
         }
 
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Debe ingresar un nombre de usuario")]
+        [MaxLength(15, ErrorMessage = "Nombre de usuario no debe pasar de 15 caracteres")]
         public string Username
         {
             set { username = value; }
             get { return username; }
         }
 
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Debe ingresar un correo")]
+        [RegularExpression(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", ErrorMessage = "Formato de correo incorrecto")]
         public string Email
         {
             set { email = value; }
@@ -46,25 +52,6 @@ namespace Entities
             get { return joined; }
         }
 
-        public void Validar()
-        {
-
-            if (String.IsNullOrEmpty(Username.Trim())) throw new Exception("Debe ingresar un nombre de usuario");
-
-            if (Username.Trim().Length > 15) throw new Exception("Nombre de usuario no debe pasar de 15 caracteres");
-
-            if (String.IsNullOrEmpty(Password)) throw new Exception("Debe ingresar una contraseña");
-
-            if (!Regex.IsMatch(Password, @"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{13,}$"))
-                throw new Exception("Formato de contraseña no valido");
-
-            if (String.IsNullOrEmpty(Email)) throw new Exception("Debe ingresar un correo");
-
-            if (!Regex.IsMatch(Email, @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"))
-                throw new Exception("Formato de correo no valido");
-
-
-        }
 
 
         public User() { }
@@ -73,11 +60,16 @@ namespace Entities
         {
 
             Id = id;
-            Username = username;
-            Email = email;
-            Password = password;
+            Username = username.Trim();
+            Email = email.Trim();
+            Password = password.Trim();
             Joined = joined;
 
+        }
+        public void ValidationPassword()
+        {
+            if (!Regex.IsMatch(Password, @"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{13,}$"))
+                throw new Exception("Formato de contraseña incorrecto");
         }
     }
 

@@ -2,13 +2,12 @@ import styles from "./Tanks.module.css";
 import iconNoTanks from "../../../../assets/img/noTanks.png";
 import iconAdd from "../../../../assets/img/add.png";
 import iconDelete from "../../../../assets/img/delete.png";
-import iconInfo from "../../../../assets/img/info.png";
 import iconEdit from "../../../../assets/img/edit.png";
 import { LevelTank } from "../../waterTankLogs/logs/levelTank/LevelTank";
-import { usePlant } from "../../../../contexts/PlantContext";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useTank } from "../../../../contexts/tankContext/TankContext";
 import { Options } from "./options/Options";
-import { useTank } from "../../../../contexts/TankContext";
+import { useFormTank } from "../../../../contexts/tankContext/FormTankContext";
 
 export const Tanks = () => {
   const {
@@ -16,13 +15,12 @@ export const Tanks = () => {
     loadingTanks,
     errorTanks,
     getTanks,
-    setAddTank,
+    setShowFormAdd,
     setEditTank,
     setDeleteTank,
-    setValuesForm,
-    valuesForm,
-    currentLevelTank,
   } = useTank();
+
+  const { setValuesForm } = useFormTank();
 
   useEffect(() => {
     getTanks();
@@ -37,6 +35,15 @@ export const Tanks = () => {
         </div>
       )}
 
+      {!loadingTanks && tanks.length == 0 && (
+        <div className={styles.addTank}>
+          <button onClick={() => setShowFormAdd(true)}>
+            Nuevo tanque
+            <img src={iconAdd}></img>
+          </button>
+        </div>
+      )}
+
       {!loadingTanks && errorTanks && (
         <div className={styles.noTanks}>
           <img src={iconNoTanks}></img>
@@ -44,20 +51,11 @@ export const Tanks = () => {
         </div>
       )}
 
-      {!loadingTanks && tanks.length == 0 && (
-        <div className={styles.addTank}>
-          <button onClick={() => setAddTank(true)}>
-            Nuevo tanque
-            <img src={iconAdd}></img>
-          </button>
-        </div>
-      )}
-
       <ul className={styles.tanks}>
         {tanks.map((tank, index) => (
           <li key={index}>
             <LevelTank currentLevelTank={100} />
-            <span>Tanque {tank.id}</span>
+            <span>Tanque N°{tank.id}</span>
 
             <div className={styles.edit}>
               <span>Altura: {tank.height}cm</span>

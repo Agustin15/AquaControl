@@ -1,7 +1,8 @@
 import styles from "./Add.module.css";
 import iconAdd from "../../../../../assets/img/add.png";
 import { Form } from "./form/Form.jsx";
-import { usePlant } from "../../../../../contexts/PlantContext.jsx";
+import { usePlant } from "../../../../../contexts/plantContext/PlantContext.jsx";
+import { useFormPlant } from "../../../../../contexts/plantContext/FormPlantContext.jsx";
 import {
   alertError,
   alertSuccess,
@@ -9,15 +10,15 @@ import {
 } from "../../../../alertSwal/alertSwal.js";
 
 export const Add = () => {
+  const { setShowFormAdd, getPlants } = usePlant();
+
   const {
-    setAddPlant,
     fetchPostOrPut,
     valuesForm,
     setValuesForm,
     errorsForm,
     setErrorsForm,
-    getPlants,
-  } = usePlant();
+  } = useFormPlant();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -65,7 +66,7 @@ export const Add = () => {
       umbralHumidity: "",
       description: "",
     });
-    setAddPlant(false);
+    setShowFormAdd(false);
   };
   return (
     <div className={styles.add}>

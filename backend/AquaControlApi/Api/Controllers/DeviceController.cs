@@ -28,12 +28,10 @@ namespace Api.Controllers
 
                 int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
-                User userFound = await new Luser().GetUserById(idUser);
-                if (userFound is null) return StatusCode(404, new { message = "Usuario no encontrado" });
+                if (device.User.Id != idUser) return StatusCode(400,
+                    new { message = "El usuario que se indico en el dispositivo a agregar, debe ser el mismo que el que esta autenticado" });
 
-                device = new Device(0, device.PlaceName, userFound, DateTime.Now);
-
-                device.Validar();
+                device.Created = DateTime.Now;
 
                 await new Ldevice().Add(device);
 
@@ -59,17 +57,8 @@ namespace Api.Controllers
 
                 int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
-                List<Device> devices = await new Ldevice().GetAllDevicesByUser(idUser);
-
-                if (devices.Find(d => d.Id == device.Id) is null) return StatusCode(404, new { message = "Dispositivo no encontrado" });
-
-                User userFound = await new Luser().GetUserById(device.User.Id);
-
-                if (userFound is null) return StatusCode(404, new { message = "Usuario no encontrado" });
-
-                device.User = userFound;
-
-                device.Validar();
+                if (device.User.Id != idUser) return StatusCode(400,
+                   new { message = "El usuario que se indico en el dispositivo a agregar, debe ser el mismo que el que esta autenticado" });
 
                 await new Ldevice().UpdatePlaceNameDevice(device);
 
@@ -95,13 +84,10 @@ namespace Api.Controllers
 
                 int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
-                List<Device> devices = await new Ldevice().GetAllDevicesByUser(idUser);
+                if (device.User.Id != idUser) return StatusCode(400,
+                    new { message = "El usuario que se indico en el dispositivo a agregar, debe ser el mismo que el que esta autenticado" });
 
-                Device deviceFound = devices.Find(d => d.Id == device.Id);
-
-                if (deviceFound is null) return StatusCode(404, new { message = "Dispositivo no encontrado" });
-
-                await new Ldevice().Delete(deviceFound);
+                await new Ldevice().Delete(device);
 
                 return Ok(device);
             }
@@ -151,6 +137,9 @@ namespace Api.Controllers
                     return Unauthorized();
 
                 int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+                if (device.User.Id != idUser) return StatusCode(400,
+                    new { message = "El usuario que se indico en el dispositivo a agregar, debe ser el mismo que el que esta autenticado" });
 
                 List<Device> devices = await new Ldevice().GetAllDevicesByUser(idUser);
 

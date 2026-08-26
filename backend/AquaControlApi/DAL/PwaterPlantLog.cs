@@ -16,7 +16,7 @@ namespace DAL
         {
 
             SqlConnection connection = new SqlConnection(DBConnection.Cnn);
-           
+
             try
             {
                 SqlCommand command = new SqlCommand("AddWaterPlantLog", connection);
@@ -96,8 +96,12 @@ namespace DAL
 
                 if (reader.HasRows)
                 {
-                    Plant plantFound = await new Pplant().GetPlantByIdAndDevice(idPlant, idDevice);
-                    Tank tankFound = await new Ptank().GetTankByIdAndDevice(idTank, idDevice);
+
+                    List<Tank> tanks = await new Ptank().GetAllTanksByDevice(idDevice);
+                    Tank tankFound = tanks.Find(tank => tank.Id == idTank);
+
+                    List<Plant> plants = await new Pplant().GetAllPlantsByDevice(idDevice);
+                    Plant plantFound = plants.Find(plant => plant.Id == idPlant);
 
                     await reader.ReadAsync();
 
@@ -190,8 +194,11 @@ namespace DAL
                 if (reader.HasRows)
                 {
 
-                    Plant plantFound = await new Pplant().GetPlantByIdAndDevice(idPlant, idDevice);
-                    Tank tankFound = await new Ptank().GetTankByIdAndDevice(idTank, idDevice);
+                    List<Tank> tanks = await new Ptank().GetAllTanksByDevice(idDevice);
+                    Tank tankFound = tanks.Find(tank => tank.Id == idTank);
+
+                    List<Plant> plants = await new Pplant().GetAllPlantsByDevice(idDevice);
+                    Plant plantFound = plants.Find(plant => plant.Id == idPlant);
 
 
                     while (await reader.ReadAsync())

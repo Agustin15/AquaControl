@@ -1,11 +1,10 @@
 import styles from "./Info.module.css";
 import iconInfo from "../../../../../assets/img/info.png";
 import iconPlant from "../../../../../assets/img/plant.png";
-import { usePlant } from "../../../../../contexts/PlantContext";
+import { usePlant } from "../../../../../contexts/plantContext/PlantContext";
 
 export const Info = () => {
   const { setInfoPlant, infoPlant } = usePlant();
-
   return (
     <div className={styles.infoPlant}>
       <div className={styles.header}>
@@ -35,7 +34,7 @@ export const Info = () => {
         <div className={styles.columnDetail}>
           <b>Descripcion:</b>
           <span>
-            {infoPlant.descripcion ? infoPlant.descripcion : "Sin descripcion"}
+            {infoPlant.description ? infoPlant.description : "Sin descripcion"}
           </span>
         </div>
       </div>

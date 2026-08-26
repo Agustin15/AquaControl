@@ -22,10 +22,8 @@ namespace DAL
                 SqlCommand command = new SqlCommand("AddAlert");
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@message", alert.Message);
-                command.Parameters.AddWithValue("@state", alert.State);
-                command.Parameters.AddWithValue("@idTank", alert.Tank.Id);
-                command.Parameters.AddWithValue("@codePlaque", alert.Tank.Device.Id);
-             
+                command.Parameters.AddWithValue("@codePlaque", alert.Device.Id);
+
                 await connection.OpenAsync();
 
                 await command.ExecuteNonQueryAsync();
@@ -49,7 +47,7 @@ namespace DAL
                 SqlCommand command = new SqlCommand("AddAlert");
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@id", alert.Id);
-                command.Parameters.AddWithValue("@state", alert.State);
+                command.Parameters.AddWithValue("@state", alert.Seen);
 
                 await connection.OpenAsync();
 
@@ -126,14 +124,15 @@ namespace DAL
 
                 if (reader.HasRows)
                 {
-                    List<Tank> tanks = await new Ptank().GetAllTanksByDevice(idDevice);
+
+                    Device deviceFound = await new Pdevice().GetDeviceById(idDevice);
 
                     while (await reader.ReadAsync())
                     {
-                        Tank tankFound = tanks.Find(tank => tank.Id == Convert.ToInt16(reader["idBowl"]));
 
-                        alertsOffset.Add(new Alert(Convert.ToInt16(reader["idPlaque"]), tankFound, Convert.ToString(reader["text"]),
-                            Convert.ToBoolean(reader["mood"])));
+                        alertsOffset.Add(new Alert(Convert.ToInt16(reader["code"]),
+                            Convert.ToString(reader["text"]), Convert.ToBoolean(reader["observed"]), deviceFound)
+                          );
 
                     }
                 }

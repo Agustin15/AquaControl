@@ -1,7 +1,6 @@
 import humidityIndicator from "../../../../../../assets/img/humidityIndicator.png";
 
 export const HumidityLevel = ({ optimePercentege, colorLevel }) => {
-  let background = "rgba(45, 118, 130, 0.6)";
 
   return (
     <svg width={65} height={85} viewBox="0 0 65 85">

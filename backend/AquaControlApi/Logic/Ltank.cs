@@ -47,20 +47,6 @@ namespace Logic
 
         }
 
-        public async Task<Tank> GetTankOfDeviceById(int idTank, int idDevice)
-        {
-
-            List<Tank> listTanks = new List<Tank>();
-
-            listTanks = await new Ptank().GetAllTanksByDevice(idDevice);
-
-            Tank tankFound = listTanks.Find(tank => tank.Id == idTank);
-
-            return tankFound;
-
-
-        }
-
     }
 
 }

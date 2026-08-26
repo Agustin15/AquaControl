@@ -45,19 +45,6 @@ namespace Logic
 
         }
 
-        public async Task<Plant> GetPlantOfDeviceById(int idPlant, int idDevice)
-        {
-
-            List<Plant> listPlants = new List<Plant>();
-
-            listPlants = await new Pplant().GetAllPlantsByDevice(idDevice);
-
-            Plant plantFound = listPlants.Find(plant => plant.Id == idPlant);
-
-            return plantFound;
-
-        }
-
     }
 
 }

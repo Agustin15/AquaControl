@@ -1,11 +1,9 @@
 import styles from "./Form.module.css";
-import iconAdd from "../../../../../../assets/img/add.png";
-import { useState } from "react";
-import { useTank } from "../../../../../../contexts/TankContext";
+import { useFormTank } from "../../../../../../contexts/tankContext/FormTankContext";
 
 export const Form = ({ handleSubmit, method }) => {
   const { valuesForm, setValuesForm, errorsForm, setErrorsForm, loadingForm } =
-    useTank();
+    useFormTank();
 
   const handleChange = (event) => {
     const { name, value } = event.target;

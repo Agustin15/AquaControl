@@ -1,8 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { getTokenSaved } from "../securityStorage.js";
-import { useAuth } from "./AuthContext";
-import { useMqtt } from "./MqttContext.jsx";
-import { useDevice } from "./DeviceContext.jsx";
+import { getTokenSaved } from "../../securityStorage.js";
+import { useAuth } from "../AuthContext";
+import { useMqtt } from "../MqttContext.jsx";
+import { useDevice } from "../DeviceContext.jsx";
 const localhostBackend = import.meta.env.VITE_BACKEND_LOCALHOST;
 
 const TankContext = createContext();
@@ -13,18 +13,9 @@ export const TankProvider = ({ children }) => {
   const [currentLevelTank, setCurrentLevelTank] = useState(0);
   const [loadingTanks, setLoadingTanks] = useState(false);
   const [errorTanks, setErrorTanks] = useState();
-  const [addTank, setAddTank] = useState(false);
+  const [showFormAdd, setShowFormAdd] = useState(false);
   const [editTank, setEditTank] = useState(null);
   const [deleteTank, setDeleteTank] = useState(null);
-  const [valuesForm, setValuesForm] = useState({
-    id: 0,
-    height: 0,
-  });
-  const [loadingForm, setLoadingForm] = useState(false);
-  const [errorsForm, setErrorsForm] = useState({
-    id: "",
-    height: "",
-  });
 
   const { mqttClient } = useMqtt();
   const { updateAccessToken } = useAuth();
@@ -75,37 +66,6 @@ export const TankProvider = ({ children }) => {
     }
   };
 
-  const fetchPostOrPut = async (method, retry) => {
-    setLoadingForm(true);
-
-    try {
-      const accessToken = await getTokenSaved("accessToken");
-
-      const response = await fetch(localhostBackend + "/api/tank", {
-        method: method,
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify(valuesForm),
-      });
-
-      if (response.status === 401 && retry == true) {
-        await updateAccessToken();
-        return fetchPostOrPut(method, false);
-      }
-      const result = await response.json();
-
-      if (!response.ok) throw new Error(result.message);
-
-      return result;
-    } catch (error) {
-      throw error;
-    } finally {
-      setLoadingForm(false);
-    }
-  };
-
   const getTanks = async () => {
     setTanks([]);
     const tanks = await fetchGet(localhostBackend + "/api/tank", true);
@@ -134,14 +94,8 @@ export const TankProvider = ({ children }) => {
         loadingTanks,
         errorTanks,
         getTanks,
-        fetchPostOrPut,
-        loadingForm,
-        valuesForm,
-        setValuesForm,
-        errorsForm,
-        setErrorsForm,
-        addTank,
-        setAddTank,
+        showFormAdd,
+        setShowFormAdd,
         editTank,
         setEditTank,
         deleteTank,

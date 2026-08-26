@@ -4,13 +4,13 @@ import { Add } from "../addPlant/Add.jsx";
 import { Edit } from "../editPlant/Edit.jsx";
 import { Info } from "../info/Info.jsx";
 import { Delete } from "../deletePlant/Delete.jsx";
-import { usePlant } from "../../../../../contexts/PlantContext";
+import { usePlant } from "../../../../../contexts/plantContext/PlantContext";
 
 export const Options = () => {
-  const { addPlant, infoPlant, editPlant, deletePlant } = usePlant();
+  const { showFormAdd, infoPlant, editPlant, deletePlant } = usePlant();
   return (
     <>
-      {addPlant &&
+      {showFormAdd &&
         createPortal(
           <Modal>
             <Add />
