@@ -48,6 +48,20 @@ export const Form = ({ handleSubmit, method }) => {
         )}
       </div>
 
+      <div className={styles.containCheckbox}>
+        <label>Indoor</label>
+        <input
+          onChange={() =>
+            setValuesForm({
+              ...valuesForm,
+              indoor: valuesForm.indoor ? false : true,
+            })
+          }
+          checked={valuesForm.indoor}
+          type="checkbox"
+        ></input>
+      </div>
+
       <div className={styles.columnInput}>
         <label>Descripcion (opcional)</label>
         <textarea

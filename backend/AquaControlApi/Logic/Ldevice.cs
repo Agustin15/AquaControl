@@ -16,11 +16,11 @@ namespace Logic
             await new Pdevice().Add(device);
 
         }
-        public async Task UpdatePlaceNameDevice(Device device)
+        public async Task UpdateDevice(Device device)
         {
             if (device is null) throw new Exception("Debe indicar una dispositivo a actualizar");
 
-            await new Pdevice().UpdatePlaceNameDevice(device);
+            await new Pdevice().UpdateDevice(device);
 
         }
         public async Task Delete(Device device)

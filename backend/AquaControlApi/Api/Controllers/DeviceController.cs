@@ -26,6 +26,8 @@ namespace Api.Controllers
                 if (!User.Identity.IsAuthenticated || User.FindFirst(ClaimTypes.NameIdentifier) is null)
                     return Unauthorized();
 
+                device.Validation();
+
                 int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
                 if (device.User.Id != idUser) return StatusCode(400,
@@ -55,12 +57,13 @@ namespace Api.Controllers
                 if (!User.Identity.IsAuthenticated || User.FindFirst(ClaimTypes.NameIdentifier) is null)
                     return Unauthorized();
 
+                device.Validation();
                 int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
                 if (device.User.Id != idUser) return StatusCode(400,
                    new { message = "El usuario que se indico en el dispositivo a agregar, debe ser el mismo que el que esta autenticado" });
 
-                await new Ldevice().UpdatePlaceNameDevice(device);
+                await new Ldevice().UpdateDevice(device);
 
                 return Ok(device);
             }

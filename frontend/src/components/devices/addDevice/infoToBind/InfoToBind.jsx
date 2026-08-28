@@ -19,6 +19,14 @@ export const InfoToBind = () => {
       </p>
 
       <p>
+        <b>Ubicacion geografica del equipo:</b>
+        Si deseas obtener datos climáticos para analizar el historial de humedad
+        de la tierra segun el clima o evitar riegos ante una alta probabilidad de lluvia, te
+        recomendamos ingresar la ubicación donde se instalará el sistema
+        de riego.
+      </p>
+
+      <p>
         Una vez vinculado, podrás enviarle las credenciales de la red Wi-Fi
         mediante la opción «Agregar nuevo dispositivo» para que el equipo se
         conecte a internet y puedas controlarlo desde tu celular a cualquier

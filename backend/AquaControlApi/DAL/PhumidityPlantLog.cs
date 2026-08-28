@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
 namespace DAL
@@ -20,6 +22,10 @@ namespace DAL
                 SqlCommand command = new SqlCommand("AddHumidityPlantLog", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@percentege", humidityPlantLog.Percentege);
+
+                if (humidityPlantLog.WeatherData != null)
+                    command.Parameters.AddWithValue("@weatherData", JsonSerializer.Serialize(humidityPlantLog.WeatherData));
+
                 command.Parameters.AddWithValue("@idPlant", humidityPlantLog.Plant.Id);
                 command.Parameters.AddWithValue("@idDevice", humidityPlantLog.Plant.Device.Id);
 
@@ -42,6 +48,7 @@ namespace DAL
         public async Task<List<HumidityPlantLog>> GetHumidityPlantLogLastWeek(int idPlant, int idDevice)
         {
 
+            WeatherData weatherData = null;
             List<HumidityPlantLog> humidityPlantLogs = new List<HumidityPlantLog>();
             SqlConnection connection = new SqlConnection(DBConnection.Cnn);
 
@@ -66,8 +73,11 @@ namespace DAL
                     while (await reader.ReadAsync())
                     {
 
+                        if (!(reader["ambientData"] is DBNull))
+                            weatherData = JsonSerializer.Deserialize<WeatherData>((string)reader["ambientData"]);
+
                         HumidityPlantLog humidityPlantLog = new HumidityPlantLog(Convert.ToInt16(reader["codeHumidityLand"]), plantFound,
-                        Convert.ToInt16(reader["measure"]), Convert.ToDateTime(reader["moment"]));
+                        Convert.ToInt16(reader["measure"]), weatherData, Convert.ToDateTime(reader["moment"]));
 
                         humidityPlantLogs.Add(humidityPlantLog);
                     }

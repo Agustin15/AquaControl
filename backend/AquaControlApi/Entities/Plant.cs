@@ -11,6 +11,7 @@ namespace Entities
     {
         private int id;
         private int umbralHumidity;
+        private bool indoor;
         private byte[] image;
         private string description;
         private Device device;
@@ -35,6 +36,13 @@ namespace Entities
             get { return image; }
         }
 
+        [Required(ErrorMessage = "Debe indicar si es encerrado o no")]
+        public Boolean Indoor
+        {
+            set { indoor = value; }
+            get { return indoor; }
+        }
+
         public string Description
         {
             set { description = value; }
@@ -49,7 +57,7 @@ namespace Entities
         }
 
 
-        public void Validar()
+        public void Validation()
         {
             if (!String.IsNullOrWhiteSpace(Description) && Description.Length > 500)
                 throw new Exception("Descripcion debe contener como maximo 500 caracteres");
@@ -59,23 +67,25 @@ namespace Entities
 
         public Plant() { }
 
-        public Plant(int id, int umbralHumidity, byte[] image, string description, Device device)
+        public Plant(int id, int umbralHumidity, bool indoor, byte[] image, string description, Device device)
         {
 
             Id = id;
             UmbralHumidity = umbralHumidity;
             Image = image;
+            Indoor = indoor;
             Description = description.Trim();
             Device = device;
 
         }
 
-        public Plant(int id, int umbralHumidity, string description, Device device)
+        public Plant(int id, int umbralHumidity, bool indoor, string description, Device device)
         {
 
             Id = id;
             UmbralHumidity = umbralHumidity;
-            Description = description.Trim();
+            Indoor = indoor;
+            Description = description?.Trim();
             Device = device;
 
         }

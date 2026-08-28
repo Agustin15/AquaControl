@@ -17,7 +17,7 @@ export const DeviceProvider = ({ children }) => {
   const [devices, setDevices] = useState([]);
   const [loadingDevices, setLoadingDevices] = useState(false);
   const [errorDevices, setErrorDevices] = useState();
-  const { accessToken, updateAccessToken } = useAuth();
+  const { updateAccessToken } = useAuth();
 
   useEffect(() => {
     setTimeout(() => {

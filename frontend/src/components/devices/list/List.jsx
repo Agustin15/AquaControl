@@ -5,7 +5,6 @@ import iconEdit from "../../../assets/img/edit.png";
 import iconDevice from "../../../assets/img/device.png";
 import { useDevice } from "../../../contexts/DeviceContext";
 import { useCrudDevice } from "../../../contexts/CrudDeviceContext";
-import { useState } from "react";
 import { useNavigate } from "react-router";
 import { Info } from "../info/Info";
 import { Modal } from "../../modal/Modal";
@@ -45,6 +44,7 @@ export const List = () => {
                     ...valuesForm,
                     id: device.id,
                     placeName: device.placeName,
+                    location:device.location
                   });
                   setEditDevice(device);
                 }}

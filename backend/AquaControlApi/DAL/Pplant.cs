@@ -28,11 +28,12 @@ namespace DAL
                 command.Parameters.AddWithValue("@id", plant.Id);
                 command.Parameters.AddWithValue("@idDevice", plant.Device.Id);
                 command.Parameters.AddWithValue("@umbralHumidity", plant.UmbralHumidity);
+                command.Parameters.AddWithValue("@indoor", plant.Indoor);
 
-                if (!(plant.Image is null))
+                if (plant.Image != null)
                     command.Parameters.AddWithValue("@image", plant.Image);
 
-                if (!(plant.Description is null))
+                if (!String.IsNullOrEmpty(plant.Description))
                     command.Parameters.AddWithValue("@description", plant.Description);
 
                 await connection.OpenAsync();
@@ -43,7 +44,7 @@ namespace DAL
                 await command.ExecuteNonQueryAsync();
 
                 await MqttClient.Instance.PublishMessage("device/plant",
-                    new { plant = new Plant(plant.Id, plant.UmbralHumidity, plant.Description, plant.Device) });
+                    new { plant = new Plant(plant.Id, plant.UmbralHumidity, plant.Indoor, plant.Description, plant.Device) });
 
                 await transaction.CommitAsync();
 
@@ -74,11 +75,12 @@ namespace DAL
                 command.Parameters.AddWithValue("@id", plant.Id);
                 command.Parameters.AddWithValue("@idDevice", plant.Device.Id);
                 command.Parameters.AddWithValue("@umbralHumidity", plant.UmbralHumidity);
+                command.Parameters.AddWithValue("@indoor", plant.Indoor);
 
-                if (!(plant.Image is null))
+                if (plant.Image != null)
                     command.Parameters.AddWithValue("@image", plant.Image);
 
-                if (!(plant.Description is null))
+                if (!String.IsNullOrEmpty(plant.Description))
                     command.Parameters.AddWithValue("@description", plant.Description);
 
                 await connection.OpenAsync();
@@ -89,7 +91,7 @@ namespace DAL
                 await command.ExecuteNonQueryAsync();
 
                 await MqttClient.Instance.PublishMessage("device/plant",
-                    new { plant = new Plant(plant.Id, plant.UmbralHumidity, plant.Description, plant.Device) });
+                    new { plant = new Plant(plant.Id, plant.UmbralHumidity, plant.Indoor, plant.Description, plant.Device) });
 
                 await transaction.CommitAsync();
             }
@@ -165,7 +167,7 @@ namespace DAL
 
                     while (await reader.ReadAsync())
                     {
-                        Plant plant = new Plant(Convert.ToInt16(reader["codeLand"]), Convert.ToInt16(reader["limitHumidity"]),
+                        Plant plant = new Plant(Convert.ToInt16(reader["codeLand"]), Convert.ToInt16(reader["limitHumidity"]), (bool)reader["inside"],
                                              reader["capture"] is DBNull ? null : (byte[])reader["capture"],
                                              reader["info"] is DBNull ? null : Convert.ToString(reader["info"]), deviceFound);
 

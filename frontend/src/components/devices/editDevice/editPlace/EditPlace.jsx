@@ -16,14 +16,24 @@ export const EditPlace = () => {
   const { getUserDevices } = useDevice();
 
   const handleChange = (event) => {
-    setValuesForm({ ...valuesForm, placeName: event.target.value });
+    const { name, value } = event.target;
+
+    let inputError = "";
+
+    if (value.length == 0 && name == "placeName")
+      inputError = "Lugar no puede estar vacio";
+    else if (
+      value.length > 0 &&
+      name == "location" &&
+      !/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+,\s*[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(value)
+    )
+      inputError = "Formato de ubicacion debe ser Ciudad,Pais";
+
+    setValuesForm({ ...valuesForm, [name]: value });
 
     setErrorsForm({
       ...errorsForm,
-      placeName:
-        event.target.value.length == 0
-          ? "*Nombre del lugar no puede estar vacio"
-          : "",
+      [name]: inputError,
     });
   };
 
@@ -51,6 +61,20 @@ export const EditPlace = () => {
         ></input>
 
         {errorsForm.placeName.length > 0 && <p>{errorsForm.placeName}</p>}
+      </div>
+
+      <div className={styles.columnInput}>
+        <label>Ubicacion geografica del riego(opcional)</label>
+        <input
+          onChange={(event) => handleChange(event)}
+          defaultValue={valuesForm.location}
+          name="location"
+          placeholder="Ingrese ubicacion:Ciudad,Pais"
+          type="text"
+          className={errorsForm.location.length > 0 ? styles.inputError : ""}
+        ></input>
+
+        {errorsForm.location.length > 0 && <p>{errorsForm.location}</p>}
       </div>
 
       <button disabled={loadingForm}>

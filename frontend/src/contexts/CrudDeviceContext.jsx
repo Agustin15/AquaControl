@@ -17,11 +17,13 @@ export const CrudDeviceProvider = ({ children }) => {
     placeName: "",
     wifi: "",
     wifiPassword: "",
+    location: "",
   });
   const [errorsForm, setErrorsForm] = useState({
     placeName: "",
     wifi: "",
     wifiPassword: "",
+    location: "",
   });
   const { updateAccessToken, userAuth } = useAuth();
 
@@ -41,6 +43,7 @@ export const CrudDeviceProvider = ({ children }) => {
         body: JSON.stringify({
           id: valuesForm.id,
           placeName: valuesForm.placeName,
+          location: valuesForm.location,
           user: userAuth,
         }),
       });
@@ -57,11 +60,13 @@ export const CrudDeviceProvider = ({ children }) => {
         `¡Dispositivo ${method == "POST" ? "agregado" : "actualizado"} exitosamente!`,
       );
 
-      setValuesForm({
-        placeName: "",
-        wifi: "",
-        wifiPassword: "",
-      });
+      if (method == "POST")
+        setValuesForm({
+          placeName: "",
+          wifi: "",
+          wifiPassword: "",
+          location: "",
+        });
 
       return result;
     } catch (error) {
@@ -79,11 +84,13 @@ export const CrudDeviceProvider = ({ children }) => {
       placeName: "",
       wifi: "",
       wifiPassword: "",
+      location: "",
     });
     setValuesForm({
       placeName: "",
       wifi: "",
       wifiPassword: "",
+      location: "",
     });
 
     if (showFormAdd) setShowFormAdd(false);

@@ -33,13 +33,6 @@ export const Edit = () => {
       await fetchPostOrPut("PUT", true);
       alertSuccess("¡Datos de la planta actualizados exitosamente!");
 
-      setValuesForm({
-        id: 0,
-        image: null,
-        umbralHumidity: 0,
-        description: "",
-      });
-
       setErrorsForm({
         image: "",
         umbralHumidity: "",

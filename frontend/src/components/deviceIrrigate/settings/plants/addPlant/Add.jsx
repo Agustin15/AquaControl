@@ -36,6 +36,7 @@ export const Add = () => {
       setValuesForm({
         image: null,
         umbralHumidity: 0,
+        indoor: 0,
         description: "",
       });
 

@@ -1,5 +1,4 @@
 import styles from "./EditWifiCredentials.module.css";
-import { useDevice } from "../../../../contexts/DeviceContext";
 import { alertWarning } from "../../../alertSwal/alertSwal";
 import { useCrudDevice } from "../../../../contexts/CrudDeviceContext";
 
@@ -11,16 +10,19 @@ export const EditWifiCredentials = () => {
     const { name, value } = event.target;
     setValuesForm({ ...valuesForm, [name]: value });
 
-    let inputError =
-      name == "wifi"
-        ? "Red Wifi no puede estar vacia"
-        : name == "wifiPassword"
-          ? "Contraseña de red no puede estar vacia"
-          : "";
+    let inputError = "";
+    if (value.length == 0) {
+      inputError =
+        name == "wifi"
+          ? "Red Wifi no puede estar vacia"
+          : name == "wifiPassword"
+            ? "Contraseña de red no puede estar vacia"
+            : "";
+    }
 
     setErrorsForm({
       ...errorsForm,
-      [name]: value.length == 0 ? "*" + inputError : "",
+      [name]: inputError,
     });
   };
 

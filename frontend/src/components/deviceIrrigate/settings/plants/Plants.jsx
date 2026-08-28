@@ -67,6 +67,7 @@ export const Plants = () => {
                   setValuesForm({
                     id: plant.id,
                     image: plant.image,
+                    indoor: plant.indoor,
                     umbralHumidity: plant.umbralHumidity,
                     description: plant.description,
                   });

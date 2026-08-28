@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -12,6 +13,7 @@ namespace Entities
     {
         int id;
         string placeName;
+        string location;
         User user;
         DateTime created;
 
@@ -29,12 +31,19 @@ namespace Entities
             get { return placeName; ; }
         }
 
+        public string Location
+        {
+            set { location = value; }
+            get { return location; }
+        }
+
         [Required(ErrorMessage = "Debe indicar un usuario")]
         public User User
         {
             set { user = value; }
             get { return user; }
         }
+
 
         public DateTime Created
         {
@@ -43,13 +52,19 @@ namespace Entities
         }
 
 
+        public void Validation() {
+            if (!string.IsNullOrEmpty(Location) && 
+                !Regex.IsMatch(Location,@"^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+,\s*[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$")) 
+                throw new Exception("Formato de ubicacion incorrecto");
+        }
         public Device() { }
 
-        public Device(int id, string placeName, User user, DateTime created)
+        public Device(int id, string placeName,string location, User user, DateTime created)
         {
 
             Id = id;
             PlaceName = placeName.Trim();
+            Location = location?.Trim();
             User = user;
             Created = created;
 

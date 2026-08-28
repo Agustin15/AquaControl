@@ -24,6 +24,23 @@
     width: 85%;
 }
 
+
+.form .containCheckbox {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    width: 85%;
+    font-size: 13px;
+    gap: 0.5rem;
+}
+
+.form .containCheckbox input {
+    width: 1.3rem;
+    height: 1.3rem;
+}
+
 .form .columnInput input {
     width: 100%;
     height: 2.2rem;

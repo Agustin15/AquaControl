@@ -45,7 +45,7 @@ export const HumidityPlantLogs = () => {
         <div className={styles.title}>
           <img src={iconHumidityPlantTitle} />
           <h3>
-            Historial de los niveles de humedad planta N°{" "}
+            Historial de los niveles de humedad de la planta N°{" "}
             {plantSelected ? plantSelected.id : ""}
           </h3>
         </div>

@@ -46,7 +46,7 @@ export const WaterTankLogs = () => {
       <div className={styles.header}>
         <div className={styles.title}>
           <img src={iconWaterTank} />
-          <h3>Historial de los niveles de agua del tanque </h3>
+          <h3>Niveles de agua del tanque </h3>
         </div>
 
         {!loadingTanks && tanks.length > 0 && (

@@ -13,10 +13,10 @@ joined DATETIME NOT NULL DEFAULT GETDATE()
 CREATE TABLE Devices(
 idDevice INT IDENTITY(1,1) PRIMARY KEY,
 placeName VARCHAR(15) NOT NULL,
+location VARCHAR(25) CHECK(location NOT LIKE '%[^A-Z,]%' and location LIKE '%,%'),
 created DATETIME NOT NULL DEFAULT GETDATE(),
 idUser INT NOT NULL FOREIGN KEY REFERENCES Users(idUser) ON DELETE CASCADE,
 )
-
 
 CREATE TABLE Tanks(
 id INT CHECK(id>0),
@@ -29,10 +29,12 @@ CREATE TABLE Plants(
 id INT CHECK(id>0),
 idDevice INT NOT NULL FOREIGN KEY REFERENCES Devices(idDevice) ON DELETE CASCADE,
 umbralHumidity INT NOT NULL CHECK(umbralHumidity >=0 and umbralHumidity <=100),
+indoor BIT NOT NULL DEFAULT 0,
 image VARBINARY(MAX),
 description VARCHAR(500),
 PRIMARY KEY(id,idDevice)
 )
+
 
 CREATE TABLE WaterTankLogs(
 id INT IDENTITY(1,1) PRIMARY KEY, 
@@ -48,10 +50,12 @@ CREATE TABLE HumidityPlantLogs(
 id INT IDENTITY(1,1) PRIMARY KEY, 
 percentege INT NOT NULL CHECK(percentege>=0 and percentege<=100),
 datetimeLog  DATETIME NOT NULL DEFAULT GETDATE(),
+weatherData NVARCHAR(300),
 idPlant INT NOT NULL,
 idDevice INT NOT NULL,
 FOREIGN KEY (idPlant,idDevice) REFERENCES Plants(id,idDevice) ON DELETE CASCADE,
 )
+
 
 CREATE TABLE WaterPlantLogs(
 id INT IDENTITY(1,1) PRIMARY KEY,
@@ -89,7 +93,7 @@ select idUser as code,username as entity,email as correspondence,password as ent
 GO
 
 CREATE OR ALTER  VIEW Plaques AS
-select idDevice as codePlaque, placeName as place,created as inserted,idUser as codeEntity from Devices;
+select idDevice as codePlaque, placeName as place,location as geography,created as inserted,idUser as codeEntity from Devices;
 
 GO
 
@@ -98,7 +102,7 @@ select id as codeBowl,idDevice as idPlaque,height as limit from Tanks;
 GO
 
 CREATE OR ALTER  VIEW Lands AS
-select id as codeLand,idDevice as idPlaque,umbralHumidity as limitHumidity,image as capture,description as info from Plants;
+select id as codeLand,idDevice as idPlaque,umbralHumidity as limitHumidity,indoor as inside,image as capture,description as info from Plants;
 
 GO
 
@@ -107,7 +111,7 @@ select id as codeLiquidBowl,percentege as measure,datetimeLog as moment,idTank a
 GO
 
 CREATE OR ALTER VIEW HumidityLandRecords AS
-select id as codeHumidityLand,percentege as measure,datetimeLog as moment,idPlant as idLand,idDevice as idPlaque from HumidityPlantLogs;
+select id as codeHumidityLand,percentege as measure,datetimeLog as moment,weatherData as ambientData,idPlant as idLand,idDevice as idPlaque from HumidityPlantLogs;
 GO
 
 CREATE OR ALTER VIEW PlantWateringRecords AS
@@ -249,9 +253,17 @@ END
 
 GO
 
+
 ------------------------------------------------------------Dispositivo--------------------------------------------------------------
-CREATE OR ALTER PROCEDURE AddDevice @placeName VARCHAR(15),@idUser INT AS
+CREATE OR ALTER PROCEDURE AddDevice @placeName VARCHAR(15),@location VARCHAR(35)=NULL,@idUser INT AS
 BEGIN
+
+IF (@location IS NOT NULL and (@location LIKE '%[^A-Z,]%' OR @location NOT LIKE '%,%'))
+BEGIN
+RAISERROR('Formato de ubicacion incorrecto',16,2)
+RETURN
+END 
+
 
 IF NOT EXISTS(select * from Users where idUser=@idUser)
 BEGIN
@@ -265,7 +277,7 @@ RAISERROR('Ya tiene un dispositivo de riego que tiene este nombre de lugar',16,2
 RETURN
 END 
 
-INSERT INTO Devices(placeName,idUser) Values(@placeName,@idUser)
+INSERT INTO Devices(placeName,location,idUser) Values(@placeName,@location,@idUser)
 IF (@@ERROR<>0)
 BEGIN
 RAISERROR('Error inesperado al registrar dispositivo',16,4)
@@ -276,8 +288,14 @@ END
 
 GO
 
-CREATE OR ALTER PROCEDURE UpdatePlaceNameDevice @placeName VARCHAR(15),@idUser INT,@idDevice INT AS
+CREATE OR ALTER PROCEDURE UpdateDevice @placeName VARCHAR(15),@location VARCHAR(35)=NULL,@idUser INT,@idDevice INT AS
 BEGIN
+
+IF (@location IS NOT NULL and (@location LIKE '%[^A-Z,]%' OR @location NOT LIKE '%,%'))
+BEGIN
+RAISERROR('Formato de ubicacion incorrecto',16,2)
+RETURN
+END 
 
 IF NOT EXISTS(select * from Devices where idDevice=idDevice)
 BEGIN
@@ -291,7 +309,7 @@ RAISERROR('Ya tiene un dispositivo de riego que tiene este nombre de lugar',16,2
 RETURN
 END 
 
-UPDATE Devices set placeName=@placeName where idDevice=@idDevice 
+UPDATE Devices set placeName=@placeName,location=@location where idDevice=@idDevice 
 
 IF (@@ERROR<>0)
 BEGIN
@@ -462,7 +480,7 @@ GO
 
 ------------------------------------------------------------Planta--------------------------------------------------------------
 
-CREATE OR ALTER PROCEDURE AddPlant @id INT, @idDevice INT,@umbralHumidity INT, @image VARBINARY(MAX)=NULL,@description VARCHAR(500)=NULL AS
+CREATE OR ALTER PROCEDURE AddPlant @id INT, @idDevice INT,@umbralHumidity INT,@indoor BIT, @image VARBINARY(MAX)=NULL,@description VARCHAR(500)=NULL AS
 BEGIN
 
 IF EXISTS(select * from Plants)
@@ -483,13 +501,14 @@ RAISERROR('Umbral de humedad debes estar entre o 100',16,1)
 RETURN
 END
 
+
 IF NOT EXISTS(select * from Devices where idDevice=@idDevice)
 BEGIN
 RAISERROR('Dispositivo no encontrado',16,2)
 RETURN
 END 
 
-INSERT INTO Plants(id,umbralHumidity,image,description,idDevice) VALUES(@id,@umbralHumidity,@image,@description,@idDevice)
+INSERT INTO Plants(id,umbralHumidity,indoor,image,description,idDevice) VALUES(@id,@umbralHumidity,@indoor,@image,@description,@idDevice)
 
 IF (@@ERROR<>0)
 BEGIN
@@ -501,7 +520,7 @@ END
 
 GO
 
-CREATE OR ALTER PROCEDURE UpdatePlant @id INT,@idDevice INT,@umbralHumidity INT,@image VARBINARY(MAX)=NULL,@description VARCHAR(500)=NULL AS
+CREATE OR ALTER PROCEDURE UpdatePlant @id INT,@idDevice INT,@umbralHumidity INT,@indoor BIT,@image VARBINARY(MAX)=NULL,@description VARCHAR(500)=NULL AS
 BEGIN
 
 IF(@umbralHumidity<0 OR @umbralHumidity>100)
@@ -516,7 +535,7 @@ RAISERROR('Planta no encontrada',16,2)
 RETURN
 END 
 
-Update Plants set umbralHumidity=@umbralHumidity, image=@image,description=@description where id=@id and idDevice=@idDevice
+Update Plants set umbralHumidity=@umbralHumidity,indoor=@indoor,image=@image,description=@description where id=@id and idDevice=@idDevice
 IF (@@ERROR<>0)
 BEGIN
 RAISERROR('Error inesperado al actualizar datos de la planta',16,4)
@@ -611,7 +630,7 @@ GO
 
 ------------------------------------------------------------Nivel de humedad de la tierra-------------------------------------------------------
 
-CREATE OR ALTER PROCEDURE AddHumidityPlantLog @percentege INT,@idPlant INT,@idDevice INT AS
+CREATE OR ALTER PROCEDURE AddHumidityPlantLog @percentege INT,@weatherData NVARCHAR(300)=null,@idPlant INT,@idDevice INT AS
 BEGIN
 
 IF (@percentege<0 OR @percentege>100)
@@ -628,7 +647,7 @@ RETURN
 END
 
 
-INSERT INTO HumidityPlantLogs(percentege,idPlant,idDevice) VALUES(@percentege,@idPlant,@idDevice)
+INSERT INTO HumidityPlantLogs(percentege,weatherData,idPlant,idDevice) VALUES(@percentege,@weatherData,@idPlant,@idDevice)
 IF (@@ERROR<>0)
 BEGIN
 RAISERROR('Error inesperado al registrar el nivel de humedad de la tierra',16,4)
@@ -846,42 +865,71 @@ GO
 EXEC AddTank 1,1,30
 
 --------------------------------------------------Plants---------------------------------------------------------- 
-EXEC AddPlant 1,1,50,
-    @image = NULL,
+EXEC AddPlant 1,1,50,0,@image = NULL,
     @description = 'Planta de albahaca cultivada en maceta, requiere riego moderado y buena exposición al sol.';
 
 --------------------------------------------------simulation day---------------------------------------------------------- 
 
-EXEC AddHumidityPlantLog @percentege = 50, @idPlant = 1,@idDevice= 1;
+EXEC AddHumidityPlantLog @percentege = 50,@weatherData='{
+  "Humidity": 65,
+  "Temperature": 15,
+  "PrecipitationChance": 50,
+  "Icon": "//cdn.weatherapi.com/weather/64x64/night/122.png"
+}', @idPlant = 1,@idDevice= 1;
+
 EXEC AddWaterTankLog @percentege = 100, @idTank = 1,@idDevice= 1;
-EXEC AddHumidityPlantLog @percentege = 40,  @idPlant = 1,@idDevice= 1;
+
+EXEC AddHumidityPlantLog @percentege = 40,@weatherData='{
+  "Humidity": 60,
+  "Temperature": 17,
+  "PrecipitationChance": 50,
+  "Icon": "//cdn.weatherapi.com/weather/64x64/night/122.png"
+}',@idPlant = 1,@idDevice= 1;
+
 EXEC AddWaterTankLog @percentege = 100, @idTank = 1,@idDevice= 1;
-EXEC AddHumidityPlantLog @percentege = 30,  @idPlant = 1,@idDevice= 1;
+EXEC AddHumidityPlantLog @percentege = 30,@weatherData='{
+  "Humidity": 57,
+  "Temperature": 17,
+  "PrecipitationChance": 45,
+  "Icon": "//cdn.weatherapi.com/weather/64x64/night/122.png"
+}',@idPlant = 1,@idDevice= 1;
 
 EXEC AddWaterPlantLog @type='Automatico',@levelTankBefore=100,@humidityBefore=30, @idTank=1, @idPlant=1,@idDevice= 1;
 EXEC UpdateStateWaterPlantLog @id=1, @state='Completado',@levelTankAfter=90, @humidityAfter=50;
 
 EXEC AddWaterTankLog @percentege = 90, @idTank = 1,@idDevice= 1;
-EXEC AddHumidityPlantLog @percentege = 45,  @idPlant = 1,@idDevice= 1;
-EXEC AddWaterTankLog @percentege = 90, @idTank = 1,@idDevice= 1;
-EXEC AddHumidityPlantLog @percentege = 40,  @idPlant = 1,@idDevice= 1;
-EXEC AddWaterTankLog @percentege = 90, @idTank = 1,@idDevice= 1;
-EXEC AddHumidityPlantLog @percentege = 38,  @idPlant = 1,@idDevice= 1;
-EXEC AddWaterTankLog @percentege = 90, @idTank = 1,@idDevice= 1;
-EXEC AddHumidityPlantLog @percentege = 30,  @idPlant = 1,@idDevice= 1;
+EXEC AddHumidityPlantLog @percentege = 45,@weatherData='{
+  "Humidity": 60,
+  "Temperature": 15,
+  "PrecipitationChance": 60,
+  "Icon": "//cdn.weatherapi.com/weather/64x64/night/122.png"
+}', @idPlant = 1,@idDevice= 1;
 
-EXEC AddWaterPlantLog @type='Automatico',@levelTankBefore=90,@humidityBefore=30, @idTank=1, @idPlant=1,@idDevice= 1;
+EXEC AddWaterTankLog @percentege = 90, @idTank = 1,@idDevice= 1;
+EXEC AddHumidityPlantLog @percentege = 40,@weatherData='{
+  "Humidity": 60,
+  "Temperature": 15,
+  "PrecipitationChance": 100,
+  "Icon": "//cdn.weatherapi.com/weather/64x64/day/113.png"
+}', @idPlant = 1,@idDevice= 1;
+
+EXEC AddWaterTankLog @percentege = 90, @idTank = 1,@idDevice= 1;
+EXEC AddHumidityPlantLog @percentege = 38,@weatherData='{
+  "Humidity": 66,
+  "Temperature": 13,
+  "PrecipitationChance": 100,
+  "Icon": "//cdn.weatherapi.com/weather/64x64/day/113.png"
+}'
+, @idPlant = 1,@idDevice= 1;
+
+EXEC AddWaterTankLog @percentege = 90, @idTank = 1,@idDevice= 1;
+EXEC AddHumidityPlantLog @percentege = 34,@weatherData='{
+  "Humidity": 68,
+  "Temperature": 13,
+  "PrecipitationChance": 100,
+  "Icon": "//cdn.weatherapi.com/weather/64x64/day/113.png"
+}'
+,@idPlant = 1,@idDevice= 1;
+
+EXEC AddWaterPlantLog @type='Automatico',@levelTankBefore=90,@humidityBefore=34, @idTank=1, @idPlant=1,@idDevice= 1;
 EXEC UpdateStateWaterPlantLog @id=2, @state='Completado',@levelTankAfter=82, @humidityAfter=50;
-
-EXEC AddWaterTankLog @percentege = 82, @idTank = 1,@idDevice= 1;
-EXEC AddHumidityPlantLog @percentege = 50,  @idPlant = 1,@idDevice= 1;
-EXEC AddWaterTankLog @percentege = 82, @idTank = 1,@idDevice= 1;
-EXEC AddHumidityPlantLog @percentege = 42,  @idPlant = 1,@idDevice= 1;
-EXEC AddWaterTankLog @percentege = 82, @idTank = 1,@idDevice= 1;
-EXEC AddHumidityPlantLog @percentege = 40,  @idPlant = 1,@idDevice= 1;
-EXEC AddWaterTankLog @percentege = 82, @idTank = 1,@idDevice= 1;
-EXEC AddHumidityPlantLog @percentege = 40,  @idPlant = 1,@idDevice= 1;
-
-EXEC AddWaterPlantLog @type='Automatico',@levelTankBefore=82,@humidityBefore=40, @idTank=1, @idPlant=1,@idDevice= 1;
-
-EXEC UpdateStateWaterPlantLog @id=3, @state='Completado',@levelTankAfter=76, @humidityAfter=50;

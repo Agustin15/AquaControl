@@ -13,6 +13,7 @@ export const FormPlantProvider = ({ children }) => {
   const [valuesForm, setValuesForm] = useState({
     id: 0,
     image: null,
+    indoor:false,
     umbralHumidity: 0,
     description: "",
   });

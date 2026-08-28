@@ -23,6 +23,10 @@ namespace DAL
                 SqlCommand command = new SqlCommand("AddDevice", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@placeName", device.PlaceName);
+
+                if (!String.IsNullOrEmpty(device.Location))
+                    command.Parameters.AddWithValue("@location", device.Location);
+
                 command.Parameters.AddWithValue("@idUser", device.User.Id);
 
                 await connection.OpenAsync();
@@ -39,7 +43,7 @@ namespace DAL
                 await connection.CloseAsync();
             }
         }
-        public async Task UpdatePlaceNameDevice(Device device)
+        public async Task UpdateDevice(Device device)
         {
 
             SqlConnection connection = new SqlConnection(DBConnection.Cnn);
@@ -47,9 +51,13 @@ namespace DAL
             try
             {
 
-                SqlCommand command = new SqlCommand("UpdatePlaceNameDevice", connection);
+                SqlCommand command = new SqlCommand("UpdateDevice", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@placeName", device.PlaceName);
+
+                if (!String.IsNullOrEmpty(device.Location))
+                    command.Parameters.AddWithValue("@location", device.Location);
+
                 command.Parameters.AddWithValue("@idUser", device.User.Id);
                 command.Parameters.AddWithValue("@idDevice", device.Id);
 
@@ -125,7 +133,7 @@ namespace DAL
                     while (await reader.ReadAsync())
                     {
                         Device device = new Device(Convert.ToInt16(reader["codePlaque"]), Convert.ToString(reader["place"]),
-                             userFound, Convert.ToDateTime(reader["inserted"]));
+                          (reader["geography"] is DBNull ? null : Convert.ToString(reader["geography"])), userFound, Convert.ToDateTime(reader["inserted"]));
 
                         devices.Add(device);
                     }
@@ -172,7 +180,7 @@ namespace DAL
                     User userFound = await new Puser().GetUserById(Convert.ToInt16(reader["codeEntity"]));
 
                     device = new Device(Convert.ToInt16(reader["codePlaque"]), Convert.ToString(reader["place"]),
-                         userFound, Convert.ToDateTime(reader["inserted"]));
+                           (reader["geography"] is DBNull ? null : Convert.ToString(reader["geography"])), userFound, Convert.ToDateTime(reader["inserted"]));
 
                 }
                 await reader.CloseAsync();

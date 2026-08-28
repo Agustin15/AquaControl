@@ -31,6 +31,12 @@ export const Info = () => {
           <b>Umbral de humedad:</b>
           <span>{infoPlant.umbralHumidity}%</span>
         </div>
+
+        <div className={styles.rowDetail}>
+          <b>Indoor:</b>
+          <span>{infoPlant.indoor ? "Si" : "No"}</span>
+        </div>
+
         <div className={styles.columnDetail}>
           <b>Descripcion:</b>
           <span>

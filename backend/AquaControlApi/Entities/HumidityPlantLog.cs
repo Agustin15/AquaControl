@@ -12,6 +12,7 @@ namespace Entities
         private int id;
         private Plant plant;
         private double percentege;
+        private WeatherData weatherData;
         private DateTime datetimeLog;
 
         public int Id
@@ -40,16 +41,21 @@ namespace Entities
             get { return datetimeLog; }
         }
 
-
+        public WeatherData WeatherData
+        {
+            set { weatherData = value; }
+            get { return weatherData; }
+        }
 
         public HumidityPlantLog() { }
 
-        public HumidityPlantLog(int id, Plant plant, double percentege, DateTime datetimeLog)
+        public HumidityPlantLog(int id, Plant plant, double percentege, WeatherData weatherData, DateTime datetimeLog)
         {
 
             Id = id;
             Plant = plant;
             Percentege = percentege;
+            WeatherData = weatherData;
             DatetimeLog = datetimeLog;
 
         }
