@@ -4,13 +4,10 @@ import "./alertSwal.css";
 export const alertError = (title, error) => {
   Swal.fire({
     title: title,
-    html: `<p class="msg">${error}</p>`,
+    html: `<p>${error}</p>`,
     icon: "error",
-    width: "350",
     customClass: {
-      icon: "iconCustom",
-      title: "titleCustom",
-      confirmButton: "confirmButtonErrorCustom",
+      popup:"popupAlertError",
     },
   });
 };
@@ -19,11 +16,8 @@ export const alertSuccess = (title) => {
   Swal.fire({
     title: title,
     icon: "success",
-    width: "350",
     customClass: {
-      icon: "iconCustom",
-      title: "titleCustom",
-      confirmButton: "confirmButtonSuccessCustom",
+     popup:"popupAlertSuccess",
     },
   });
 };
@@ -32,11 +26,9 @@ export const alertWarning = (title) => {
   Swal.fire({
     title: title,
     icon: "warning",
-    width: "350",
     customClass: {
       icon: "iconCustom",
-      title: "titleCustom",
-      confirmButton: "confirmButtonWarningCustom",
+      popup:"popupAlertWarning"
     },
   });
 };
@@ -45,18 +37,29 @@ export const alertConfirmDelete = async (title) => {
   const result = await Swal.fire({
     title: title,
     icon: "question",
-    width: "450",
     showDenyButton: true,
     showCancelButton: false,
     confirmButtonText: "Confirmar",
     denyButtonText: "Cancelar",
     customClass: {
       icon: "iconCustom",
-      title: "titleCustom",
-      confirmButton: "confirmDeleteButton",
-      denyButton: "cancelDeleteButton",
+      popup: "popupAlertConfirmDelete",
+      confirmButton: "confirmButton",
+      denyButton: "denyButton",
     },
   });
 
   return result;
+};
+
+export const alertErrorIrrigation = (title, icon) => {
+  Swal.fire({
+    title: title,
+    imageUrl: icon,
+    imageHeight: "66",
+    imageWidth: "66",
+    customClass: {
+      popup: "popupAlertIrrigation",
+    },
+  });
 };

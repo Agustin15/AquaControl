@@ -3,6 +3,7 @@ import iconDevice from "../../assets/img/device.png";
 import { useState } from "react";
 import { useDevice } from "../../contexts/DeviceContext";
 import { useNavigate } from "react-router";
+import { useWeather } from "../../contexts/WeatherContext";
 import { LogsWeekdayProvider } from "../../contexts/LogsWeekdayContext";
 import { PlantProvider } from "../../contexts/plantContext/PlantContext";
 import { TankProvider } from "../../contexts/tankContext/TankContext";
@@ -12,15 +13,19 @@ import { WaterTankLogs } from "./waterTankLogs/WaterTankLogs";
 import { Settings } from "./settings/Settings";
 import { Irrigate } from "./irrigate/Irrigate";
 import { StateMqttConnection } from "./stateMqttConnection/StateMqttConnection";
+import { CurrentWeather } from "./currentWeather/CurrentWeather";
 
 export const DeviceIrrigate = () => {
   const [optionSelected, setOptionSelected] = useState("Irrigate");
   const { deviceSelected } = useDevice();
+  const { currentWeather } = useWeather();
+
   let navigate = useNavigate();
 
   return (
     <div id="contentBody" className={styles.contentBody}>
       <div className={styles.menuDevice}>
+        {currentWeather && <CurrentWeather currentWeather={currentWeather} />}
         <StateMqttConnection />
         <img src={iconDevice}></img>
         <h3>{deviceSelected.placeName}</h3>

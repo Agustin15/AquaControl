@@ -1,78 +1,116 @@
-.titleCustom,
-.msg {
-    font-size: 16px;
-    margin-top: -1rem;
+.iconCustom {
+    width: 4rem;
+    height: 4rem;
+    margin-top: 1rem;
 }
+
+.popupAlertError,
+.popupAlertSuccess,
+.popupAlertWarning {
+    width: 17rem;
+}
+
+.popupAlertError h2,
+.popupAlertSuccess h2,
+.popupAlertWarning h2 {
+    font-size: 13px;
+    margin: 0;
+    padding: 0;
+}
+
+.popupAlertError .swal2-icon,
+.popupAlertSuccess .swal2-icon,
+.popupAlertWarning .swal2-icon {
+    width: 56px;
+    height: 56px;
+    margin-top: 1rem;
+}
+
+.popupAlertError .swal2-x-mark-line-left,
+.popupAlertError .swal2-x-mark-line-right {
+    font-size: 11px;
+}
+
+.popupAlertSuccess .swal2-success-line-tip,
+.popupAlertSuccess .swal2-success-line-long {
+    font-size: 11px;
+}
+
+.popupAlertError p,
+.popupAlertSuccess p {
+    font-size: 14px;
+}
+
+.popupAlertError button,
+.popupAlertSuccess button,
+.popupAlertWarning button {
+    width: 4rem;
+    height: 2rem;
+    font-size: 12px;
+    background: red;
+    margin: 0;
+}
+
+.popupAlertSuccess button {
+    background: rgb(33, 181, 50);
+}
+
+.popupAlertWarning button {
+    background: rgb(230, 172, 57);
+}
+
+.popupAlertConfirmDelete {
+    width: 17rem;
+}
+
+.popupAlertConfirmDelete button {
+    width: 7rem;
+    height: 2rem;
+    font-size: 12px;
+}
+
+.popupAlertConfirmDelete .swal2-icon-content,
+.popupAlertWarning .swal2-icon-content {
+    font-size: 40px;
+}
+
+.popupAlertConfirmDelete .confirmButton {
+    background: red;
+}
+
+.popupAlertConfirmDelete .denyButton {
+    background: rgb(36, 34, 34);
+}
+
+.popupAlertConfirmDelete h2 {
+    font-size: 13px;
+}
+
 
 .titleLoading {
     font-size: 13px;
 }
 
-.msg {
-    margin-top: -0.3rem;
+.popupAlertIrrigation {
+    width: 16rem;
+    height: 11rem;
 }
 
-.confirmButtonSuccessCustom,
-.confirmButtonErrorCustom,
-.confirmButtonWarningCustom {
-    height: 2.2rem;
-    width: 5rem;
-    font-size: 13px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-weight: bold;
-    margin-top: -0.3rem;
-}
-
-.confirmButtonSuccessCustom {
-    background: rgb(21, 174, 44);
-}
-
-.confirmButtonSuccessCustom:hover {
-    background: rgb(21, 152, 41);
-}
-
-.confirmButtonErrorCustom {
-    background: rgb(231, 10, 10);
-}
-
-.confirmButtonErrorCustom:hover {
-    background: rgb(213, 10, 10);
-}
-
-.confirmButtonWarningCustom {
-    background: rgb(232, 186, 59);
-}
-
-.confirmButtonWarningCustom:hover {
-    background: rgb(208, 166, 51);
-}
-
-
-.iconCustom {
-    transform: scale(0.7);
+.popupAlertIrrigation img {
     margin-top: 0.5rem;
+    margin-bottom: 0;
+    padding: 0;
 }
 
-.confirmDeleteButton,
-.cancelDeleteButton {
-    height: 2.2rem;
-    width: 9rem;
-    font-size: 13px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-weight: bold;
-    margin-top: -0.3rem;
-    border-radius: 4px;
+.popupAlertIrrigation h2 {
+    margin: 0;
+    padding: 0;
+    font-size: 12px;
 }
 
-.cancelDeleteButton {
-    background: rgb(162, 162, 162);
+.popupAlertIrrigation button {
+    width: 5rem;
+    height: 2rem;
+    font-size: 12px;
+    background: rgb(202, 25, 25);
 }
-
-.confirmDeleteButton {
-    background: rgb(247, 39, 39);
-}
-
