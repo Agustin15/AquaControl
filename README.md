@@ -112,14 +112,18 @@ Real-time connectivity: Data is continuously transmitted using the MQTT protocol
      LOCALHOST_BACKEND=<url of backend>
 
 
-![Devices](/captures/screenApp1.jpg)
+![Devices](/captures/Devices.jpg)
 
-![Humidity week logs ](/captures/screenApp2.jpg)
+![Humidity week logs ](/captures/HumidityPlantLogs.jpg)
 
-![Water level tank week logs ](/captures/screenApp3.jpg)
+![Water level tank week logs ](/captures/WaterLevelLogs.jpg)
 
-![Irrigate](/captures/screenApp4.jpg)
+![Irrigatation](/captures/Irrigation.jpg)
 
-![Irrigates record](/captures/screenApp5.jpg)
+![Irrigations record](/captures/IrrigationsRecord.jpg)
 
-![Irrigate details](/captures/screenApp6.jpg)
+![Irrigation details](/captures/DetailsIrrigation.jpg)
+
+![Plants](/captures/Plants.jpg)
+
+![Tanks](/captures/Tanks.jpg)
