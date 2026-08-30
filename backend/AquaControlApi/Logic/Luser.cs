@@ -117,20 +117,13 @@ namespace Logic
 
         }
 
-        public async Task UpdateUsername(User user)
+        public async Task UpdateUser(User user)
         {
             if (user is null) throw new Exception("Debe indicar un usuario a actualizar");
-
-            await new Puser().UpdateUsername(user);
-
-        }
-        public async Task UpdatePasswordUser(User user)
-        {
-            if (user is null) throw new Exception("Debe indicar un usuario a actualizar");
-
-            await new Puser().UpdatePasswordUser(user);
+            await new Puser().UpdateUser(user);
 
         }
+
 
         public async Task<List<User>> GetAllUsers()
         {

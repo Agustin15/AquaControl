@@ -19,11 +19,11 @@ namespace Logic
             return idGenerated;
 
         }
-        public async Task UpdateStateWaterPlantLog(WaterPlantLog waterPlantLog)
+        public async Task UpdateWaterPlantLogFinished(WaterPlantLog waterPlantLog)
         {
             if (waterPlantLog is null) throw new Exception("Debe indicar un riego a actualizar");
 
-            await new PwaterPlantLog().UpdateStateWaterPlantLog(waterPlantLog);
+            await new PwaterPlantLog().UpdateWaterPlantLogFinished(waterPlantLog);
 
         }
 

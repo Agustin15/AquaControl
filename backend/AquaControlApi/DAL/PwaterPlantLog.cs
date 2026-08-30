@@ -46,13 +46,13 @@ namespace DAL
                 await connection.CloseAsync();
             }
         }
-        public async Task UpdateStateWaterPlantLog(WaterPlantLog waterPlantLog)
+        public async Task UpdateWaterPlantLogFinished(WaterPlantLog waterPlantLog)
         {
 
             SqlConnection connection = new SqlConnection(DBConnection.Cnn);
             try
             {
-                SqlCommand command = new SqlCommand("UpdateStateWaterPlantLog", connection);
+                SqlCommand command = new SqlCommand("UpdateWaterPlantLogFinished", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@id", waterPlantLog.Id);
                 command.Parameters.AddWithValue("@state", waterPlantLog.State);

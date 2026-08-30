@@ -77,7 +77,7 @@ namespace DAL
             }
         }
 
-        public async Task UpdateUsername(User user)
+        public async Task UpdateUser(User user)
         {
 
             SqlConnection connection = new SqlConnection(DBConnection.Cnn);
@@ -85,40 +85,13 @@ namespace DAL
             try
             {
 
-                SqlCommand command = new SqlCommand("UpdateUsername", connection);
+                SqlCommand command = new SqlCommand("UpdateUser", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@username", user.Username);
-                command.Parameters.AddWithValue("@idUser", user.Id);
-
-                await connection.OpenAsync();
-                await command.ExecuteNonQueryAsync();
-
-            }
-            catch (Exception ex)
-            {
-
-                throw new Exception(ex.Message);
-            }
-            finally
-            {
-                await connection.CloseAsync();
-            }
-        }
-        public async Task UpdatePasswordUser(User user)
-        {
-
-            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
-
-            try
-            {
-
-                SqlCommand command = new SqlCommand("UpdatePasswordUser", connection);
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@idUser", user.Id);
+                command.Parameters.AddWithValue("@email", user.Email);
                 command.Parameters.AddWithValue("@password", user.Password);
 
                 await connection.OpenAsync();
-
                 await command.ExecuteNonQueryAsync();
 
             }
@@ -132,7 +105,7 @@ namespace DAL
                 await connection.CloseAsync();
             }
         }
-
+      
         public async Task<List<User>> GetAllUsers()
         {
 

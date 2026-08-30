@@ -35,12 +35,15 @@ namespace Entities
             set { percentege = value; }
             get { return percentege; }
         }
+
+        [Required(ErrorMessage = "Fecha del monitoreo no puede ser nula")]
         public DateTime DatetimeLog
         {
             set { datetimeLog = value; }
             get { return datetimeLog; }
         }
 
+        [Required(ErrorMessage = "Debe indicar informacion del clima")]
         public WeatherData WeatherData
         {
             set { weatherData = value; }

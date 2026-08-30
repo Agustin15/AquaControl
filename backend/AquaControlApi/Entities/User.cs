@@ -46,6 +46,7 @@ namespace Entities
             get { return password; }
         }
 
+        [Required(ErrorMessage = "Fecha en la que se unio no puede estar nula")]
         public DateTime Joined
         {
             set { joined = value; }
@@ -60,9 +61,9 @@ namespace Entities
         {
 
             Id = id;
-            Username = username.Trim();
-            Email = email.Trim();
-            Password = password.Trim();
+            Username = username?.Trim();
+            Email = email?.Trim();
+            Password = password?.Trim();
             Joined = joined;
 
         }

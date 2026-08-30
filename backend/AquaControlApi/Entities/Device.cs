@@ -49,6 +49,7 @@ namespace Entities
         }
 
 
+        [Required(ErrorMessage = "Fecha de creacion del dispositivo no puede ser nula")]
         public DateTime Created
         {
             set { created = value; }
@@ -61,8 +62,8 @@ namespace Entities
         {
 
             Id = id;
-            PlaceName = placeName.Trim();
-            Location = location.Trim();
+            PlaceName = placeName?.Trim();
+            Location = location?.Trim();
             User = user;
             Created = created;
 

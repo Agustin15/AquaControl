@@ -22,10 +22,7 @@ namespace DAL
                 SqlCommand command = new SqlCommand("AddHumidityPlantLog", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@percentege", humidityPlantLog.Percentege);
-
-                if (humidityPlantLog.WeatherData != null)
-                    command.Parameters.AddWithValue("@weatherData", JsonSerializer.Serialize(humidityPlantLog.WeatherData));
-
+                command.Parameters.AddWithValue("@weatherData", JsonSerializer.Serialize(humidityPlantLog.WeatherData));
                 command.Parameters.AddWithValue("@idPlant", humidityPlantLog.Plant.Id);
                 command.Parameters.AddWithValue("@idDevice", humidityPlantLog.Plant.Device.Id);
 
@@ -72,9 +69,7 @@ namespace DAL
 
                     while (await reader.ReadAsync())
                     {
-
-                        if (!(reader["ambientData"] is DBNull))
-                            weatherData = JsonSerializer.Deserialize<WeatherData>((string)reader["ambientData"]);
+                        weatherData = JsonSerializer.Deserialize<WeatherData>((string)reader["ambientData"]);
 
                         HumidityPlantLog humidityPlantLog = new HumidityPlantLog(Convert.ToInt16(reader["codeHumidityLand"]), plantFound,
                         Convert.ToInt16(reader["measure"]), weatherData, Convert.ToDateTime(reader["moment"]));

@@ -44,7 +44,7 @@ namespace DAL
             SqlConnection connection = new SqlConnection(DBConnection.Cnn);
             try
             {
-                SqlCommand command = new SqlCommand("AddAlert");
+                SqlCommand command = new SqlCommand("UpdateAlertState");
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@id", alert.Id);
                 command.Parameters.AddWithValue("@state", alert.Seen);

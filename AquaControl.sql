@@ -2,6 +2,7 @@ CREATE DATABASE AquaControl;
 
 USE AquaControl
 
+
 CREATE TABLE Users(
 idUser INT IDENTITY(1,1) PRIMARY KEY,
 username VARCHAR(15) NOT NULL UNIQUE,
@@ -50,12 +51,11 @@ CREATE TABLE HumidityPlantLogs(
 id INT IDENTITY(1,1) PRIMARY KEY, 
 percentege INT NOT NULL CHECK(percentege>=0 and percentege<=100),
 datetimeLog  DATETIME NOT NULL DEFAULT GETDATE(),
-weatherData NVARCHAR(300),
+weatherData NVARCHAR(300) NOT NULL,
 idPlant INT NOT NULL,
 idDevice INT NOT NULL,
 FOREIGN KEY (idPlant,idDevice) REFERENCES Plants(id,idDevice) ON DELETE CASCADE,
 )
-
 
 CREATE TABLE WaterPlantLogs(
 id INT IDENTITY(1,1) PRIMARY KEY,
@@ -136,36 +136,17 @@ GO
 CREATE OR ALTER PROCEDURE AddUser @username VARCHAR(15),@email VARCHAR(30),@password VARCHAR(60) AS
 BEGIN
 
-IF EXISTS(select * from Users where username=@username)
-BEGIN
-RAISERROR('Nombre de usuario ya en uso',16,3)
-RETURN
-END 
-
-IF (@email NOT LIKE '%@%.%')
-BEGIN
-RAISERROR('Formato de correo incorrecto',16,3)
-RETURN
-END 
-
-IF EXISTS(select * from Users where email=@email)
-BEGIN
-RAISERROR('Correo ya en uso',16,3)
-RETURN
-END 
-
 BEGIN TRY
 
-INSERT INTO Users(username,email,password) Values(@username,@email,@password)
+INSERT INTO Users (username,email,password) VALUES(@username,@email,@password)
 
 RETURN SCOPE_IDENTITY()
 
 END TRY 
 BEGIN CATCH
-BEGIN
-RAISERROR('Error inesperado al crear cuenta',16,4)
+DECLARE @error NVARCHAR(500)=ERROR_MESSAGE()
+RAISERROR(@error,16,4)
 RETURN
-END
 END CATCH
 
 END
@@ -173,51 +154,25 @@ END
 GO
 
 
-CREATE OR ALTER PROCEDURE UpdateUsername @idUser INT,@username VARCHAR(15) AS
+CREATE OR ALTER PROCEDURE UpdateUser @idUser INT,@username VARCHAR(15),@email VARCHAR(30),@password VARCHAR(60) AS
 BEGIN
 
-IF NOT EXISTS(select * from Users where idUser=@idUser)
-BEGIN
-RAISERROR('Usuario no encontrado',16,2)
-RETURN
-END 
+BEGIN TRY
 
-IF EXISTS(select * from Users where username=@username and idUser=@idUser)
-BEGIN
-RAISERROR('Nombre de usuario ya en uso',16,3)
-RETURN
-END 
+Update Users set username=@username,email=@email,password=@password where idUser=@idUser
 
-Update Users set username=@username where idUser=@idUser
-IF (@@ERROR<>0)
-BEGIN
-RAISERROR('Error inesperado al actualizar nombre de usuario',16,4)
+END TRY
+
+BEGIN CATCH
+DECLARE @error NVARCHAR(500)=ERROR_MESSAGE()
+RAISERROR(@error,16,4)
 RETURN
-END 
+END CATCH
 
 END
 
 GO
 
-CREATE OR ALTER PROCEDURE UpdatePasswordUser @idUser INT,@password VARCHAR(60) AS
-BEGIN
-
-IF NOT EXISTS(select * from Users where idUser=@idUser)
-BEGIN
-RAISERROR('Usuario no encontrado',16,2)
-RETURN
-END 
-
-Update Users set password=@password where idUser=@idUser
-IF (@@ERROR<>0)
-BEGIN
-RAISERROR('Error inesperado al actualizar contraseña',16,4)
-RETURN
-END 
-
-END
-
-GO
 
 CREATE OR ALTER PROCEDURE UserByUsername @username VARCHAR(15) AS
 BEGIN
@@ -257,64 +212,32 @@ GO
 CREATE OR ALTER PROCEDURE AddDevice @placeName VARCHAR(15),@location VARCHAR(35),@idUser INT AS
 BEGIN
 
-IF (@location IS NOT NULL and (@location LIKE '%[^A-Z,]%' OR @location NOT LIKE '%,%'))
-BEGIN
-RAISERROR('Formato de ubicacion incorrecto',16,2)
-RETURN
-END 
-
-
-IF NOT EXISTS(select * from Users where idUser=@idUser)
-BEGIN
-RAISERROR('Usuario no encontrado',16,2)
-RETURN
-END 
-
-IF EXISTS(select * from Devices where idUser=@idUser and placeName=@placeName)
-BEGIN
-RAISERROR('Ya tiene un dispositivo de riego que tiene este nombre de lugar',16,2)
-RETURN
-END 
-
+BEGIN TRY 
 INSERT INTO Devices(placeName,location,idUser) Values(@placeName,@location,@idUser)
-IF (@@ERROR<>0)
-BEGIN
-RAISERROR('Error inesperado al registrar dispositivo',16,4)
+END TRY
+
+BEGIN CATCH
+DECLARE @error NVARCHAR(500)=ERROR_MESSAGE()
+RAISERROR(@error,16,4)
 RETURN
-END 
+END CATCH
 
 END 
 
 GO
 
-CREATE OR ALTER PROCEDURE UpdateDevice @placeName VARCHAR(15),@location VARCHAR(35),@idUser INT,@idDevice INT AS
+CREATE OR ALTER PROCEDURE UpdateDevice @placeName VARCHAR(15),@location VARCHAR(35),@idDevice INT AS
 BEGIN
 
-IF (@location IS NOT NULL and (@location LIKE '%[^A-Z,]%' OR @location NOT LIKE '%,%'))
-BEGIN
-RAISERROR('Formato de ubicacion incorrecto',16,2)
-RETURN
-END 
-
-IF NOT EXISTS(select * from Devices where idDevice=idDevice)
-BEGIN
-RAISERROR('Dispositivo no encontrado',16,2)
-RETURN
-END 
-
-IF EXISTS(select * from Devices where idUser=@idUser and placeName=@placeName and idDevice!=@idDevice)
-BEGIN
-RAISERROR('Ya tiene un dispositivo de riego que tiene este nombre de lugar',16,2)
-RETURN
-END 
+BEGIN TRY
 
 UPDATE Devices set placeName=@placeName,location=@location where idDevice=@idDevice 
+END TRY
 
-IF (@@ERROR<>0)
-BEGIN
-RAISERROR('Error inesperado al actualizar nombre del dispositivo',16,4)
-RETURN
-END 
+BEGIN CATCH
+DECLARE @error NVARCHAR(500)=ERROR_MESSAGE()
+RAISERROR(@error,16,4)
+END CATCH
 
 END 
 
@@ -322,7 +245,6 @@ GO
 
 CREATE OR ALTER PROCEDURE DeleteDevice @idDevice INT AS
 BEGIN
-
 
 IF NOT EXISTS(select * from Devices where idDevice=@idDevice)
 BEGIN
@@ -337,8 +259,6 @@ BEGIN
 RAISERROR('Error inesperado al eliminar dispositivo',16,4)
 RETURN
 END 
-
-
 END 
 
 GO
@@ -367,44 +287,14 @@ GO
 CREATE OR ALTER PROCEDURE AddTank @id INT,@idDevice INT,@height DECIMAL(4,1) AS
 BEGIN
 
-IF EXISTS(select * from Tanks)
-BEGIN
-RAISERROR('Solo puede haber un tanque',16,1)
-RETURN
-END
-
-IF(@id<=0)
-BEGIN
-RAISERROR('Numero de tanque debe ser mayor a cero',16,1)
-RETURN
-END
-
-IF(@height<15 OR @height>800)
-BEGIN
-RAISERROR('Altura del tanque debe estar entre 15 y 800 CM',16,1)
-RETURN
-END
-
-IF NOT EXISTS(select * from Devices where idDevice=@idDevice)
-BEGIN
-RAISERROR('Dispositivo no encontrado',16,2)
-RETURN
-END
-
-IF EXISTS(select * from Tanks where @id=id and idDevice=@idDevice)
-BEGIN
-RAISERROR('Ya existe un tanque con este numero en el dispositivo de riego',16,1)
-RETURN
-END
-
-
+BEGIN TRY
 INSERT INTO Tanks(id,idDevice,height) Values(@id,@idDevice,@height)
+END TRY
 
-IF (@@ERROR<>0)
-BEGIN
-RAISERROR('Error inesperado al agregar tanque de agua',16,4)
-RETURN
-END 
+BEGIN CATCH
+DECLARE @error NVARCHAR(500)=ERROR_MESSAGE()
+RAISERROR(@error,16,4)
+END CATCH
 
 END
 
@@ -436,24 +326,14 @@ GO
 CREATE OR ALTER PROCEDURE UpdateTank @id INT,@idDevice INT, @height DECIMAL(4,1) AS
 BEGIN
 
-IF NOT EXISTS(select * from Tanks where id=@id and idDevice=@idDevice)
-BEGIN
-RAISERROR('Tanque no encontrado',16,2)
-RETURN
-END 
-
-IF(@height<15 OR @height>800)
-BEGIN
-RAISERROR('Altura del tanque debe estar entre 15 y 800 CM',16,1)
-RETURN
-END
-
+BEGIN TRY
 UPDATE Tanks set height=@height where id=@id and idDevice=@idDevice
-IF (@@ERROR<>0)
-BEGIN
-RAISERROR('Error inesperado al actualizar tanque de agua',16,4)
-RETURN
-END 
+END TRY
+
+BEGIN CATCH
+DECLARE @error NVARCHAR(500)=ERROR_MESSAGE()
+RAISERROR(@error,16,4)
+END CATCH
 
 END
 
@@ -479,67 +359,33 @@ GO
 
 ------------------------------------------------------------Planta--------------------------------------------------------------
 
-CREATE OR ALTER PROCEDURE AddPlant @id INT, @idDevice INT,@umbralHumidity INT,@indoor BIT, @image VARBINARY(MAX)=NULL,@description VARCHAR(500)=NULL AS
+CREATE OR ALTER PROCEDURE AddPlant @id INT, @idDevice INT,@umbralHumidity INT,@indoor BIT, @image VARBINARY(MAX)=null,@description VARCHAR(500)=null AS
 BEGIN
 
-IF EXISTS(select * from Plants)
-BEGIN
-RAISERROR('Solo puede haber una planta',16,1)
-RETURN
-END
+BEGIN TRY
+INSERT INTO Plants(id,idDevice,umbralHumidity,indoor,image,description) Values(@id,@idDevice,@umbralHumidity,@indoor,@image,@description)
+END TRY
 
-IF(@id<=0)
-BEGIN
-RAISERROR('Numero de planta debe ser mayor a cero',16,1)
-RETURN
-END
-
-IF(@umbralHumidity<0 OR @umbralHumidity>100)
-BEGIN
-RAISERROR('Umbral de humedad debes estar entre o 100',16,1)
-RETURN
-END
-
-
-IF NOT EXISTS(select * from Devices where idDevice=@idDevice)
-BEGIN
-RAISERROR('Dispositivo no encontrado',16,2)
-RETURN
-END 
-
-INSERT INTO Plants(id,umbralHumidity,indoor,image,description,idDevice) VALUES(@id,@umbralHumidity,@indoor,@image,@description,@idDevice)
-
-IF (@@ERROR<>0)
-BEGIN
-RAISERROR('Error inesperado al agregar planta',16,4)
-RETURN
-END 
+BEGIN CATCH
+DECLARE @error NVARCHAR(500)=ERROR_MESSAGE()
+RAISERROR(@error,16,4)
+END CATCH
 
 END
 
 GO
 
-CREATE OR ALTER PROCEDURE UpdatePlant @id INT,@idDevice INT,@umbralHumidity INT,@indoor BIT,@image VARBINARY(MAX)=NULL,@description VARCHAR(500)=NULL AS
+CREATE OR ALTER PROCEDURE UpdatePlant @id INT,@idDevice INT,@umbralHumidity INT,@indoor BIT,@image VARBINARY(MAX)=null,@description VARCHAR(500)=null AS
 BEGIN
 
-IF(@umbralHumidity<0 OR @umbralHumidity>100)
-BEGIN
-RAISERROR('Umbral de humedad debes estar entre o 100',16,1)
-RETURN
-END
-
-IF NOT EXISTS(select * from Plants where id=@id and idDevice=@idDevice)
-BEGIN
-RAISERROR('Planta no encontrada',16,2)
-RETURN
-END 
-
+BEGIN TRY
 Update Plants set umbralHumidity=@umbralHumidity,indoor=@indoor,image=@image,description=@description where id=@id and idDevice=@idDevice
-IF (@@ERROR<>0)
-BEGIN
-RAISERROR('Error inesperado al actualizar datos de la planta',16,4)
-RETURN
-END 
+END TRY
+
+BEGIN CATCH
+DECLARE @error NVARCHAR(500)=ERROR_MESSAGE()
+RAISERROR(@error,16,4)
+END CATCH
 
 END
 
@@ -586,24 +432,14 @@ GO
 CREATE OR ALTER PROCEDURE AddWaterTankLog @percentege DECIMAL(4,1),@idTank INT,@idDevice INT AS
 BEGIN
 
-IF (@percentege<0 OR @percentege>100)
-BEGIN
-RAISERROR('Porcentaje debe estar entre 0 y 100',16,1)
-RETURN
-END
-
-IF NOT EXISTS(select * from Tanks where id=@idTank and idDevice=@idDevice)
-BEGIN
-RAISERROR('Tanque no encontrado',16,2)
-RETURN
-END
-
+BEGIN TRY
 INSERT INTO WaterTankLogs(percentege,idTank,idDevice) VALUES(@percentege,@idTank,@idDevice)
-IF (@@ERROR<>0)
-BEGIN
-RAISERROR('Error inesperado al registrar el nivel del tanque de agua',16,4)
-RETURN
-END 
+END TRY
+
+BEGIN CATCH
+DECLARE @error NVARCHAR(500)=ERROR_MESSAGE()
+RAISERROR(@error,16,4)
+END CATCH
 
 END
 
@@ -629,29 +465,16 @@ GO
 
 ------------------------------------------------------------Nivel de humedad de la tierra-------------------------------------------------------
 
-CREATE OR ALTER PROCEDURE AddHumidityPlantLog @percentege INT,@weatherData NVARCHAR(300)=null,@idPlant INT,@idDevice INT AS
+CREATE OR ALTER PROCEDURE AddHumidityPlantLog @percentege INT,@weatherData NVARCHAR(300),@idPlant INT,@idDevice INT AS
 BEGIN
 
-IF (@percentege<0 OR @percentege>100)
-BEGIN
-RAISERROR('Porcentaje debe estar entre 0 y 100',16,1)
-RETURN
-END
-
-
-IF NOT EXISTS(select * from Plants where id=@idPlant and idDevice=@idDevice)
-BEGIN
-RAISERROR('Planta no encontrada',16,2)
-RETURN
-END
-
-
+BEGIN TRY
 INSERT INTO HumidityPlantLogs(percentege,weatherData,idPlant,idDevice) VALUES(@percentege,@weatherData,@idPlant,@idDevice)
-IF (@@ERROR<>0)
-BEGIN
-RAISERROR('Error inesperado al registrar el nivel de humedad de la tierra',16,4)
-RETURN
-END 
+END TRY
+BEGIN CATCH
+DECLARE @error NVARCHAR(500)=ERROR_MESSAGE()
+RAISERROR(@error,16,4)
+END CATCH
 
 END
 
@@ -679,38 +502,8 @@ GO
 CREATE OR ALTER PROCEDURE AddWaterPlantLog @type VARCHAR(10),@levelTankBefore INT,@humidityBefore INT,@idTank INT,@idPlant INT,@idDevice INT AS
 BEGIN
 
-IF (@type NOT IN ('Automatico','Manual'))
-BEGIN
-RAISERROR('Tipo debe ser Automatico o Manual',16,1)
-RETURN
-END
-
-IF(@levelTankBefore<0 OR @levelTankBefore>100)
-BEGIN
-RAISERROR('Nivel del tanque debe estar enter 0 y 100',16,2)
-RETURN
-END 
-
-IF(@humidityBefore<0 OR @humidityBefore>100)
-BEGIN
-RAISERROR('Humedad debe estar enter 0 y 100',16,2)
-RETURN
-END 
-
-
-IF NOT EXISTS(select * from Tanks where id=@idTank and idDevice=@idDevice)
-BEGIN
-RAISERROR('Tanque no encontrado',16,2)
-RETURN
-END
-
-IF NOT EXISTS(select * from Plants where id=@idPlant and idDevice=@idDevice)
-BEGIN
-RAISERROR('Planta no encontrado',16,2)
-RETURN
-END
-
 BEGIN TRY
+
 INSERT INTO WaterPlantLogs(type,state,levelTankBefore,humidityBefore,idTank,idPlant,idDevice) 
 VALUES(@type,'En curso',@levelTankBefore,@humidityBefore,@idTank,@idPlant,@idDevice)
 
@@ -718,10 +511,8 @@ return SCOPE_IDENTITY()
 
 END TRY
 BEGIN CATCH
-BEGIN
-RAISERROR('Error inesperado al registrar el riego',16,4)
-RETURN
-END 
+DECLARE @error NVARCHAR(500)=ERROR_MESSAGE()
+RAISERROR(@error,16,4)
 END CATCH
 
 END
@@ -729,45 +520,18 @@ END
 GO
 
 
-CREATE OR ALTER PROCEDURE UpdateStateWaterPlantLog @id INT,@state VARCHAR(15),@levelTankAfter DECIMAL(4,1),@humidityAfter INT AS 
+CREATE OR ALTER PROCEDURE UpdateWaterPlantLogFinished @id INT,@state VARCHAR(15),@levelTankAfter DECIMAL(4,1),@humidityAfter INT AS 
 
 BEGIN
 
-IF NOT EXISTS(select * from WaterPlantLogs where id=@id)
-BEGIN
-RAISERROR('Registro de riego no encontrado',16,2)
-RETURN
-END
-
-
-IF(@levelTankAfter<0 OR @levelTankAfter>100)
-BEGIN
-RAISERROR('Nivel del tanque debe estar enter 0 y 100',16,2)
-RETURN
-END 
-
-
-IF(@humidityAfter<0 OR @humidityAfter>100)
-BEGIN
-RAISERROR('Humedad debe estar enter 0 y 100',16,2)
-RETURN
-END 
-
-
-IF (@state NOT IN ('Completado','Fallido','En curso','Interrumpido'))
-BEGIN
-RAISERROR('Estado solo acepta los valores:Compleado - Fallido - Interrumpido - En curso',16,1)
-RETURN
-END
-
-
+BEGIN TRY
 UPDATE WaterPlantLogs set datetimeEnd=GETDATE(),state=@state,levelTankAfter=@levelTankAfter,humidityAfter=@humidityAfter where id=@id
+END TRY
 
-IF (@@ERROR<>0)
-BEGIN
-RAISERROR('Error inesperado al actualizar los datos del riego',16,4)
-RETURN
-END 
+BEGIN CATCH
+DECLARE @error NVARCHAR(500)=ERROR_MESSAGE()
+RAISERROR(@error,16,4)
+END CATCH
 
 END
 
@@ -805,16 +569,18 @@ GO
 
 --------------------------------------------------------------Alerta-------------------------------------------------------------------
 
-CREATE OR ALTER PROCEDURE AddAlert @message VARCHAR(200),@idTank INT,@idDevice INT AS 
+CREATE OR ALTER PROCEDURE AddAlert @message VARCHAR(200),@idDevice INT AS 
 BEGIN
 
+BEGIN TRY
 INSERT INTO Alerts(message,idDevice) VALUES(@message,@idDevice)
+END TRY
 
-IF (@@ERROR<>0)
-BEGIN
-RAISERROR('Error inesperado al agregar alerta',16,4)
-RETURN
-END 
+BEGIN CATCH
+DECLARE @error NVARCHAR(500)=ERROR_MESSAGE()
+RAISERROR(@error,16,4)
+END CATCH
+
 END
 
 GO
@@ -823,18 +589,14 @@ GO
 CREATE OR ALTER PROCEDURE UpdateAlertState @id INT,@seen BIT AS 
 BEGIN
 
-IF NOT EXISTS(select * from Alerts where id=@id)
-BEGIN
-RAISERROR('Alerta no encontrada',16,2)
-RETURN
-END 
+BEGIN TRY
+Update Alerts set seen=@seen where id=@id
+END TRY
 
-INSERT INTO Alerts(seen) VALUES(@seen)
-IF (@@ERROR<>0)
-BEGIN
-RAISERROR('Error inesperado al actualizar alerta',16,4)
-RETURN
-END 
+BEGIN CATCH
+DECLARE @error NVARCHAR(500)=ERROR_MESSAGE()
+RAISERROR(@error,16,4)
+END CATCH
 
 END
 
@@ -858,78 +620,502 @@ select * from Notifications where idPlaque=@codePlaque ORDER BY momentAlert DESC
 END
 GO
 
---------------------------------------------------Datos de prueba---------------------------------------------------------- 
 
---------------------------------------------------Tanks---------------------------------------------------------- 
-EXEC AddTank 1,1,30
+----------------------------------------------------------------------------TRIGGERS----------------------------------------------------------------------------
 
---------------------------------------------------Plants---------------------------------------------------------- 
-EXEC AddPlant 1,1,50,0,@image = NULL,
-    @description = 'Planta de albahaca cultivada en maceta, requiere riego moderado y buena exposición al sol.';
+----------------------------------------------------User----------------------------------------------------------------
+CREATE OR ALTER TRIGGER ValidAddUser ON Users INSTEAD OF INSERT AS
+BEGIN
 
---------------------------------------------------simulation day---------------------------------------------------------- 
+IF EXISTS(select * from Users where username=(select username from inserted))
+BEGIN
+RAISERROR('Nombre de usuario ya en uso',16,3)
+RETURN
+END 
 
-EXEC AddHumidityPlantLog @percentege = 50,@weatherData='{
-  "Humidity": 65,
-  "Temperature": 15,
-  "PrecipitationChance": 50,
-  "Icon": "//cdn.weatherapi.com/weather/64x64/night/122.png"
-}', @idPlant = 1,@idDevice= 1;
+IF((select email from inserted) NOT LIKE '%@%.%')
+BEGIN
+RAISERROR('Formato de correo incorrecto',16,3)
+RETURN
+END 
 
-EXEC AddWaterTankLog @percentege = 100, @idTank = 1,@idDevice= 1;
+IF EXISTS(select * from Users where email=(select email from inserted))
+BEGIN
+RAISERROR('Correo ya en uso',16,3)
+RETURN
+END 
 
-EXEC AddHumidityPlantLog @percentege = 40,@weatherData='{
-  "Humidity": 60,
-  "Temperature": 17,
-  "PrecipitationChance": 50,
-  "Icon": "//cdn.weatherapi.com/weather/64x64/night/122.png"
-}',@idPlant = 1,@idDevice= 1;
+INSERT INTO Users(username,email,password) (select username,email,password from inserted)
 
-EXEC AddWaterTankLog @percentege = 100, @idTank = 1,@idDevice= 1;
-EXEC AddHumidityPlantLog @percentege = 30,@weatherData='{
-  "Humidity": 57,
-  "Temperature": 17,
-  "PrecipitationChance": 45,
-  "Icon": "//cdn.weatherapi.com/weather/64x64/night/122.png"
-}',@idPlant = 1,@idDevice= 1;
+END
 
 
-EXEC AddWaterPlantLog @type='Automatico',@levelTankBefore=100,@humidityBefore=30, @idTank=1, @idPlant=1,@idDevice= 1;
-EXEC UpdateStateWaterPlantLog @id=1, @state='Completado',@levelTankAfter=90, @humidityAfter=50;
+GO
 
-EXEC AddWaterTankLog @percentege = 90, @idTank = 1,@idDevice= 1;
-EXEC AddHumidityPlantLog @percentege = 45,@weatherData='{
-  "Humidity": 60,
-  "Temperature": 15,
-  "PrecipitationChance": 60,
-  "Icon": "//cdn.weatherapi.com/weather/64x64/night/122.png"
-}', @idPlant = 1,@idDevice= 1;
+CREATE OR ALTER TRIGGER ValidUpdateUser ON Users INSTEAD OF UPDATE AS
+BEGIN
 
-EXEC AddWaterTankLog @percentege = 90, @idTank = 1,@idDevice= 1;
-EXEC AddHumidityPlantLog @percentege = 40,@weatherData='{
-  "Humidity": 60,
-  "Temperature": 15,
-  "PrecipitationChance": 58,
-  "Icon": "//cdn.weatherapi.com/weather/64x64/day/113.png"
-}', @idPlant = 1,@idDevice= 1;
+DECLARE @idUser INT 
+DECLARE @usernameInserted VARCHAR(15)
+DECLARE @emailInserted VARCHAR(30)
+DECLARE @passwordInserted VARCHAR(60)
 
-EXEC AddWaterTankLog @percentege = 90, @idTank = 1,@idDevice= 1;
-EXEC AddHumidityPlantLog @percentege = 38,@weatherData='{
-  "Humidity": 66,
-  "Temperature": 13,
-  "PrecipitationChance": 55,
-  "Icon": "//cdn.weatherapi.com/weather/64x64/day/113.png"
-}'
-, @idPlant = 1,@idDevice= 1;
+select @emailInserted=email,@usernameInserted=username,@passwordInserted=password from inserted
+select @idUser=idUser from deleted
 
-EXEC AddWaterTankLog @percentege = 90, @idTank = 1,@idDevice= 1;
-EXEC AddHumidityPlantLog @percentege = 34,@weatherData='{
-  "Humidity": 68,
-  "Temperature": 13,
-  "PrecipitationChance": 50,
-  "Icon": "//cdn.weatherapi.com/weather/64x64/day/113.png"
-}'
-,@idPlant = 1,@idDevice= 1;
+IF (@emailInserted NOT LIKE '%@%.%')
+BEGIN
+RAISERROR('Formato de correo incorrecto',16,3)
+RETURN
+END 
 
-EXEC AddWaterPlantLog @type='Automatico',@levelTankBefore=90,@humidityBefore=34, @idTank=1, @idPlant=1,@idDevice= 1;
-EXEC UpdateStateWaterPlantLog @id=2, @state='Completado',@levelTankAfter=82, @humidityAfter=50;
+IF NOT EXISTS(select * from Users where idUser=@idUser)
+BEGIN
+RAISERROR('Usuario no encontrado',16,2)
+RETURN
+END 
+
+IF EXISTS(select * from Users where username=@usernameInserted and idUser!=@idUser)
+BEGIN
+RAISERROR('Nombre de usuario ya en uso',16,3)
+RETURN
+END 
+
+IF EXISTS(select * from Users where email=@emailInserted and idUser!=@idUser)
+BEGIN
+RAISERROR('Correo ya en uso',16,3)
+RETURN
+END 
+
+UPDATE Users set username=@usernameInserted,email=@emailInserted,password=@passwordInserted
+
+END
+
+GO
+--------------------------------------------------------------------Device----------------------------------------------------------------
+CREATE OR ALTER TRIGGER ValidAddDevice ON Devices INSTEAD OF INSERT AS
+BEGIN
+
+IF ((select location from inserted) LIKE '%[^A-Z,]%' OR (select location from inserted) NOT LIKE '%,%')
+BEGIN
+RAISERROR('Formato de ubicacion incorrecto',16,2)
+RETURN
+END 
+
+IF NOT EXISTS(select * from Users where idUser=(select idUser from inserted))
+BEGIN
+RAISERROR('Usuario no encontrado',16,2)
+RETURN
+END 
+
+IF EXISTS(select * from Devices where idUser=(select idUser from inserted) and placeName=(select placeName from inserted))
+BEGIN
+RAISERROR('Ya tiene un dispositivo de riego que tiene este nombre de lugar',16,2)
+RETURN
+END 
+
+INSERT INTO Devices(idUser,location,placeName) (select idUser,location,placeName from inserted)
+
+ IF (@@ERROR <> 0)
+    BEGIN
+        RAISERROR('Error inesperado al agregar dispositivo',16,4)
+        RETURN
+    END
+END
+
+GO
+
+CREATE OR ALTER TRIGGER ValidUpdateDevice ON Devices INSTEAD OF UPDATE AS
+BEGIN
+
+IF ((select location from inserted) LIKE '%[^A-Z,]%' OR (select location from inserted) NOT LIKE '%,%')
+BEGIN
+RAISERROR('Formato de ubicacion incorrecto',16,2)
+RETURN
+END 
+
+IF EXISTS(select * from Devices where idUser=(select idUser from deleted) and idDevice!=(select idDevice from deleted) and placeName=(select placeName from inserted))
+BEGIN
+RAISERROR('Ya tiene un dispositivo de riego que tiene este nombre de lugar',16,2)
+RETURN
+END 
+
+UPDATE Devices set location=(select location from inserted),placeName=(select placeName from inserted) 
+Where idDevice=(select idDevice from deleted)
+
+ IF (@@ERROR <> 0)
+    BEGIN
+        RAISERROR('Error inesperado al actualizar dispositivo',16,4)
+        RETURN
+    END
+
+END
+
+GO
+
+------------------------------------------------------------------Tank------------------------------------------------------------------
+
+CREATE OR ALTER TRIGGER ValidAddTank ON Tanks INSTEAD OF INSERT AS
+BEGIN
+
+IF EXISTS(select * from Tanks)
+BEGIN
+RAISERROR('Solo puede haber un tanque',16,1)
+RETURN
+END
+
+IF((select id from inserted)<=0)
+BEGIN
+RAISERROR('Numero de tanque debe ser mayor a cero',16,1)
+RETURN
+END
+
+IF((select height from inserted)<15 OR (select height from inserted)>800)
+BEGIN
+RAISERROR('Altura del tanque debe estar entre 15 y 800 CM',16,1)
+RETURN
+END
+
+IF NOT EXISTS(select * from Devices where idDevice=(select idDevice from inserted))
+BEGIN
+RAISERROR('Dispositivo no encontrado',16,2)
+RETURN
+END
+
+IF EXISTS(select * from Tanks where id=(select id from inserted) and idDevice=(select idDevice from inserted))
+BEGIN
+RAISERROR('Ya existe un tanque con este numero en el dispositivo de riego',16,1)
+RETURN
+END
+
+INSERT INTO Tanks(id,idDevice,height) (select id,idDevice,height from inserted)
+
+END
+GO
+
+CREATE OR ALTER TRIGGER ValidUpdateTank ON Tanks INSTEAD OF UPDATE AS
+BEGIN
+
+IF((select height from inserted)<15 OR (select height from inserted)>800)
+BEGIN
+RAISERROR('Altura del tanque debe estar entre 15 y 800 CM',16,1)
+RETURN
+END
+
+IF NOT EXISTS(select * from Tanks where idDevice=(select idDevice from deleted) and id=(select id from deleted))
+BEGIN
+RAISERROR('Tanque no encontrado',16,2)
+RETURN
+END
+
+UPDATE Tanks set height=(select height from inserted) where id=(select id from deleted) and IdDevice=(select idDevice from deleted)
+
+ IF (@@ERROR <> 0)
+    BEGIN
+        RAISERROR('Error inesperado al actualizar datos del tanque de agua',16,4)
+        RETURN
+    END
+END
+
+GO
+-----------------------------------------------------------------Plants---------------------------------------------------------------
+CREATE OR ALTER TRIGGER ValidAddPlant ON Plants INSTEAD OF INSERT AS
+BEGIN
+
+IF EXISTS(select * from Plants)
+BEGIN
+RAISERROR('Solo puede haber una planta',16,1)
+RETURN
+END
+
+IF((select id from inserted)<=0)
+BEGIN
+RAISERROR('Numero de planta debe ser mayor a cero',16,1)
+RETURN
+END
+
+IF((select umbralHumidity from inserted)<0 OR (select umbralHumidity from inserted)>100)
+BEGIN
+RAISERROR('Umbral de humedad debes estar entre o 100',16,1)
+RETURN
+END
+
+IF NOT EXISTS(select * from Devices where idDevice=(select idDevice from inserted))
+BEGIN
+RAISERROR('Dispositivo no encontrado',16,2)
+RETURN
+END 
+
+INSERT INTO Plants(id,umbralHumidity,indoor,image,description,idDevice) (select id,umbralHumidity,indoor,image,description,idDevice from inserted)
+
+ IF (@@ERROR <> 0)
+    BEGIN
+        RAISERROR('Error inesperado al agregar planta',16,4)
+        RETURN
+    END
+
+END
+
+GO
+
+CREATE OR ALTER TRIGGER ValidUpdatePlant ON Plants INSTEAD OF UPDATE AS 
+
+BEGIN
+IF((select umbralHumidity from inserted)<0 OR (select umbralHumidity from inserted)>100)
+BEGIN
+RAISERROR('Umbral de humedad debes estar entre o 100',16,1)
+RETURN
+END
+
+IF NOT EXISTS(select * from Plants where id=(select id from deleted) and idDevice=(select idDevice from deleted))
+BEGIN
+RAISERROR('Planta no encontrada',16,2)
+RETURN
+END 
+
+Update Plants set umbralHumidity=(select umbralHumidity from inserted),indoor=(select indoor from inserted),
+image=(select image from inserted),description=(select description from inserted) where id=(select id from deleted) and 
+idDevice=(select idDevice from deleted)
+
+ IF (@@ERROR <> 0)
+    BEGIN
+        RAISERROR('Error inesperado al actualizar datos de la planta',16,4)
+        RETURN
+    END
+
+END
+
+GO
+-------------------------------------------------------WaterTankLog------------------------------------------------------
+CREATE OR ALTER TRIGGER ValidAddWaterTankLog
+ON WaterTankLogs
+INSTEAD OF INSERT
+AS
+BEGIN
+
+    IF EXISTS(SELECT * FROM inserted WHERE percentege < 0 OR percentege > 100)
+    BEGIN
+        RAISERROR('Porcentaje debe estar entre 0 y 100',16,1)
+        RETURN
+    END
+
+    IF NOT EXISTS(SELECT * FROM Tanks WHERE id=(select id from inserted) and idDevice=(select idDevice from inserted))
+    BEGIN
+        RAISERROR('Tanque no encontrado',16,2)
+        RETURN
+    END
+
+    INSERT INTO WaterTankLogs(percentege, idTank, idDevice) SELECT percentege, idTank, idDevice FROM inserted
+
+    IF (@@ERROR <> 0)
+    BEGIN
+        RAISERROR('Error inesperado al registrar el nivel del tanque de agua',16,4)
+        RETURN
+    END
+
+END
+GO
+
+-------------------------------------------------------HumidityPlantLog------------------------------------------------------
+CREATE OR ALTER TRIGGER ValidAddHumidityPlantLog
+ON HumidityPlantLogs
+INSTEAD OF INSERT
+AS
+BEGIN
+
+    IF EXISTS (SELECT * FROM inserted WHERE percentege < 0 OR percentege > 100)
+    BEGIN
+        RAISERROR('Porcentaje debe estar entre 0 y 100',16,1)
+        RETURN
+    END
+
+    IF NOT EXISTS(
+        SELECT * FROM Plants
+        WHERE id = (SELECT idPlant FROM inserted)
+          AND idDevice = (SELECT idDevice FROM inserted)
+    )
+    BEGIN
+        RAISERROR('Planta no encontrada',16,2)
+        RETURN
+    END
+
+    INSERT INTO HumidityPlantLogs(percentege, weatherData, idPlant, idDevice)
+    SELECT percentege, weatherData, idPlant, idDevice FROM inserted
+
+    IF (@@ERROR <> 0)
+    BEGIN
+        RAISERROR('Error inesperado al registrar el nivel de humedad de la tierra',16,4)
+        RETURN
+    END
+END
+GO
+
+
+-------------------------------------------------------WaterPlantLog------------------------------------------------------
+
+CREATE OR ALTER TRIGGER ValidAddWaterPlantLog
+ON WaterPlantLogs
+INSTEAD OF INSERT
+AS
+BEGIN
+  
+    IF EXISTS(SELECT * FROM inserted WHERE type NOT IN ('Automatico','Manual'))
+    BEGIN
+        RAISERROR('Tipo debe ser Automatico o Manual',16,1)
+        RETURN
+    END
+
+    IF EXISTS(SELECT * FROM inserted WHERE levelTankBefore < 0 OR levelTankBefore > 100)
+    BEGIN
+        RAISERROR('Nivel del tanque debe estar enter 0 y 100',16,2)
+        RETURN
+    END
+
+    IF EXISTS(SELECT * FROM inserted WHERE humidityBefore < 0 OR humidityBefore > 100)
+    BEGIN
+        RAISERROR('Humedad debe estar enter 0 y 100',16,2)
+        RETURN
+    END
+
+    IF NOT EXISTS(
+        SELECT * FROM Tanks
+        WHERE id = (SELECT idTank FROM inserted)
+          AND idDevice = (SELECT idDevice FROM inserted)
+    )
+    BEGIN
+        RAISERROR('Tanque no encontrado',16,2)
+        RETURN
+    END
+
+    IF NOT EXISTS(
+        SELECT * FROM Plants
+        WHERE id = (SELECT idPlant FROM inserted)
+          AND idDevice = (SELECT idDevice FROM inserted)
+    )
+    BEGIN
+        RAISERROR('Planta no encontrado',16,2)
+        RETURN
+    END
+
+    INSERT INTO WaterPlantLogs(type, state, levelTankBefore, humidityBefore, idTank, idPlant, idDevice)
+    SELECT type, 'En curso', levelTankBefore, humidityBefore, idTank, idPlant, idDevice
+    FROM inserted
+
+    IF (@@ERROR <> 0)
+    BEGIN
+        RAISERROR('Error inesperado al registrar el riego',16,4)
+        RETURN
+    END
+END
+GO
+
+
+CREATE OR ALTER TRIGGER ValidUpdateWaterPlantLogFinished
+ON WaterPlantLogs
+INSTEAD OF UPDATE
+AS
+BEGIN
+
+    IF NOT EXISTS(
+        SELECT * FROM WaterPlantLogs
+        WHERE id = (SELECT id FROM deleted)
+    )
+    BEGIN
+        RAISERROR('Registro de riego no encontrado',16,2)
+        RETURN
+    END
+
+    IF EXISTS(
+        SELECT * FROM inserted
+        WHERE levelTankAfter < 0 OR levelTankAfter > 100
+    )
+    BEGIN
+        RAISERROR('Nivel del tanque debe estar enter 0 y 100',16,2)
+        RETURN
+    END
+
+    IF EXISTS(
+        SELECT * FROM inserted
+        WHERE humidityAfter < 0 OR humidityAfter > 100
+    )
+    BEGIN
+        RAISERROR('Humedad debe estar enter 0 y 100',16,2)
+        RETURN
+    END
+
+    IF EXISTS(
+        SELECT * FROM inserted
+        WHERE state NOT IN ('Completado','Fallido','En curso','Interrumpido')
+    )
+    BEGIN
+        RAISERROR('Estado solo acepta los valores:Compleado - Fallido - Interrumpido - En curso',16,1)
+        RETURN
+    END
+
+    UPDATE WaterPlantLogs
+    SET
+        datetimeEnd = GETDATE(),
+        state = (SELECT state FROM inserted),
+        levelTankAfter = (SELECT levelTankAfter FROM inserted),
+        humidityAfter = (SELECT humidityAfter FROM inserted)
+    WHERE id IN (SELECT id FROM deleted);
+
+    IF (@@ERROR <> 0)
+    BEGIN
+        RAISERROR('Error inesperado al actualizar los datos del riego',16,4)
+        RETURN
+    END
+END
+GO
+
+-------------------------------------------------------Alert-----------------------------------------------------------------
+
+CREATE OR ALTER TRIGGER ValidAddAlert
+ON Alerts
+INSTEAD OF INSERT
+AS
+BEGIN
+
+    IF EXISTS (
+        SELECT *
+        FROM Devices where idDevice=(select idDevice from inserted))
+    BEGIN
+        RAISERROR('Dispositivo no encontrado',16,2)
+        RETURN
+    END
+
+    INSERT INTO Alerts(message, idDevice) SELECT message, idDevice FROM inserted
+
+    IF (@@ERROR <> 0)
+    BEGIN
+        RAISERROR('Error inesperado al agregar alerta',16,4)
+        RETURN
+    END
+END
+GO
+
+CREATE OR ALTER TRIGGER ValidUpdateAlertState
+ON Alerts
+INSTEAD OF UPDATE
+AS
+BEGIN
+   
+    IF NOT EXISTS (
+        SELECT * FROM Alerts
+        WHERE id = (SELECT id FROM deleted)
+    )
+    BEGIN
+        RAISERROR('Alerta no encontrada',16,2)
+        RETURN
+    END
+
+    UPDATE Alerts SET seen = (SELECT seen FROM inserted) WHERE id IN (SELECT id FROM deleted);
+
+    IF (@@ERROR <> 0)
+    BEGIN
+        RAISERROR('Error inesperado al actualizar alerta',16,4)
+        RETURN
+    END
+END
+GO
+

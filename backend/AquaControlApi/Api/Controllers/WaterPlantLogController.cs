@@ -63,7 +63,7 @@ namespace Api.Controllers
                 if (idDevice != waterPlantLog.Plant.Device.Id || idDevice != waterPlantLog.Tank.Device.Id)
                     throw new Exception("Solo se puede actualizar monitoreos de riegos que pertenezcan al dispositivo que se esta usando");
 
-                await new LwaterPlantLog().UpdateStateWaterPlantLog(waterPlantLog);
+                await new LwaterPlantLog().UpdateWaterPlantLogFinished(waterPlantLog);
 
                 return Ok(waterPlantLog);
 

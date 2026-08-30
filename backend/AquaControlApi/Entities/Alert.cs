@@ -28,12 +28,14 @@ namespace Entities
             get { return message; }
         }
 
+        [Required(ErrorMessage = "Fecha de creacion de la alerta no pude ser nula")]
         public DateTime DatetimeAlert
         {
             set { datetimeAlert = value; }
             get { return datetimeAlert; }
         }
 
+        [Required(ErrorMessage = "Debe indicar estado de visualizacion de la alerta")]
         public bool Seen
         {
             set { seen = value; }
@@ -52,7 +54,7 @@ namespace Entities
         public Alert(int id, string message, bool seen, Device device)
         {
             Id = id;
-            Message = message.Trim();
+            Message = message?.Trim();
             Seen = seen;
             Device = device;
         }

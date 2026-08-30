@@ -12,8 +12,8 @@ namespace Entities
         private int id;
         private int umbralHumidity;
         private bool indoor;
-        private byte[] image;
-        private string description;
+        private byte[]? image;
+        private string? description;
         private Device device;
 
         public int Id
@@ -30,7 +30,7 @@ namespace Entities
             get { return umbralHumidity; }
         }
 
-        public byte[] Image
+        public byte[]? Image
         {
             set { image = value; }
             get { return image; }
@@ -43,7 +43,7 @@ namespace Entities
             get { return indoor; }
         }
 
-        public string Description
+        public string? Description
         {
             set { description = value; }
             get { return description; }
@@ -74,7 +74,7 @@ namespace Entities
             UmbralHumidity = umbralHumidity;
             Image = image;
             Indoor = indoor;
-            Description = description.Trim();
+            Description = description?.Trim();
             Device = device;
 
         }
