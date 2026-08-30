@@ -25,7 +25,9 @@ export const DeviceIrrigate = () => {
   return (
     <div id="contentBody" className={styles.contentBody}>
       <div className={styles.menuDevice}>
-        {currentWeather && <CurrentWeather currentWeather={currentWeather} />}
+        {deviceSelected.location && (
+          <CurrentWeather currentWeather={currentWeather} />
+        )}
         <StateMqttConnection />
         <img src={iconDevice}></img>
         <h3>{deviceSelected.placeName}</h3>

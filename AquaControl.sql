@@ -253,9 +253,8 @@ END
 
 GO
 
-
 ------------------------------------------------------------Dispositivo--------------------------------------------------------------
-CREATE OR ALTER PROCEDURE AddDevice @placeName VARCHAR(15),@location VARCHAR(35)=NULL,@idUser INT AS
+CREATE OR ALTER PROCEDURE AddDevice @placeName VARCHAR(15),@location VARCHAR(35),@idUser INT AS
 BEGIN
 
 IF (@location IS NOT NULL and (@location LIKE '%[^A-Z,]%' OR @location NOT LIKE '%,%'))
@@ -288,7 +287,7 @@ END
 
 GO
 
-CREATE OR ALTER PROCEDURE UpdateDevice @placeName VARCHAR(15),@location VARCHAR(35)=NULL,@idUser INT,@idDevice INT AS
+CREATE OR ALTER PROCEDURE UpdateDevice @placeName VARCHAR(15),@location VARCHAR(35),@idUser INT,@idDevice INT AS
 BEGIN
 
 IF (@location IS NOT NULL and (@location LIKE '%[^A-Z,]%' OR @location NOT LIKE '%,%'))
@@ -894,6 +893,7 @@ EXEC AddHumidityPlantLog @percentege = 30,@weatherData='{
   "Icon": "//cdn.weatherapi.com/weather/64x64/night/122.png"
 }',@idPlant = 1,@idDevice= 1;
 
+
 EXEC AddWaterPlantLog @type='Automatico',@levelTankBefore=100,@humidityBefore=30, @idTank=1, @idPlant=1,@idDevice= 1;
 EXEC UpdateStateWaterPlantLog @id=1, @state='Completado',@levelTankAfter=90, @humidityAfter=50;
 
@@ -909,7 +909,7 @@ EXEC AddWaterTankLog @percentege = 90, @idTank = 1,@idDevice= 1;
 EXEC AddHumidityPlantLog @percentege = 40,@weatherData='{
   "Humidity": 60,
   "Temperature": 15,
-  "PrecipitationChance": 100,
+  "PrecipitationChance": 58,
   "Icon": "//cdn.weatherapi.com/weather/64x64/day/113.png"
 }', @idPlant = 1,@idDevice= 1;
 
@@ -917,7 +917,7 @@ EXEC AddWaterTankLog @percentege = 90, @idTank = 1,@idDevice= 1;
 EXEC AddHumidityPlantLog @percentege = 38,@weatherData='{
   "Humidity": 66,
   "Temperature": 13,
-  "PrecipitationChance": 100,
+  "PrecipitationChance": 55,
   "Icon": "//cdn.weatherapi.com/weather/64x64/day/113.png"
 }'
 , @idPlant = 1,@idDevice= 1;
@@ -926,7 +926,7 @@ EXEC AddWaterTankLog @percentege = 90, @idTank = 1,@idDevice= 1;
 EXEC AddHumidityPlantLog @percentege = 34,@weatherData='{
   "Humidity": 68,
   "Temperature": 13,
-  "PrecipitationChance": 100,
+  "PrecipitationChance": 50,
   "Icon": "//cdn.weatherapi.com/weather/64x64/day/113.png"
 }'
 ,@idPlant = 1,@idDevice= 1;

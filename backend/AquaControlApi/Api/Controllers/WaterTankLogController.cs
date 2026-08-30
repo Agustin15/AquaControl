@@ -23,6 +23,8 @@ namespace Api.Controllers
 
                 int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
 
+                if (!ModelState.IsValid) return StatusCode(400, new { message = ModelState.Values.First().Errors.First().ErrorMessage });
+
                 if (idDevice != waterTankLog.Tank.Device.Id)
                     throw new Exception("El tanque del registro de nivel de agua que quiere agregar no pertence a este dispositivo");
 

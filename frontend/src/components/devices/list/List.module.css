@@ -11,47 +11,71 @@
 }
 
 .listDevices li {
+    position: relative;
     display: flex;
     justify-content: start;
     align-items: center;
     flex-direction: column;
-    gap: 0.5rem;
-    padding: 0.5rem;
-    width: auto;
-    height: auto;
+    gap: 0.6rem;
+    padding: 1rem;
     border-radius: 5px;
     background-color: rgba(23, 75, 128, 0.416);
     font-size: 13px;
     font-weight: bold;
-
 }
 
-.listDevices li img {
+.listDevices li .iconDevice {
     width: 49px;
     height: 49px;
 }
 
-.options {
+.moreOptions {
+    position: absolute;
+    top: 0.6rem;
+    right: 0;
+    padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.options button {
     background: none;
     border: none;
-
 }
 
-.options button img {
+.moreOptions img {
     width: 20px;
     height: 20px;
 }
 
-.options button .iconDelete {
-    width: 25px;
-    height: 25px;
+
+.options {
+    position: absolute;
+    top: 7vh;
+    left: 15vw;
+    background: rgb(38, 38, 38);
+    border-top-right-radius: 4px;
+    animation-duration: 0.3s;
+    animation-name: showOption;
 }
+
+
+@keyframes showOption {
+    from {
+        width: 0;
+    }
+
+    to {
+        width: 2rem;
+    }
+}
+
+.options li {
+    font-size: 10px;
+    background: none;
+    border-bottom: 1px solid rgb(21, 21, 21);
+    border-radius: 0;
+    padding: 0.4rem;
+}
+
 
 .listDevices li .watch {
     width: 5rem;

@@ -2,6 +2,8 @@ import styles from "./EditPlace.module.css";
 import { alertWarning } from "../../../alertSwal/alertSwal.js";
 import { useCrudDevice } from "../../../../contexts/CrudDeviceContext.jsx";
 import { useDevice } from "../../../../contexts/DeviceContext.jsx";
+import { saveInfo } from "../../../../securityStorage.js";
+import { validation } from "./validationInputs.js";
 
 export const EditPlace = () => {
   const {
@@ -13,21 +15,12 @@ export const EditPlace = () => {
     fetchPostOrPut,
   } = useCrudDevice();
 
-  const { getUserDevices } = useDevice();
+  const { getUserDevices, deviceSelected, setDeviceSelected } = useDevice();
 
   const handleChange = (event) => {
     const { name, value } = event.target;
 
-    let inputError = "";
-
-    if (value.length == 0 && name == "placeName")
-      inputError = "Lugar no puede estar vacio";
-    else if (
-      value.length > 0 &&
-      name == "location" &&
-      !/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+,\s*[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(value)
-    )
-      inputError = "Formato de ubicacion debe ser Ciudad,Pais";
+    let inputError = validation(name, value);
 
     setValuesForm({ ...valuesForm, [name]: value });
 
@@ -40,11 +33,22 @@ export const EditPlace = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (valuesForm.placeName.length == 0)
-      return alertWarning("Nombre de lugar no puede estar vacio");
+    if (
+      valuesForm.placeName.length == 0 ||
+      !/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+,\s*[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(
+        valuesForm.location,
+      )
+    )
+      return alertWarning("Complete los datos correctamente");
 
-    const result = await fetchPostOrPut("PUT", true);
-    if (result) await getUserDevices();
+    const deviceUpdated = await fetchPostOrPut("PUT", true);
+
+    if (deviceUpdated && deviceSelected) {
+      await saveInfo(deviceUpdated);
+      setDeviceSelected(deviceUpdated);
+
+      await getUserDevices();
+    }
   };
 
   return (
@@ -64,7 +68,7 @@ export const EditPlace = () => {
       </div>
 
       <div className={styles.columnInput}>
-        <label>Ubicacion geografica del riego(opcional)</label>
+        <label>Ubicacion geografica del riego</label>
         <input
           onChange={(event) => handleChange(event)}
           defaultValue={valuesForm.location}

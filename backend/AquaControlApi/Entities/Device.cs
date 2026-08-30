@@ -31,6 +31,10 @@ namespace Entities
             get { return placeName; ; }
         }
 
+
+        [Required(ErrorMessage = "Debe indicar una ubicacion")]
+        [RegularExpression(@"^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+,\s*[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$",ErrorMessage ="Formato de ubicacion incorrecto")]
+      
         public string Location
         {
             set { location = value; }
@@ -51,12 +55,6 @@ namespace Entities
             get { return created; }
         }
 
-
-        public void Validation() {
-            if (!string.IsNullOrEmpty(Location) && 
-                !Regex.IsMatch(Location,@"^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+,\s*[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$")) 
-                throw new Exception("Formato de ubicacion incorrecto");
-        }
         public Device() { }
 
         public Device(int id, string placeName,string location, User user, DateTime created)
@@ -64,7 +62,7 @@ namespace Entities
 
             Id = id;
             PlaceName = placeName.Trim();
-            Location = location?.Trim();
+            Location = location.Trim();
             User = user;
             Created = created;
 

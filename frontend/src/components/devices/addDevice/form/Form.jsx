@@ -20,7 +20,9 @@ export const Form = ({ handleSubmit }) => {
             : name == "placeName"
               ? "Nombre del lugar no puede estar vacio"
               : "";
-    } else if (
+    }
+    
+    if (
       name == "location" &&
       /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+,\s*[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(value) ==
         false
@@ -76,11 +78,13 @@ export const Form = ({ handleSubmit }) => {
           }
         ></input>
 
-        {errorsForm.wifiPassword.length > 0 && <p>*{errorsForm.wifiPassword}</p>}
+        {errorsForm.wifiPassword.length > 0 && (
+          <p>*{errorsForm.wifiPassword}</p>
+        )}
       </div>
 
       <div className={styles.columnInput}>
-        <label>Ubicacion geografica del equipo (opcional)</label>
+        <label>Ubicacion geografica del equipo</label>
         <input
           onChange={(event) => handleChange(event)}
           value={valuesForm.location}

@@ -31,6 +31,8 @@ namespace Api.Controllers
 
                 int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
 
+                if (!ModelState.IsValid) return StatusCode(400, new { message = ModelState.Values.First().Errors.First().ErrorMessage });
+
                 if (idDevice != waterPlantLog.Plant.Device.Id || idDevice != waterPlantLog.Tank.Device.Id)
                     throw new Exception("Solo se puede dar de alta monitoreos de riegos que pertenezcan al dispositivo que se esta usando");
 
@@ -55,6 +57,8 @@ namespace Api.Controllers
                     return Unauthorized();
 
                 int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
+
+                if (!ModelState.IsValid) return StatusCode(400, new { message = ModelState.Values.First().Errors.First().ErrorMessage });
 
                 if (idDevice != waterPlantLog.Plant.Device.Id || idDevice != waterPlantLog.Tank.Device.Id)
                     throw new Exception("Solo se puede actualizar monitoreos de riegos que pertenezcan al dispositivo que se esta usando");

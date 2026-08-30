@@ -24,6 +24,16 @@
     border-radius: 4px;
 }
 
+.currentWeather .noWeather {
+    width: 9.7rem;
+    padding-left: 0.6rem;
+}
+
+.currentWeather .noWeather img {
+    width: 29px;
+    height: 29px;
+}
+
 .currentWeather .iconSky {
     width: 50px;
     height: 50px;
@@ -36,7 +46,7 @@
     gap: 0.3rem;
 }
 
-.currentWeather .column  img {
+.currentWeather .column img {
     width: 18px;
     height: 18px;
 }

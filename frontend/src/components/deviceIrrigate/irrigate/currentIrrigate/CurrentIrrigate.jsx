@@ -1,6 +1,7 @@
 import styles from "./CurrentIrrigate.module.css";
 import iconHumidityOptime from "../../../../assets/img/adviceHumidityOptime.png";
 import iconNoWater from "../../../../assets/img/adviceNoWater.png";
+import iconAdviceRainPlant from "../../../../assets/img/adviceRainPlant.png";
 import { usePlant } from "../../../../contexts/plantContext/PlantContext";
 import { useTank } from "../../../../contexts/tankContext/TankContext";
 import { useWaterPlant } from "../../../../contexts/WaterPlantContext";
@@ -9,10 +10,7 @@ import { useEffect } from "react";
 import { HumidityPlant } from "./humitiyPlant/HumidityPlant";
 import { WaterTank } from "./waterTank/WaterTank";
 import { LastWaterPlant } from "./lastWaterPlant/LastWaterPlant.jsx";
-import {
-  alertErrorIrrigation,
-  alertWarning,
-} from "../../../alertSwal/alertSwal.js";
+import { alertErrorIrrigation } from "../../../alertSwal/alertSwal.js";
 
 export const CurrentIrrigate = () => {
   const { plantSelected, currentHumidityPlant } = usePlant();
@@ -40,11 +38,13 @@ export const CurrentIrrigate = () => {
       );
 
     if (
-      plantSelected.indoor == false &&
-      currentWeather.precipitationChance >= 75
+      currentWeather &&
+      currentWeather.precipitationChance >= 75 &&
+      plantSelected.indoor == false
     )
-      return alertWarning(
-        "Hay alta probabilidad de lluvia, como su planta esta afuera no es necesario el riego",
+      return alertErrorIrrigation(
+        "Hay alta probabilidad de lluvia, como su planta se encuentra afuera, no es necesario el riego",
+        iconAdviceRainPlant,
       );
 
     sendStartWaterPlant();

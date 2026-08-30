@@ -22,7 +22,7 @@ export const InfoToBind = () => {
         <b>Ubicacion geografica del equipo:</b>
         Si deseas obtener datos climáticos para analizar el historial de humedad
         de la tierra segun el clima o evitar riegos ante una alta probabilidad de lluvia, te
-        recomendamos ingresar la ubicación donde se instalará el sistema
+        ingrese la ubicación donde se instalará el sistema
         de riego.
       </p>
 

@@ -58,6 +58,7 @@ export const Plants = () => {
           <li key={index}>
             <img src={iconPlant}></img>
             <span>Planta N°{plant.id}</span>
+            <span>Indoor:{plant.indoor == 1 ? "Si" : "No"}</span>
             <div className={styles.options}>
               <button onClick={() => setDeletePlant(plant)}>
                 <img className={styles.iconDelete} src={iconDelete}></img>

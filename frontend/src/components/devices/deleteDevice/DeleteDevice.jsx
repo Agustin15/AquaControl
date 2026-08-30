@@ -1,4 +1,5 @@
 const localhostBackend = import.meta.env.VITE_BACKEND_LOCALHOST;
+import { SecureStoragePlugin } from "capacitor-secure-storage-plugin";
 import {
   alertConfirmDelete,
   alertSuccess,
@@ -23,7 +24,10 @@ export const DeleteDevice = ({ setDeleteDevice, deleteDevice }) => {
 
       if (result.isConfirmed == true) {
         await fetchDelete(true);
-      } else setDeleteDevice(null);
+      } else {
+        await SecureStoragePlugin.remove({ key: "deviceSelected" });
+        setDeleteDevice(null);
+      }
     };
 
     handleDeleteDevice();

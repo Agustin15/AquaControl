@@ -30,6 +30,8 @@ namespace Api.Controllers
 
                 int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
 
+                if (!ModelState.IsValid) return StatusCode(400, new { message = ModelState.Values.First().Errors.First().ErrorMessage });
+
                 if (idDevice != alert.Device.Id)
                     throw new Exception("El dispositivo vinculado a la alerta es distinto al dispositivo actual");
 
@@ -56,6 +58,8 @@ namespace Api.Controllers
                     return Unauthorized();
 
                 int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
+
+                if (!ModelState.IsValid) return StatusCode(400, new { message = ModelState.Values.First().Errors.First().ErrorMessage });
 
                 if (idDevice != alert.Device.Id)
                     throw new Exception("El dispositivo vinculado a la alerta es distinto al dispositivo actual");

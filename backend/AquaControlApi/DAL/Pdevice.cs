@@ -23,10 +23,7 @@ namespace DAL
                 SqlCommand command = new SqlCommand("AddDevice", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@placeName", device.PlaceName);
-
-                if (!String.IsNullOrEmpty(device.Location))
-                    command.Parameters.AddWithValue("@location", device.Location);
-
+                command.Parameters.AddWithValue("@location", device.Location);
                 command.Parameters.AddWithValue("@idUser", device.User.Id);
 
                 await connection.OpenAsync();
@@ -54,10 +51,7 @@ namespace DAL
                 SqlCommand command = new SqlCommand("UpdateDevice", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@placeName", device.PlaceName);
-
-                if (!String.IsNullOrEmpty(device.Location))
-                    command.Parameters.AddWithValue("@location", device.Location);
-
+                command.Parameters.AddWithValue("@location", device.Location);
                 command.Parameters.AddWithValue("@idUser", device.User.Id);
                 command.Parameters.AddWithValue("@idDevice", device.Id);
 

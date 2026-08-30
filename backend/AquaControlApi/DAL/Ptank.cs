@@ -38,7 +38,8 @@ namespace DAL
 
                 await command.ExecuteNonQueryAsync();
 
-                await MqttClient.Instance.PublishMessage("device/tank", new { tank = tank });
+                string topic = "device/" + tank.Device.Id + "/tank";
+                await MqttClient.Instance.PublishMessage(topic, new { tank = tank });
 
                 await transaction.CommitAsync();
 
@@ -79,7 +80,8 @@ namespace DAL
 
                 await command.ExecuteNonQueryAsync();
 
-                await MqttClient.Instance.PublishMessage("device/tank", new { tank = tank });
+                string topic = "device/" + tank.Device.Id + "/tank";
+                await MqttClient.Instance.PublishMessage("topic", new { tank = tank });
 
                 await transaction.CommitAsync();
             }
@@ -116,7 +118,8 @@ namespace DAL
 
                 await command.ExecuteNonQueryAsync();
 
-                await MqttClient.Instance.PublishMessage("device/tank", new { tank = (Tank)tank });
+                string topic = "device/" + tank.Device.Id + "/tank";
+                await MqttClient.Instance.PublishMessage(topic, new { tank = (Tank)tank });
 
                 await transaction.CommitAsync();
             }

@@ -25,6 +25,8 @@ namespace Api.Controllers
 
                 int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
 
+                if (!ModelState.IsValid) return StatusCode(400, new { message = ModelState.Values.First().Errors.First().ErrorMessage });
+
                 if (idDevice != humidityPlantLog.Plant.Device.Id)
                     throw new Exception("Solo se puede dar de alta monitoreos de humedad de planta que pertenezcan a este dispositivo");
 

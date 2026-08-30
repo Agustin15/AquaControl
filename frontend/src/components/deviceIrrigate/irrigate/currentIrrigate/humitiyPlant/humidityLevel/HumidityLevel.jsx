@@ -1,10 +1,9 @@
 import humidityIndicator from "../../../../../../assets/img/humidityIndicator.png";
 
 export const HumidityLevel = ({ optimePercentege, colorLevel }) => {
-
   return (
     <svg width={65} height={85} viewBox="0 0 65 85">
-      {/* recipiente */}
+      {/*medidor humedad*/}
       <rect
         x={10.5}
         y={4}
@@ -25,17 +24,22 @@ export const HumidityLevel = ({ optimePercentege, colorLevel }) => {
           rx={4}
           ry={4}
           width={10}
-          height={(optimePercentege * 50) / 100}
+          height={
+            ((optimePercentege > 100 ? 100 : optimePercentege) * 50) / 100
+          }
           fill={colorLevel}
         ></rect>
 
+        {/* shadow */}
         <rect
           x={19}
           y={5}
           rx={4}
           ry={4}
           width={5}
-          height={(optimePercentege * 50) / 100}
+          height={
+            ((optimePercentege > 100 ? 100 : optimePercentege) * 50) / 100
+          }
           fill={"#5555552d"}
         ></rect>
       </g>

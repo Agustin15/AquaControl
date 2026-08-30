@@ -25,6 +25,8 @@ namespace Api.Controllers
 
                 int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
 
+                if (!ModelState.IsValid) return StatusCode(400, new { message = ModelState.Values.First().Errors.First().ErrorMessage });
+
                 plant.Validation();
 
                 if (idDevice != plant.Device.Id)
@@ -55,9 +57,11 @@ namespace Api.Controllers
                 if (!User.Identity.IsAuthenticated || User.FindFirst("IdDevice") is null)
                     return Unauthorized();
 
-                plant.Validation();
-
                 int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
+
+                if (!ModelState.IsValid) return StatusCode(400, new { message = ModelState.Values.First().Errors.First().ErrorMessage });
+
+                plant.Validation();
 
                 if (idDevice != plant.Device.Id)
                     throw new Exception("La planta que quiere actualizar sus datos no pertence al dispositivo que esta usando");

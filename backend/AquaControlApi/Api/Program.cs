@@ -19,11 +19,12 @@ var accessTokenSecretKey = Environment.GetEnvironmentVariable("ACCESS_TOKEN_SECR
 var refreshTokenSecretKey = Environment.GetEnvironmentVariable("REFRESH_TOKEN_SECRET_KEY");
 var deviceTokenSecretKey = Environment.GetEnvironmentVariable("DEVICE_TOKEN_SECRET_KEY");
 
-
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
     options.SuppressModelStateInvalidFilter = true;
+
 });
+
 
 builder.Services.AddCors(options =>
 {
