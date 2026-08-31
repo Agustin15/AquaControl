@@ -27,8 +27,6 @@ namespace Api.Controllers
 
                 if (!ModelState.IsValid) return StatusCode(400, new { message = ModelState.Values.First().Errors.First().ErrorMessage });
 
-                plant.Validation();
-
                 if (idDevice != plant.Device.Id)
                     throw new Exception("La planta que quiere agregar no pertence al dispositivo que esta usando");
 
@@ -60,8 +58,6 @@ namespace Api.Controllers
                 int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
 
                 if (!ModelState.IsValid) return StatusCode(400, new { message = ModelState.Values.First().Errors.First().ErrorMessage });
-
-                plant.Validation();
 
                 if (idDevice != plant.Device.Id)
                     throw new Exception("La planta que quiere actualizar sus datos no pertence al dispositivo que esta usando");

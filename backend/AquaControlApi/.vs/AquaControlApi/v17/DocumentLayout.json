@@ -1,7 +1,12 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\develop\\AquaControl\\backend\\AquaControlApi\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{93838C10-957E-44C0-8A0B-434432666ECA}|Entities\\Entities.csproj|c:\\develop\\aquacontrol\\backend\\aquacontrolapi\\entities\\humidityplantlog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{93838C10-957E-44C0-8A0B-434432666ECA}|Entities\\Entities.csproj|solutionrelative:entities\\humidityplantlog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -9,11 +14,24 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{eefa5220-e298-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "HumidityPlantLog.cs",
+              "DocumentMoniker": "C:\\develop\\AquaControl\\backend\\AquaControlApi\\Entities\\HumidityPlantLog.cs",
+              "RelativeDocumentMoniker": "Entities\\HumidityPlantLog.cs",
+              "ToolTip": "C:\\develop\\AquaControl\\backend\\AquaControlApi\\Entities\\HumidityPlantLog.cs",
+              "RelativeToolTip": "Entities\\HumidityPlantLog.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-31T14:51:04.386Z",
+              "EditorCaption": ""
             }
           ]
         }

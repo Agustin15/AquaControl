@@ -11,7 +11,7 @@ namespace Entities
     {
         private int id;
         private string message;
-        private DateTime datetimeAlert;
+        private DateTime? datetimeAlert;
         private bool seen = false;
         private Device device;
 
@@ -28,8 +28,7 @@ namespace Entities
             get { return message; }
         }
 
-        [Required(ErrorMessage = "Fecha de creacion de la alerta no pude ser nula")]
-        public DateTime DatetimeAlert
+        public DateTime? DatetimeAlert
         {
             set { datetimeAlert = value; }
             get { return datetimeAlert; }

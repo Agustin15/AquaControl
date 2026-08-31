@@ -26,8 +26,8 @@ export const Menu = ({ optionSelected, setOptionSelected }) => {
             <img width={"30px"} height={"30px"} src={iconHumidity} />
           </button>
         </li>
-        <li className={optionSelected == "Irrigate" ? styles.selected : ""}>
-          <button onClick={() => setOptionSelected("Irrigate")}>
+        <li className={optionSelected == "Irrigation" ? styles.selected : ""}>
+          <button onClick={() => setOptionSelected("Irrigation")}>
             <img width={"31px"} height={"31px"} src={iconWaterPlant} />
           </button>
         </li>

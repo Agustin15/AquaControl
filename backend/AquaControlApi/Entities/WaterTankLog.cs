@@ -12,7 +12,7 @@ namespace Entities
         private int id;
         private Tank tank;
         private double percentege;
-        private DateTime datetimeLog;
+        private DateTime? datetimeLog;
 
         public int Id
         {
@@ -37,7 +37,8 @@ namespace Entities
             get { return percentege; }
         }
 
-        public DateTime DatetimeLog
+        [Required(ErrorMessage = "Fecha del monitoreo es requerida")]
+        public DateTime? DatetimeLog
         {
             set { datetimeLog = value; }
             get { return datetimeLog; }

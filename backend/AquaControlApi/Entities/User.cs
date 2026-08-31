@@ -46,7 +46,7 @@ namespace Entities
             get { return password; }
         }
 
-        [Required(ErrorMessage = "Fecha en la que se unio no puede estar nula")]
+        [Required(ErrorMessage = "Fecha de union es requerida")]
         public DateTime Joined
         {
             set { joined = value; }

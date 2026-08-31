@@ -1,4 +1,4 @@
-import styles from "./CurrentIrrigate.module.css";
+import styles from "./CurrentIrrigation.module.css";
 import iconHumidityOptime from "../../../../assets/img/adviceHumidityOptime.png";
 import iconNoWater from "../../../../assets/img/adviceNoWater.png";
 import iconAdviceRainPlant from "../../../../assets/img/adviceRainPlant.png";
@@ -12,7 +12,7 @@ import { WaterTank } from "./waterTank/WaterTank";
 import { LastWaterPlant } from "./lastWaterPlant/LastWaterPlant.jsx";
 import { alertErrorIrrigation } from "../../../alertSwal/alertSwal.js";
 
-export const CurrentIrrigate = () => {
+export const CurrentIrrigation = () => {
   const { plantSelected, currentHumidityPlant } = usePlant();
   const { currentLevelTank } = useTank();
   const { currentWeather } = useWeather();

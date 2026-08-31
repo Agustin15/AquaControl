@@ -15,7 +15,7 @@ namespace Entities
         string placeName;
         string location;
         User user;
-        DateTime created;
+        DateTime? created;
 
         public int Id
         {
@@ -34,7 +34,6 @@ namespace Entities
 
         [Required(ErrorMessage = "Debe indicar una ubicacion")]
         [RegularExpression(@"^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+,\s*[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$",ErrorMessage ="Formato de ubicacion incorrecto")]
-      
         public string Location
         {
             set { location = value; }
@@ -48,9 +47,7 @@ namespace Entities
             get { return user; }
         }
 
-
-        [Required(ErrorMessage = "Fecha de creacion del dispositivo no puede ser nula")]
-        public DateTime Created
+        public DateTime? Created
         {
             set { created = value; }
             get { return created; }

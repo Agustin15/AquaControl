@@ -1,4 +1,4 @@
-import styles from "./DeviceIrrigate.module.css";
+import styles from "./DeviceIrrigation.module.css";
 import iconDevice from "../../assets/img/device.png";
 import { useState } from "react";
 import { useDevice } from "../../contexts/DeviceContext";
@@ -11,12 +11,12 @@ import { HumidityPlantLogs } from "./humidityPlantLogs/HumidityPlantLogs";
 import { Menu } from "./menu/Menu";
 import { WaterTankLogs } from "./waterTankLogs/WaterTankLogs";
 import { Settings } from "./settings/Settings";
-import { Irrigate } from "./irrigate/Irrigate";
+import { Irrigation } from "./irrigation/Irrigation";
 import { StateMqttConnection } from "./stateMqttConnection/StateMqttConnection";
 import { CurrentWeather } from "./currentWeather/CurrentWeather";
 
-export const DeviceIrrigate = () => {
-  const [optionSelected, setOptionSelected] = useState("Irrigate");
+export const DeviceIrrigation = () => {
+  const [optionSelected, setOptionSelected] = useState("Irrigation");
   const { deviceSelected } = useDevice();
   const { currentWeather } = useWeather();
 
@@ -58,10 +58,10 @@ export const DeviceIrrigate = () => {
             </PlantProvider>
           )}
 
-          {optionSelected == "Irrigate" && (
+          {optionSelected == "Irrigation" && (
             <PlantProvider>
               <TankProvider>
-                <Irrigate />
+                <Irrigation />
               </TankProvider>
             </PlantProvider>
           )}

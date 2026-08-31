@@ -1,15 +1,15 @@
-import styles from "./Irrigate.module.css";
+import styles from "./Irrigation.module.css";
 import iconNoPlants from "../../../assets/img/noPlants.png";
 import iconNoTanks from "../../../assets/img/noTanks.png";
 import { useEffect, useState } from "react";
 import { usePlant } from "../../../contexts/plantContext/PlantContext";
 import { useTank } from "../../../contexts/tankContext/TankContext";
-import { CurrentIrrigate } from "./currentIrrigate/CurrentIrrigate";
+import { CurrentIrrigation } from "./currentIrrigation/CurrentIrrigation";
 import { Record } from "./record/Record";
 import { Menu } from "./menu/Menu";
 import { WaterPlantProvider } from "../../../contexts/WaterPlantContext";
 
-export const Irrigate = () => {
+export const Irrigation = () => {
   const [optionSelected, setOptionSelected] = useState("Irrigate");
   const [loadingInit, setLoadingInit] = useState(true);
   const { getPlants, errorPlants, plants, plantSelected, setPlantSelected } =
@@ -66,7 +66,7 @@ export const Irrigate = () => {
           </select>
           {optionSelected == "Irrigate" ? (
             <WaterPlantProvider>
-              <CurrentIrrigate />
+              <CurrentIrrigation />
             </WaterPlantProvider>
           ) : (
             <WaterPlantProvider>

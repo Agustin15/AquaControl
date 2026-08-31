@@ -30,19 +30,21 @@ namespace Entities
             get { return umbralHumidity; }
         }
 
+        [MinLength(1, ErrorMessage = "Imagen no valida")]
         public byte[]? Image
         {
             set { image = value; }
             get { return image; }
         }
 
-        [Required(ErrorMessage = "Debe indicar si es encerrado o no")]
+        [Required(ErrorMessage = "Debe indicar si la planta esta en un lugar cerrado o no")]
         public Boolean Indoor
         {
             set { indoor = value; }
             get { return indoor; }
         }
 
+        [MaxLength(500, ErrorMessage = "Descripcion solo pueden tener un maximo de 500 caracteres")]
         public string? Description
         {
             set { description = value; }
@@ -54,15 +56,6 @@ namespace Entities
         {
             set { device = value; }
             get { return device; }
-        }
-
-
-        public void Validation()
-        {
-            if (!String.IsNullOrWhiteSpace(Description) && Description.Length > 500)
-                throw new Exception("Descripcion debe contener como maximo 500 caracteres");
-
-            if (image != null && image.Length == 0) throw new Exception("Debe indicar una imagen");
         }
 
         public Plant() { }

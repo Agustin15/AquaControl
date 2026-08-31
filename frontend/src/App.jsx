@@ -3,7 +3,7 @@ import { SignUpPage } from "./pages/SignUpPage";
 import { LoginPage } from "./pages/LoginPage";
 import { LoadingScreenPage } from "./pages/LoadingScreenPage";
 import { DevicesPage } from "./pages/DevicesPage";
-import { DeviceIrrigatePage } from "./pages/DeviceIrrigatePage";
+import { DeviceIrrigationPage } from "./pages/DeviceIrrigationPage";
 import { useAuth } from "./contexts/AuthContext";
 import { DeviceProvider } from "./contexts/DeviceContext";
 export const App = () => {
@@ -45,7 +45,7 @@ export const App = () => {
           path="/deviceIrrigate"
           element={
             <DeviceProvider>
-              <DeviceIrrigatePage />
+              <DeviceIrrigationPage />
             </DeviceProvider>
           }
         />

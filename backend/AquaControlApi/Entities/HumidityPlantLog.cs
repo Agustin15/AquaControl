@@ -13,7 +13,7 @@ namespace Entities
         private Plant plant;
         private double percentege;
         private WeatherData weatherData;
-        private DateTime datetimeLog;
+        private DateTime? datetimeLog;
 
         public int Id
         {
@@ -36,8 +36,7 @@ namespace Entities
             get { return percentege; }
         }
 
-        [Required(ErrorMessage = "Fecha del monitoreo no puede ser nula")]
-        public DateTime DatetimeLog
+        public DateTime? DatetimeLog
         {
             set { datetimeLog = value; }
             get { return datetimeLog; }

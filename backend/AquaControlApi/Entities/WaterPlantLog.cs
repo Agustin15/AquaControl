@@ -12,14 +12,14 @@ namespace Entities
         private int id;
         private Tank tank;
         private Plant plant;
-        private DateTime datetimeStart;
-        private DateTime datetimeEnd;
+        private DateTime? datetimeStart;
+        private DateTime? datetimeEnd;
         private string type;
         private string state;
         private double levelTankBefore;
-        private double levelTankAfter;
+        private double? levelTankAfter;
         private int humidityBefore;
-        private int humidityAfter;
+        private int? humidityAfter;
 
         public int Id
         {
@@ -42,13 +42,13 @@ namespace Entities
             get { return plant; }
         }
 
-        public DateTime DatetimeStart
+        public DateTime? DatetimeStart
         {
             set { datetimeStart = value; }
             get { return datetimeStart; }
         }
 
-        public DateTime DatetimeEnd
+        public DateTime? DatetimeEnd
         {
             set { datetimeEnd = value; }
             get { return datetimeEnd; }
@@ -79,9 +79,8 @@ namespace Entities
             get { return levelTankBefore; }
         }
 
-        [Required(ErrorMessage = "Debe indicar el nivel que tiene el tanque posterior al riego")]
         [Range(0, 100, ErrorMessage = "Nivel del tanque debe estar entre 0 y 100")]
-        public double LevelTankAfter
+        public double? LevelTankAfter
         {
             set { levelTankAfter = value; }
             get { return levelTankAfter; }
@@ -95,9 +94,8 @@ namespace Entities
             get { return humidityBefore; }
         }
 
-        [Required(ErrorMessage = "Debe indicar el nivel de humedad de la planta posterior del riego")]
         [Range(0, 100, ErrorMessage = "Nivel de humedad debe estar entre 0 y 100")]
-        public int HumidityAfter
+        public int? HumidityAfter
         {
             set { humidityAfter = value; }
             get { return humidityAfter; }

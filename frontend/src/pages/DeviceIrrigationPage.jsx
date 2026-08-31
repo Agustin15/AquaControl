@@ -1,10 +1,10 @@
 import { LoadingScreenPage } from "./LoadingScreenPage";
-import { DeviceIrrigate } from "../components/deviceIrrigate/DeviceIrrigate";
+import { DeviceIrrigation } from "../components/deviceIrrigation/DeviceIrrigation";
 import { DevicesPage } from "./DevicesPage";
 import { useDevice } from "../contexts/DeviceContext";
 import { WeatherProvider } from "../contexts/WeatherContext";
 
-export const DeviceIrrigatePage = () => {
+export const DeviceIrrigationPage = () => {
   const { deviceSelected, loadingDevice } = useDevice();
 
   return (
@@ -13,7 +13,7 @@ export const DeviceIrrigatePage = () => {
         <LoadingScreenPage />
       ) : deviceSelected ? (
         <WeatherProvider>
-          <DeviceIrrigate />
+          <DeviceIrrigation />
         </WeatherProvider>
       ) : (
         <DevicesPage />
