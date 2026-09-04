@@ -1,0 +1,81 @@
+.notification {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    position: fixed;
+    top: 1rem;
+    z-index: 1;
+    margin: auto;
+    width: 25rem;
+    height: 5rem;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.908);
+
+}
+
+
+.showNotification {
+    animation-name: showNotification;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes showNotification {
+    from {
+        top: -5rem;
+    }
+
+    to {
+        top: 1rem;
+    }
+}
+
+.hideNotification {
+    animation-name: hideNotification;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes hideNotification {
+    from {
+        top: 1rem;
+    }
+
+    to {
+        top: -5rem;
+    }
+}
+
+.notification .column {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 0.3rem;
+    margin-left: 0.5rem;
+    width: 80%;
+}
+
+.notification img {
+    width: 45px;
+    height: 45px;
+    margin-left: 0.5rem;
+}
+
+
+.notification h3 {
+    font-size: 13px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.notification h3 img {
+    width: 22px;
+    height: 22px;
+    margin-left: 0;
+}
+
+.notification p {
+    font-size: 12px;
+}

@@ -7,6 +7,7 @@ import { useWeather } from "../../contexts/WeatherContext";
 import { LogsWeekdayProvider } from "../../contexts/LogsWeekdayContext";
 import { PlantProvider } from "../../contexts/plantContext/PlantContext";
 import { TankProvider } from "../../contexts/tankContext/TankContext";
+import { UserDevicesTokensProvider } from "../../contexts/UserDevicesTokenContext";
 import { HumidityPlantLogs } from "./humidityPlantLogs/HumidityPlantLogs";
 import { Menu } from "./menu/Menu";
 import { WaterTankLogs } from "./waterTankLogs/WaterTankLogs";
@@ -14,6 +15,7 @@ import { Settings } from "./settings/Settings";
 import { Irrigation } from "./irrigation/Irrigation";
 import { StateMqttConnection } from "./stateMqttConnection/StateMqttConnection";
 import { CurrentWeather } from "./currentWeather/CurrentWeather";
+import { Notification } from "./notification/Notification";
 
 export const DeviceIrrigation = () => {
   const [optionSelected, setOptionSelected] = useState("Irrigation");
@@ -24,11 +26,16 @@ export const DeviceIrrigation = () => {
 
   return (
     <div id="contentBody" className={styles.contentBody}>
+      <UserDevicesTokensProvider>
+        <Notification />
+      </UserDevicesTokensProvider>
+      
       <div className={styles.menuDevice}>
         {deviceSelected.location && (
           <CurrentWeather currentWeather={currentWeather} />
         )}
         <StateMqttConnection />
+        
         <img src={iconDevice}></img>
         <h3>{deviceSelected.placeName}</h3>
         <button className={styles.back} onClick={() => navigate("/devices")}>

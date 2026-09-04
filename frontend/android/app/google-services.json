@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "774792248437",
+    "project_id": "aquacontrol-26761",
+    "storage_bucket": "aquacontrol-26761.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:774792248437:android:f5f8c1d973c1f54cb9cc3c",
+        "android_client_info": {
+          "package_name": "aquacontrol.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVARzfAOinFC4jnL2mI0u3CxplEHoW5Io"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

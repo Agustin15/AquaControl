@@ -1,4 +1,4 @@
-package aguacontrol.app;
+package aquacontrol.app;
 
 import com.getcapacitor.BridgeActivity;
 

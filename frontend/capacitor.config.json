@@ -1,6 +1,6 @@
 {
-  "appId": "aguacontrol.app",
-  "appName": "aquacontrol.json",
+  "appId": "aquacontrol.app",
+  "appName": "aquacontrol",
   "webDir": "dist",
    "bundledWebRuntime": false,
      "server": {
