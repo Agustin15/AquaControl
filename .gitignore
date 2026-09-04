@@ -27,7 +27,8 @@ dist-ssr
 [Bb]in/
 [Oo]bj/
 
-#archivo de declaraciond de variables de entorno
+#archivo de declaracion de variables de entorno
 .env
 
-
+#archivo de credenciales Google Auth Firebase
+aquacontrol-26761-firebase-adminsdk-fbsvc-6b69479e3b.json

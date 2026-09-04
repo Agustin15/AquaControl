@@ -13,20 +13,28 @@ namespace DAL
     public class Palert
     {
 
-        public async Task Add(Alert alert)
+        public async Task<int> Add(Alert alert)
         {
 
             SqlConnection connection = new SqlConnection(DBConnection.Cnn);
             try
             {
-                SqlCommand command = new SqlCommand("AddAlert");
+                SqlCommand command = new SqlCommand("AddAlert", connection);
                 command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@title", alert.Title);
                 command.Parameters.AddWithValue("@message", alert.Message);
-                command.Parameters.AddWithValue("@codePlaque", alert.Device.Id);
+                command.Parameters.AddWithValue("@type", alert.Type);
+                command.Parameters.AddWithValue("@idDevice", alert.Device.Id);
+
+                SqlParameter parameterIdGenerated = new SqlParameter();
+                parameterIdGenerated.Direction = ParameterDirection.ReturnValue;
+                command.Parameters.Add(parameterIdGenerated);
 
                 await connection.OpenAsync();
 
                 await command.ExecuteNonQueryAsync();
+
+                return (int)parameterIdGenerated.Value;
             }
             catch (Exception ex)
             {
@@ -44,7 +52,7 @@ namespace DAL
             SqlConnection connection = new SqlConnection(DBConnection.Cnn);
             try
             {
-                SqlCommand command = new SqlCommand("UpdateAlertState");
+                SqlCommand command = new SqlCommand("UpdateAlertState", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@id", alert.Id);
                 command.Parameters.AddWithValue("@state", alert.Seen);
@@ -66,6 +74,32 @@ namespace DAL
             }
         }
 
+        public async Task Delete(Alert alert)
+        {
+
+            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
+            try
+            {
+                SqlCommand command = new SqlCommand("DeleteAlertById", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@id", alert.Id);
+
+                await connection.OpenAsync();
+
+                await command.ExecuteNonQueryAsync();
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+
+            }
+            finally
+            {
+                await connection.CloseAsync();
+            }
+        }
+
         public async Task<int> GetAmountAlertsByDevice(int idDevice)
         {
 
@@ -74,7 +108,7 @@ namespace DAL
             try
             {
 
-                SqlCommand command = new SqlCommand("AmountAlerts");
+                SqlCommand command = new SqlCommand("AmountAlerts", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@codePlaque", idDevice);
 
@@ -113,7 +147,7 @@ namespace DAL
             try
             {
 
-                SqlCommand command = new SqlCommand("AlertsOffset");
+                SqlCommand command = new SqlCommand("AlertsOffset", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@offset", offset);
                 command.Parameters.AddWithValue("@codePlaque", idDevice);
@@ -130,8 +164,9 @@ namespace DAL
                     while (await reader.ReadAsync())
                     {
 
-                        alertsOffset.Add(new Alert(Convert.ToInt16(reader["code"]),
-                            Convert.ToString(reader["text"]), Convert.ToBoolean(reader["observed"]), deviceFound)
+
+                        alertsOffset.Add(new Alert(Convert.ToInt16(reader["code"]), Convert.ToString(reader["heading"]),
+                            Convert.ToString(reader["text"]), Convert.ToString(reader["category"]), Convert.ToBoolean(reader["observed"]), deviceFound)
                           );
 
                     }

@@ -2,7 +2,6 @@ CREATE DATABASE AquaControl;
 
 USE AquaControl
 
-
 CREATE TABLE Users(
 idUser INT IDENTITY(1,1) PRIMARY KEY,
 username VARCHAR(15) NOT NULL UNIQUE,
@@ -76,16 +75,32 @@ FOREIGN KEY (idPlant,idDevice) REFERENCES Plants(id,idDevice)
 
 GO
 
-CREATE TABLE Alerts(
-id INT IDENTITY(1,1) PRIMARY KEY,
-message VARCHAR(45) NOT NULL,
-datetimeAlert DATETIME NOT NULL DEFAULT GETDATE(),
-seen BIT NOT NULL DEFAULT 0,
-idDevice INT NOT NULL FOREIGN KEY (idDevice) REFERENCES Devices(idDevice) ON DELETE CASCADE
+CREATE TABLE UserDevicesTokens(
+idUserDevice VARCHAR(16) PRIMARY KEY,
+token NVARCHAR(300) UNIQUE,
+idUser INT NOT NULL FOREIGN KEY (idUser) REFERENCES Users(idUser) ON DELETE CASCADE,
+created DATETIME NOT NULL DEFAULT GETDATE(),
+lastModified DATETIME
 )
- 
+
 
 GO
+
+CREATE TABLE Alerts(
+id INT IDENTITY(1,1) PRIMARY KEY,
+title VARCHAR(30) NOT NULL,
+message VARCHAR(60) NOT NULL,
+type VARCHAR(11) NOT NULL CHECK(type IN('Advertencia','Exito')),
+datetimeAlert DATETIME NOT NULL DEFAULT GETDATE(),
+seen BIT NOT NULL DEFAULT 0,
+idDevice INT NOT NULL FOREIGN KEY (idDevice) REFERENCES Devices(idDevice) ON DELETE CASCADE,
+)
+
+GO
+
+
+GO
+
 
 CREATE OR ALTER  VIEW Entities AS
 select idUser as code,username as entity,email as correspondence,password as entityKey,joined as created from Users;
@@ -122,7 +137,11 @@ idPlant as idLand,idDevice as idPlaque from WaterPlantLogs;
 GO
 
 CREATE OR ALTER VIEW Notifications AS
-select id as code,message as text,datetimeAlert as momentAlert,seen as observed,idDevice as idPlaque from Alerts;
+select id as code,title as heading,message as text,type as category,datetimeAlert as momentAlert,seen as observed,idDevice as idPlaque from Alerts;
+GO
+
+CREATE OR ALTER VIEW IdentificationUserDevices AS
+select idUserDevice as code,idUser as codeEntity,token as mark,created as datetimeLog,lastModified as lastUpdated from UserDevicesTokens;
 GO
 
 
@@ -131,7 +150,7 @@ GO
 -----3 Conflict Error 
 -----4 Server Error 
 
-------------------------------------------------------------Usuario--------------------------------------------------------------
+------------------------------------------------------------Users--------------------------------------------------------------
 
 CREATE OR ALTER PROCEDURE AddUser @username VARCHAR(15),@email VARCHAR(30),@password VARCHAR(60) AS
 BEGIN
@@ -208,7 +227,7 @@ END
 
 GO
 
-------------------------------------------------------------Dispositivo--------------------------------------------------------------
+------------------------------------------------------------Devices--------------------------------------------------------------
 CREATE OR ALTER PROCEDURE AddDevice @placeName VARCHAR(15),@location VARCHAR(35),@idUser INT AS
 BEGIN
 
@@ -283,7 +302,7 @@ END
 GO
 
 
-------------------------------------------------------------Tanque--------------------------------------------------------------
+------------------------------------------------------------Tanks--------------------------------------------------------------
 CREATE OR ALTER PROCEDURE AddTank @id INT,@idDevice INT,@height DECIMAL(4,1) AS
 BEGIN
 
@@ -357,7 +376,7 @@ END
 GO
 
 
-------------------------------------------------------------Planta--------------------------------------------------------------
+------------------------------------------------------------Plants--------------------------------------------------------------
 
 CREATE OR ALTER PROCEDURE AddPlant @id INT, @idDevice INT,@umbralHumidity INT,@indoor BIT, @image VARBINARY(MAX)=null,@description VARCHAR(500)=null AS
 BEGIN
@@ -427,7 +446,7 @@ END
 
 GO
 
-------------------------------------------------------------Registro nivel del tanque----------------------------------------------------------
+------------------------------------------------------------WaterTankLogs----------------------------------------------------------
 
 CREATE OR ALTER PROCEDURE AddWaterTankLog @percentege DECIMAL(4,1),@idTank INT,@idDevice INT AS
 BEGIN
@@ -463,7 +482,7 @@ END
 
 GO
 
-------------------------------------------------------------Nivel de humedad de la tierra-------------------------------------------------------
+------------------------------------------------------------HumidityPlantLogs-------------------------------------------------------
 
 CREATE OR ALTER PROCEDURE AddHumidityPlantLog @percentege INT,@weatherData NVARCHAR(300),@idPlant INT,@idDevice INT AS
 BEGIN
@@ -496,7 +515,7 @@ END
 GO
 
 
---------------------------------------------------------------Riego-------------------------------------------------------------------
+--------------------------------------------------------------WaterPlants-------------------------------------------------------------------
 
 
 CREATE OR ALTER PROCEDURE AddWaterPlantLog @type VARCHAR(10),@levelTankBefore INT,@humidityBefore INT,@idTank INT,@idPlant INT,@idDevice INT AS
@@ -567,13 +586,16 @@ END
 GO
 
 
---------------------------------------------------------------Alerta-------------------------------------------------------------------
+--------------------------------------------------------------Alerts-------------------------------------------------------------------
 
-CREATE OR ALTER PROCEDURE AddAlert @message VARCHAR(200),@idDevice INT AS 
+CREATE OR ALTER PROCEDURE AddAlert @title VARCHAR(30), @message VARCHAR(60),@type VARCHAR(11),@idDevice INT AS 
 BEGIN
 
 BEGIN TRY
-INSERT INTO Alerts(message,idDevice) VALUES(@message,@idDevice)
+INSERT INTO Alerts(title,message,type,idDevice) VALUES(@title,@message,@type,@idDevice)
+
+RETURN SCOPE_IDENTITY();
+
 END TRY
 
 BEGIN CATCH
@@ -602,6 +624,27 @@ END
 
 GO
 
+CREATE OR ALTER PROCEDURE DeleteAlertById @id INT AS 
+BEGIN
+
+IF NOT EXISTS(select * from Alerts where id=@id)
+BEGIN
+RAISERROR('Alerta no encontrada',16,4)
+RETURN
+END
+
+BEGIN TRY
+DELETE Alerts where id=@id
+END TRY
+
+BEGIN CATCH
+RAISERROR('Error al eliminar alerta',16,4)
+END CATCH
+
+END
+
+GO
+
 
 CREATE OR ALTER PROCEDURE AmountAlerts @codePlaque INT AS 
 BEGIN
@@ -620,6 +663,61 @@ select * from Notifications where idPlaque=@codePlaque ORDER BY momentAlert DESC
 END
 GO
 
+------------------------------------------------------UserDevicesTokens------------------------------------------------------------------------------------------
+
+CREATE OR ALTER PROCEDURE AddUserDeviceToken @idUserDevice VARCHAR(16),@idUser INT,@token NVARCHAR(300) AS
+BEGIN
+
+BEGIN TRY
+
+INSERT INTO UserDevicesTokens(idUserDevice,token,idUser) VALUES(@idUserDevice,@token,@idUser)
+
+END TRY 
+
+BEGIN CATCH
+DECLARE @error NVARCHAR(500)=ERROR_MESSAGE()
+RAISERROR(@error,16,4)
+END CATCH
+
+END
+
+GO
+
+CREATE OR ALTER PROCEDURE UpdateUserDeviceToken @idUserDevice VARCHAR(16),@idUser INT,@token NVARCHAR(300) AS
+BEGIN
+
+BEGIN TRY
+
+UPDATE UserDevicesTokens set token=@token where idUserDevice=@idUserDevice
+
+END TRY 
+
+BEGIN CATCH
+DECLARE @error NVARCHAR(500)=ERROR_MESSAGE()
+RAISERROR(@error,16,4)
+END CATCH
+
+END
+
+GO
+
+
+CREATE OR ALTER PROCEDURE UserDeviceTokenById @code VARCHAR(16) AS 
+BEGIN
+
+select * from IdentificationUserDevices where code=@code
+END
+
+GO
+
+CREATE OR ALTER PROCEDURE UserDevicesTokensByUser @codeEntity INT AS 
+BEGIN
+
+select * from IdentificationUserDevices where codeEntity=@codeEntity
+
+END
+
+GO
 
 ----------------------------------------------------------------------------TRIGGERS----------------------------------------------------------------------------
 
@@ -1069,14 +1167,13 @@ END
 GO
 
 -------------------------------------------------------Alert-----------------------------------------------------------------
-
 CREATE OR ALTER TRIGGER ValidAddAlert
 ON Alerts
 INSTEAD OF INSERT
 AS
 BEGIN
 
-    IF EXISTS (
+    IF NOT EXISTS (
         SELECT *
         FROM Devices where idDevice=(select idDevice from inserted))
     BEGIN
@@ -1084,7 +1181,15 @@ BEGIN
         RETURN
     END
 
-    INSERT INTO Alerts(message, idDevice) SELECT message, idDevice FROM inserted
+	  IF EXISTS(
+        SELECT *
+        FROM inserted where type NOT IN('Advertencia','Exito'))
+    BEGIN
+        RAISERROR('Tipo de alerta solo acepta los valores, Advertencia o Exito',16,2)
+        RETURN
+    END
+
+    INSERT INTO Alerts(title,message,type, idDevice) SELECT title,message,type, idDevice FROM inserted
 
     IF (@@ERROR <> 0)
     BEGIN
@@ -1119,3 +1224,72 @@ BEGIN
 END
 GO
 
+------------------------------------------------------------UserDevicesToken-------------------------------------------------------------------
+CREATE OR ALTER TRIGGER ValidAddUserDeviceToken ON UserDevicesTokens INSTEAD OF INSERT
+AS
+BEGIN
+
+    IF NOT EXISTS (
+        SELECT *
+        FROM Users where idUser=(select idUser from inserted))
+    BEGIN
+        RAISERROR('Usuario no encontrado',16,2)
+        RETURN
+    END
+
+    IF EXISTS (
+        SELECT *
+        FROM UserDevicesTokens where idUserDevice=(select idUserDevice from inserted))
+    BEGIN
+        RAISERROR('Este identificador de dipositivo de movil ya existe',16,2)
+        RETURN
+    END
+
+	   IF EXISTS (
+        SELECT *
+        FROM UserDevicesTokens where token=(select token from inserted))
+    BEGIN
+        RAISERROR('Token ya existente',16,2)
+        RETURN
+    END
+
+    INSERT INTO UserDevicesTokens(idUserDevice,token,idUser) SELECT idUserDevice,token,idUser FROM inserted
+
+    IF (@@ERROR <> 0)
+    BEGIN
+        RAISERROR('Error inesperado al agregar token del movil del usuario',16,4)
+        RETURN
+    END
+END
+GO
+
+
+CREATE OR ALTER TRIGGER ValidUpdateDeviceToken ON UserDevicesTokens INSTEAD OF UPDATE
+AS
+BEGIN
+
+    IF NOT EXISTS (
+        SELECT *
+        FROM UserDevicesTokens where idUserDevice=(select idUserDevice from inserted))
+    BEGIN
+        RAISERROR('Registro de token con este identificador de dispositivo movil no encontrado',16,2)
+        RETURN
+    END
+
+	   IF EXISTS (
+        SELECT *
+        FROM UserDevicesTokens where token=(select token from inserted))
+    BEGIN
+        RAISERROR('Token ya existente',16,2)
+        RETURN
+    END
+
+    UPDATE UserDevicesTokens set token=(select token from inserted),lastModified=GETDATE() where idUserDevice=(select idUserDevice from deleted)
+
+    IF (@@ERROR <> 0)
+    BEGIN
+        RAISERROR('Error inesperado al actualizar token del movil del usuario',16,4)
+        RETURN
+    END
+END
+GO

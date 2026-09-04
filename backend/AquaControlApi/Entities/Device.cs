@@ -33,7 +33,7 @@ namespace Entities
 
 
         [Required(ErrorMessage = "Debe indicar una ubicacion")]
-        [RegularExpression(@"^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+,\s*[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$",ErrorMessage ="Formato de ubicacion incorrecto")]
+        [RegularExpression(@"^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+,\s*[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$", ErrorMessage = "Formato de ubicacion incorrecto")]
         public string Location
         {
             set { location = value; }
@@ -55,7 +55,7 @@ namespace Entities
 
         public Device() { }
 
-        public Device(int id, string placeName,string location, User user, DateTime created)
+        public Device(int id, string placeName, string location, User user, DateTime created)
         {
 
             Id = id;

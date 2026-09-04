@@ -10,16 +10,24 @@ namespace Logic
 {
     public class Lalert
     {
-        public async Task Add(Alert alert)
+        public async Task<int> Add(Alert alert)
         {
             if (alert is null) throw new Exception("Debe indicar una alerta a agregar");
-            await new Palert().Add(alert);
+            int idGenerated = await new Palert().Add(alert);
 
+            return idGenerated;
         }
         public async Task UpdateAlertState(Alert alert)
         {
             if (alert is null) throw new Exception("Debe indicar una alerta a actualizar");
             await new Palert().UpdateAlertState(alert);
+
+        }
+
+        public async Task Delete(Alert alert)
+        {
+            if (alert is null) throw new Exception("Debe indicar una alerta a eliminar");
+            await new Palert().Delete(alert);
 
         }
 

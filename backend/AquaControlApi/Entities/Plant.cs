@@ -16,6 +16,8 @@ namespace Entities
         private string? description;
         private Device device;
 
+        [Required(ErrorMessage = "Debe indicar el numero de planta")]
+        [Range(0, int.MaxValue, ErrorMessage = "Numero de la planta debe ser un valor positivo")]
         public int Id
         {
             set { id = value; }

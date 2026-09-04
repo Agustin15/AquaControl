@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace Entities
 {
@@ -13,7 +13,8 @@ namespace Entities
         private double height;
         private Device device;
 
-
+        [Required(ErrorMessage = "Debe indicar el numero de tanque")]
+        [Range(0, int.MaxValue, ErrorMessage = "Numero de tanque debe ser un valor positivo")]
         public int Id
         {
             set { id = value; }
@@ -36,7 +37,6 @@ namespace Entities
             set { device = value; }
             get { return device; }
         }
-
 
         public Tank() { }
 
