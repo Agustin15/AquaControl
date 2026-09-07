@@ -14,7 +14,7 @@ namespace Api.Controllers
         [Authorize(AuthenticationSchemes = "RefreshBearer")]
         [Route("api/refreshToken")]
         [HttpPost]
-        public ActionResult RefreshToken()
+        public async Task<ActionResult> RefreshToken()
         {
 
             try
@@ -27,7 +27,13 @@ namespace Api.Controllers
 
                 Authentication authentication = new Authentication();
 
-                var jwtAccessToken = authentication.GenerateAccessJWTtoken(idUser, idDevice);
+                List<User> users = await new Luser().GetAllUsers();
+
+                User userFound = users.Find(u => u.Id == idUser);
+
+                if (userFound is null) throw new Exception("Usuario no encontrado");
+
+                var jwtAccessToken = authentication.GenerateAccessJWTtoken(userFound, idDevice);
 
                 return Ok(new { accessToken = jwtAccessToken });
             }

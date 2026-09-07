@@ -9,49 +9,22 @@ namespace Entities
 {
     public class WaterPlantLog
     {
-        private int id;
-        private Tank tank;
-        private Plant plant;
-        private DateTime? datetimeStart;
-        private DateTime? datetimeEnd;
-        private string type;
-        private string state;
-        private double levelTankBefore;
-        private double? levelTankAfter;
-        private int humidityBefore;
-        private int? humidityAfter;
+        int id;
+        string type;
+        string state;
+        double levelTankBefore;
+        double? levelTankAfter;
+        int humidityBefore;
+        int? humidityAfter;
+        Tank tank;
+        Plant plant;
+        DateTime? datetimeStart;
+        DateTime? datetimeEnd;
 
         public int Id
         {
             set { id = value; }
             get { return id; }
-        }
-
-
-        [Required(ErrorMessage = "Debe ingresar un tanque")]
-        public Tank Tank
-        {
-            set { tank = value; }
-            get { return tank; }
-        }
-
-        [Required(ErrorMessage = "Debe ingresar una planta")]
-        public Plant Plant
-        {
-            set { plant = value; }
-            get { return plant; }
-        }
-
-        public DateTime? DatetimeStart
-        {
-            set { datetimeStart = value; }
-            get { return datetimeStart; }
-        }
-
-        public DateTime? DatetimeEnd
-        {
-            set { datetimeEnd = value; }
-            get { return datetimeEnd; }
         }
 
         [Required(ErrorMessage = "Debe indicar el tipo de riego")]
@@ -101,6 +74,32 @@ namespace Entities
             get { return humidityAfter; }
         }
 
+
+        [Required(ErrorMessage = "Debe ingresar un tanque")]
+        public Tank Tank
+        {
+            set { tank = value; }
+            get { return tank; }
+        }
+
+        [Required(ErrorMessage = "Debe ingresar una planta")]
+        public Plant Plant
+        {
+            set { plant = value; }
+            get { return plant; }
+        }
+
+        public DateTime? DatetimeStart
+        {
+            set { datetimeStart = value; }
+            get { return datetimeStart; }
+        }
+
+        public DateTime? DatetimeEnd
+        {
+            set { datetimeEnd = value; }
+            get { return datetimeEnd; }
+        }
 
         public WaterPlantLog() { }
 

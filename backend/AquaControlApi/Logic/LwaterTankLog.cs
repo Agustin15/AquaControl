@@ -17,6 +17,12 @@ namespace Logic
 
         }
 
+        public async Task<List<WaterTankLog>> GetWaterTankLogsLastWeek(int idTank, int idDevice)
+        {
+            return await new PwaterTankLog().GetWaterTankLogsLastWeek(idTank, idDevice);
+
+        }
+
     }
 
 }

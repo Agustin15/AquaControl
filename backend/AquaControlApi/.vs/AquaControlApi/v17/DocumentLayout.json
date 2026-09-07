@@ -3,8 +3,8 @@
   "WorkspaceRootPath": "C:\\develop\\AquaControl\\backend\\AquaControlApi\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{1ECA56E5-04A1-493C-AF8B-2C637F7CA81B}|Api\\Api.csproj|c:\\develop\\aquacontrol\\backend\\aquacontrolapi\\api\\controllers\\alertcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1ECA56E5-04A1-493C-AF8B-2C637F7CA81B}|Api\\Api.csproj|solutionrelative:api\\controllers\\alertcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1ECA56E5-04A1-493C-AF8B-2C637F7CA81B}|Api\\Api.csproj|c:\\develop\\aquacontrol\\backend\\aquacontrolapi\\api\\controllers\\userofalertcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1ECA56E5-04A1-493C-AF8B-2C637F7CA81B}|Api\\Api.csproj|solutionrelative:api\\controllers\\userofalertcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -23,14 +23,14 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "AlertController.cs",
-              "DocumentMoniker": "C:\\develop\\AquaControl\\backend\\AquaControlApi\\Api\\Controllers\\AlertController.cs",
-              "RelativeDocumentMoniker": "Api\\Controllers\\AlertController.cs",
-              "ToolTip": "C:\\develop\\AquaControl\\backend\\AquaControlApi\\Api\\Controllers\\AlertController.cs",
-              "RelativeToolTip": "Api\\Controllers\\AlertController.cs",
-              "ViewState": "AgIAADAAAAAAAAAAAAAYwEEAAAAAAAAAAAAAAA==",
+              "Title": "UserOfAlertController.cs",
+              "DocumentMoniker": "C:\\develop\\AquaControl\\backend\\AquaControlApi\\Api\\Controllers\\UserOfAlertController.cs",
+              "RelativeDocumentMoniker": "Api\\Controllers\\UserOfAlertController.cs",
+              "ToolTip": "C:\\develop\\AquaControl\\backend\\AquaControlApi\\Api\\Controllers\\UserOfAlertController.cs",
+              "RelativeToolTip": "Api\\Controllers\\UserOfAlertController.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABYAAAA/AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-04T00:57:30.362Z",
+              "WhenOpened": "2026-09-07T00:12:48.923Z",
               "EditorCaption": ""
             }
           ]

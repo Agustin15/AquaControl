@@ -39,6 +39,54 @@ namespace DAL
             }
         }
 
+
+        public async Task<List<WaterTankLog>> GetWaterTankLogsLastWeek(int idTank, int idDevice)
+        {
+
+            WaterTankLog waterTankLog = null;
+            WaterPlantLog waterPlantLogMostNearly = null;
+            List<WaterTankLog> waterTankLogs = new List<WaterTankLog>();
+
+            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
+            try
+            {
+                SqlCommand command = new SqlCommand("WaterTankLogsLastWeek", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@idBowl", idTank);
+                command.Parameters.AddWithValue("@codePlaque", idDevice);
+
+                await connection.OpenAsync();
+
+                SqlDataReader reader = await command.ExecuteReaderAsync();
+
+                if (reader.HasRows)
+                {
+                    List<Tank> tanks = await new Ptank().GetAllTanksByDevice(idDevice);
+                    Tank tankFound = tanks.Find(t => t.Id == idTank);
+
+                    while (await reader.ReadAsync())
+                    {
+                        waterPlantLogMostNearly = await new PwaterPlantLog().GetWaterPlantLogMostNearylToWaterTank(idTank, idDevice, Convert.ToDateTime(reader["moment"]));
+
+                        waterTankLog = new WaterTankLog(Convert.ToInt32(reader["codeLiquidBowl"]), tankFound, Convert.ToDouble(reader["measure"]),
+                        (waterPlantLogMostNearly.LevelTankAfter == Convert.ToDouble(reader["measure"]) ? waterPlantLogMostNearly : null),
+                        Convert.ToDateTime(reader["moment"]));
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+
+            }
+            finally
+            {
+                await connection.CloseAsync();
+            }
+            return waterTankLogs;
+        }
+
     }
 
 }

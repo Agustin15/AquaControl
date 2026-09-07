@@ -10,13 +10,14 @@ namespace Entities
 {
     public class Alert
     {
-        private int id;
-        private string title;
-        private string message;
-        private string type;
-        private DateTime? datetimeAlert;
-        private bool seen = false;
-        private Device device;
+        int id;
+        string title;
+        string message;
+        string type;
+        List<UserOfAlert> usersOfAlert;
+        Device device;
+        DateTime? datetimeAlert;
+
 
         public int Id
         {
@@ -49,17 +50,21 @@ namespace Entities
             get { return message; }
         }
 
-        [Required(ErrorMessage = "Debe indicar estado de visualizacion de la alerta")]
-        public bool Seen
-        {
-            set { seen = value; }
-            get { return seen; }
-        }
         public DateTime? DatetimeAlert
         {
             set { datetimeAlert = value; }
             get { return datetimeAlert; }
         }
+
+
+        [Required(ErrorMessage = "Debe indicarse los usuarios de la alerta")]
+        [MinLength(1, ErrorMessage = "Debe haber al menos un usuario vinculado a la alerta")]
+        public List<UserOfAlert> UsersOfAlert
+        {
+            set { usersOfAlert = value; }
+            get { return usersOfAlert; }
+        }
+
 
 
         [Required(ErrorMessage = "Alerta debe pertencer a algun dispositivo de riego")]
@@ -69,17 +74,17 @@ namespace Entities
             get { return device; }
         }
 
-
         public Alert() { }
 
-        public Alert(int id, string title, string message, string type, bool seen, Device device)
+        public Alert(int id, string title, string message, string type, List<UserOfAlert> usersOfAlert, Device device, DateTime dateTimeAlert)
         {
             Id = id;
             Title = title?.Trim();
             Message = message?.Trim();
             Type = type?.Trim();
-            Seen = seen;
+            UsersOfAlert = usersOfAlert;
             Device = device;
+            DatetimeAlert = dateTimeAlert;
 
         }
 

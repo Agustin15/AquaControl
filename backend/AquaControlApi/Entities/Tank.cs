@@ -9,9 +9,9 @@ namespace Entities
 {
     public class Tank
     {
-        private int id;
-        private double height;
-        private Device device;
+        int id;
+        double height;
+        Device device;
 
         [Required(ErrorMessage = "Debe indicar el numero de tanque")]
         [Range(0, int.MaxValue, ErrorMessage = "Numero de tanque debe ser un valor positivo")]

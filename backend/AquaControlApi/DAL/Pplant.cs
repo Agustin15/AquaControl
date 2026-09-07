@@ -173,7 +173,7 @@ namespace DAL
 
                     while (await reader.ReadAsync())
                     {
-                        Plant plant = new Plant(Convert.ToInt16(reader["codeLand"]), Convert.ToInt16(reader["limitHumidity"]), (bool)reader["inside"],
+                        Plant plant = new Plant(Convert.ToInt32(reader["codeLand"]), Convert.ToInt32(reader["limitHumidity"]), (bool)reader["inside"],
                                              reader["capture"] is DBNull ? null : (byte[])reader["capture"],
                                              reader["info"] is DBNull ? null : Convert.ToString(reader["info"]), deviceFound);
 

@@ -26,7 +26,7 @@ namespace Api.Controllers
                 if (!ModelState.IsValid) return StatusCode(400, new { message = ModelState.Values.First().Errors.First().ErrorMessage });
 
                 if (idDevice != waterTankLog.Tank.Device.Id)
-                    throw new Exception("El tanque del registro de nivel de agua que quiere agregar no pertence a este dispositivo");
+                    return StatusCode(403, new { message = "No tiene acceso al dispositivo de riego donde desea agregar el monitoreo de nivel de agua del tanque" });
 
                 await new LwaterTankLog().Add(waterTankLog);
 
@@ -35,6 +35,32 @@ namespace Api.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpGet]
+        [Route("api/waterTankLog/tank/{idTank}/lastWeek")]
+        public async Task<ActionResult> GetHumidityPlantLogsLastWeek(int idTank)
+        {
+            try
+            {
+                if (!User.Identity.IsAuthenticated || User.FindFirst("IdDevice") is null)
+                    return Unauthorized();
+
+                int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
+
+                List<WaterTankLog> waterTankLogs = await new LwaterTankLog().GetWaterTankLogsLastWeek(idTank, idDevice);
+
+                if (waterTankLogs.Count == 0)
+                    throw new Exception("No se encontraron registros sobre niveles de agua del tanque en esta semana");
+
+                return Ok(waterTankLogs);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(404, new { message = ex.Message });
             }
         }
     }

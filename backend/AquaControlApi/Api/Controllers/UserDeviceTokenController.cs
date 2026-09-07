@@ -28,9 +28,9 @@ namespace Api.Controllers
                 if (!ModelState.IsValid) return StatusCode(400, new { message = ModelState.Values.First().Errors.First().ErrorMessage });
 
                 if (userDeviceToken.User.Id != idUser)
-                    return StatusCode(400, new { message = "Usuario del token del dispositivo movil ingresado no coindice con su usuario" });
+                    return StatusCode(403, new { message = "Usuario del token del dispositivo movil ingresado, no coindice con el logueado" });
 
-                UserDeviceToken userDeviceTokenFound = await new LuserDeviceToken().GetUserDeviceTokenById(userDeviceToken.IdUserDevice);
+                UserDeviceToken userDeviceTokenFound = await new LuserDeviceToken().GetUserDeviceTokenById(userDeviceToken.Id);
 
                 if (userDeviceTokenFound == null)
                 {

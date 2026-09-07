@@ -15,6 +15,7 @@ namespace Entities
         int id;
         string username;
         string email;
+        string role;
         string password;
         DateTime joined;
 
@@ -40,6 +41,14 @@ namespace Entities
             get { return email; }
         }
 
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Debe indicar un rol")]
+        [AllowedValues(["Administrador", "Usuario"], ErrorMessage = "Rol solo acepta los valores:Administrador o Usuario")]
+        public string Role
+        {
+            set { role = value; }
+            get { return role; }
+        }
+
         public string Password
         {
             set { password = value; }
@@ -53,16 +62,15 @@ namespace Entities
             get { return joined; }
         }
 
-
-
         public User() { }
 
-        public User(int id, string username, string email, string password, DateTime joined)
+        public User(int id, string username, string email, string role, string password, DateTime joined)
         {
 
             Id = id;
             Username = username?.Trim();
             Email = email?.Trim();
+            Role = role?.Trim();
             Password = password?.Trim();
             Joined = joined;
 

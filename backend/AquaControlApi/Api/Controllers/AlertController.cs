@@ -45,11 +45,25 @@ namespace Api.Controllers
                 if (!ModelState.IsValid) return StatusCode(400, new { message = ModelState.Values.First().Errors.First().ErrorMessage });
 
                 if (idDevice != alert.Device.Id)
-                    throw new Exception("El dispositivo vinculado a la alerta es distinto al dispositivo actual");
+                    return StatusCode(403, new { message = "No tiene acceso al dispositivo de riego de donde desea enviar la alerta" });
 
-                List<UserDeviceToken> userDevicesTokens = await new LuserDeviceToken().GetUserDevicesTokensByIdUser(alert.Device.User.Id);
+                List<UserDeviceToken> usersDevicesTokens = new List<UserDeviceToken>();
+                List<UserDeviceToken> userDevicesTokens = new List<UserDeviceToken>();
 
-                if (userDevicesTokens.Count == 0)
+                foreach (UserOfAlert userOfAlert in alert.UsersOfAlert)
+                {
+                    userOfAlert.Seen = false;
+                    userDevicesTokens = await new LuserDeviceToken().GetUserDevicesTokensByIdUser(userOfAlert.User.Id);
+
+                    foreach (UserDeviceToken userDeviceToken in userDevicesTokens)
+                    {
+                        usersDevicesTokens.Add(userDeviceToken);
+                    }
+
+                }
+
+
+                if (usersDevicesTokens.Count == 0)
                     throw new Exception("No se encontraron tokens de dispositivos de usuarios para enviar notificaciones");
 
                 string fcmEnpointApi = Environment.GetEnvironmentVariable("FCM_ENDPOINT_API");
@@ -64,7 +78,7 @@ namespace Api.Controllers
                 var requestMessage = new HttpRequestMessage(HttpMethod.Post, fcmEnpointApi);
                 requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
-                foreach (UserDeviceToken userDeviceToken in userDevicesTokens)
+                foreach (UserDeviceToken userDeviceToken in usersDevicesTokens)
                 {
                     var notification = new
                     {
@@ -72,7 +86,7 @@ namespace Api.Controllers
                         {
                             token = userDeviceToken.Token,
                             notification = new { title = alert.Title, body = alert.Message },
-                            data = new { alertType = alert.Type }
+                            data = new { idAlert = idAlertGenerated, alertType = alert.Type }
                         }
                     };
 
@@ -97,33 +111,6 @@ namespace Api.Controllers
             }
         }
 
-        [Authorize(AuthenticationSchemes = "Bearer")]
-        [HttpPut("api/alert")]
-        public async Task<ActionResult> UpdateAlertState([FromBody] Alert alert)
-        {
-            try
-            {
-
-                if (!User.Identity.IsAuthenticated || User.FindFirst("IdDevice") is null)
-                    return Unauthorized();
-
-                int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
-
-                if (!ModelState.IsValid) return StatusCode(400, new { message = ModelState.Values.First().Errors.First().ErrorMessage });
-
-                if (idDevice != alert.Device.Id)
-                    throw new Exception("El dispositivo vinculado a la alerta es distinto al dispositivo actual");
-
-                await new Lalert().UpdateAlertState(alert);
-
-                return Ok(alert);
-
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = ex.Message });
-            }
-        }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("api/alert/pagination/{offset}")]
@@ -131,22 +118,23 @@ namespace Api.Controllers
         {
             try
             {
-                if (!User.Identity.IsAuthenticated || User.FindFirst(ClaimTypes.SerialNumber) is null)
+                if (!User.Identity.IsAuthenticated || User.FindFirst("IdDevice") is null || User.FindFirst(ClaimTypes.NameIdentifier) is null)
                     return Unauthorized();
 
-                int idDevice = Convert.ToInt32(User.FindFirst(ClaimTypes.SerialNumber).Value);
+                int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
+                int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
-                int amount = await new Lalert().GetAmountAlerts(idDevice);
+                int amount = await new Lalert().GetAmountAlertsByDeviceAndUser(idDevice, idUser);
 
                 if (amount == 0)
-                    throw new Exception("No se encontraron alertas en este dispositivo");
+                    throw new Exception("No se encontraron alertas para este dispositivo de riego");
 
                 double pages = Math.Ceiling(Convert.ToDouble(amount) / Convert.ToDouble(10));
 
-                List<Alert> alertsOffset = await new Lalert().GetAlertsOffsetByDevice(offset, idDevice);
+                List<Alert> alertsOffset = await new Lalert().GetAlertsOffsetByDevice(offset, idDevice, idUser);
 
                 if (alertsOffset.Count == 0)
-                    throw new Exception("No se encontraron alertas en este dispositivo");
+                    throw new Exception("No se encontraron alertas en este dispositivo de riego");
 
                 var result = new { pages = pages, alerts = alertsOffset };
 

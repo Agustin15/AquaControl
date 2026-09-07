@@ -1,7 +1,9 @@
-﻿using Entities;
+﻿using DAL;
+using Entities;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -12,7 +14,7 @@ namespace Logic
 {
     public class Authentication
     {
-        public string GenerateAccessJWTtoken(int idUser, int idDevice)
+        public string GenerateAccessJWTtoken(User user, int idDevice)
         {
             var localhostBackend = Environment.GetEnvironmentVariable("LOCALHOST_BACKEND");
             var tokenSecretKey = Environment.GetEnvironmentVariable("ACCESS_TOKEN_SECRET_KEY");
@@ -24,11 +26,12 @@ namespace Logic
 
             //creacion del payload contenido del token a traves de claims
             List<Claim> claims = new List<Claim>();
-            claims.Add(new Claim(ClaimTypes.NameIdentifier, Convert.ToString(idUser)));
+            claims.Add(new Claim(ClaimTypes.NameIdentifier, Convert.ToString(user.Id)));
+            claims.Add(new Claim(ClaimTypes.Role, Convert.ToString(user.Role)));
             claims.Add(new Claim("IdDevice", Convert.ToString(idDevice)));
 
             //creacion de la claves secretas simetricas de la firma, que se usara para crear la firmas de los token
-            ;
+            
             var tokenSecretKeySymetric = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenSecretKey));
 
             var jwtToken = new JwtSecurityToken(issuer: localhostBackend, audience: localhostBackend,
@@ -39,7 +42,7 @@ namespace Logic
 
         }
 
-        public string GenerateRefreshJWTtoken(int idUser, int idDevice = 0)
+        public string GenerateRefreshJWTtoken(User user, int idDevice = 0)
         {
             var localhostBackend = Environment.GetEnvironmentVariable("LOCALHOST_BACKEND");
             var tokenSecretKey = Environment.GetEnvironmentVariable("REFRESH_TOKEN_SECRET_KEY");
@@ -50,7 +53,8 @@ namespace Logic
             if (refreshTokenExpiredMinutes is null) throw new Exception("Variable REFRESH_TOKEN_EXPIRED_MINUTES no definida");
 
             List<Claim> claims = new List<Claim>();
-            claims.Add(new Claim(ClaimTypes.NameIdentifier, Convert.ToString(idUser)));
+            claims.Add(new Claim(ClaimTypes.NameIdentifier, Convert.ToString(user.Id)));
+            claims.Add(new Claim(ClaimTypes.Role, Convert.ToString(user.Role)));
             claims.Add(new Claim("IdDevice", Convert.ToString(idDevice)));
 
             var tokenSecretKeySymetric = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenSecretKey));

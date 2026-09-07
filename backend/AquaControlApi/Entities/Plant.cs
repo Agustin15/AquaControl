@@ -9,12 +9,12 @@ namespace Entities
 {
     public class Plant
     {
-        private int id;
-        private int umbralHumidity;
-        private bool indoor;
-        private byte[]? image;
-        private string? description;
-        private Device device;
+        int id;
+        int umbralHumidity;
+        bool indoor;
+        byte[]? image;
+        Device device;
+        string? description;
 
         [Required(ErrorMessage = "Debe indicar el numero de planta")]
         [Range(0, int.MaxValue, ErrorMessage = "Numero de la planta debe ser un valor positivo")]

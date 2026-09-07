@@ -9,23 +9,16 @@ namespace Entities
 {
     public class HumidityPlantLog
     {
-        private int id;
-        private Plant plant;
-        private double percentege;
-        private WeatherData weatherData;
-        private DateTime? datetimeLog;
+        int id;
+        double percentege;
+        Plant plant;
+        WeatherData weatherData;
+        DateTime? datetimeLog;
 
         public int Id
         {
             set { id = value; }
             get { return id; }
-        }
-
-        [Required(ErrorMessage = "Debe indicar planta a la que pertenece el registro de humedad")]
-        public Plant Plant
-        {
-            set { plant = value; }
-            get { return plant; }
         }
 
         [Required(ErrorMessage = "Debe indicar el porcentaje de humedad de la planta")]
@@ -36,10 +29,11 @@ namespace Entities
             get { return percentege; }
         }
 
-        public DateTime? DatetimeLog
+        [Required(ErrorMessage = "Debe indicar planta a la que pertenece el registro de humedad")]
+        public Plant Plant
         {
-            set { datetimeLog = value; }
-            get { return datetimeLog; }
+            set { plant = value; }
+            get { return plant; }
         }
 
         [Required(ErrorMessage = "Debe indicar informacion del clima")]
@@ -47,6 +41,11 @@ namespace Entities
         {
             set { weatherData = value; }
             get { return weatherData; }
+        }
+        public DateTime? DatetimeLog
+        {
+            set { datetimeLog = value; }
+            get { return datetimeLog; }
         }
 
         public HumidityPlantLog() { }

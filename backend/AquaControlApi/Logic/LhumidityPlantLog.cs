@@ -17,12 +17,12 @@ namespace Logic
 
         }
 
-        public async Task<List<HumidityPlantLog>> GetHumidityPlantLogLastWeek(int idPlant, int idDevice)
+        public async Task<List<HumidityPlantLog>> GetHumidityPlantLogsLastWeek(int idPlant, int idDevice)
         {
 
             List<HumidityPlantLog> humidityPlantLogs = new List<HumidityPlantLog>();
 
-            humidityPlantLogs = await new PhumidityPlantLog().GetHumidityPlantLogLastWeek(idPlant, idDevice);
+            humidityPlantLogs = await new PhumidityPlantLog().GetHumidityPlantLogsLastWeek(idPlant, idDevice);
 
             return humidityPlantLogs;
         }

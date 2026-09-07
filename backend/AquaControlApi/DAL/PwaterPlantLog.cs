@@ -103,14 +103,69 @@ namespace DAL
                     List<Plant> plants = await new Pplant().GetAllPlantsByDevice(idDevice);
                     Plant plantFound = plants.Find(plant => plant.Id == idPlant);
 
-                    await reader.ReadAsync();
+                    if (await reader.ReadAsync())
+                    {
 
-                    waterPlantLog = new WaterPlantLog(Convert.ToInt16(reader["codeWaterPlant"]), tankFound, plantFound,
+                        waterPlantLog = new WaterPlantLog(Convert.ToInt32(reader["codeWaterPlant"]), tankFound, plantFound,
                           Convert.ToDateTime(reader["momentStart"]), Convert.ToDateTime(reader["momentEnd"]),
                             Convert.ToString(reader["category"]), Convert.ToString(reader["mood"]),
                             Convert.ToDouble(reader["prevMeasureBowl"]), Convert.ToDouble(reader["postMeasureBowl"]),
-                            Convert.ToInt16(reader["prevHumidity"]), Convert.ToInt16(reader["postHumidity"]));
+                            Convert.ToInt32(reader["prevHumidity"]), Convert.ToInt32(reader["postHumidity"]));
+                    }
+                }
 
+                await reader.CloseAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+
+            }
+            finally
+            {
+                await connection.CloseAsync();
+            }
+
+            return waterPlantLog;
+        }
+
+
+        internal async Task<WaterPlantLog> GetWaterPlantLogMostNearylToWaterTank(int idTank, int idDevice, DateTime waterTankLogDatetime)
+        {
+
+            WaterPlantLog waterPlantLog = null;
+            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
+            try
+            {
+
+                SqlCommand command = new SqlCommand("WaterPlantMostNearlyToWaterTank", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@idBowl", idTank);
+                command.Parameters.AddWithValue("@codePlaque ", idDevice);
+                command.Parameters.AddWithValue("@momentWaterTank", waterTankLogDatetime);
+
+                await connection.OpenAsync();
+
+                SqlDataReader reader = await command.ExecuteReaderAsync();
+
+                if (reader.HasRows)
+                {
+
+                    List<Tank> tanks = await new Ptank().GetAllTanksByDevice(idDevice);
+                    Tank tankFound = tanks.Find(tank => tank.Id == idTank);
+
+                    List<Plant> plants = await new Pplant().GetAllPlantsByDevice(idDevice);
+
+                    if (await reader.ReadAsync())
+                    {
+                        Plant plantFound = plants.Find(plant => plant.Id == Convert.ToInt32(reader["idLand"]));
+
+                        waterPlantLog = new WaterPlantLog(Convert.ToInt32(reader["codeWaterPlant"]), tankFound, plantFound,
+                              Convert.ToDateTime(reader["momentStart"]), Convert.ToDateTime(reader["momentEnd"]),
+                                Convert.ToString(reader["category"]), Convert.ToString(reader["mood"]),
+                                Convert.ToDouble(reader["prevMeasureBowl"]), Convert.ToDouble(reader["postMeasureBowl"]),
+                                Convert.ToInt32(reader["prevHumidity"]), Convert.ToInt32(reader["postHumidity"]));
+                    }
                 }
 
                 await reader.CloseAsync();
@@ -150,8 +205,8 @@ namespace DAL
 
                 if (reader.HasRows)
                 {
-                    await reader.ReadAsync();
-                    amount = Convert.ToInt16(reader["amount"]);
+                    if (await reader.ReadAsync())
+                        amount = Convert.ToInt32(reader["amount"]);
                 }
 
                 await reader.CloseAsync();
@@ -204,11 +259,11 @@ namespace DAL
                     while (await reader.ReadAsync())
                     {
 
-                        WaterPlantLog waterPlantLog = new WaterPlantLog(Convert.ToInt16(reader["codeWaterPlant"]), tankFound, plantFound,
+                        WaterPlantLog waterPlantLog = new WaterPlantLog(Convert.ToInt32(reader["codeWaterPlant"]), tankFound, plantFound,
                             Convert.ToDateTime(reader["momentStart"]), Convert.ToDateTime(reader["momentEnd"]),
                               Convert.ToString(reader["category"]), Convert.ToString(reader["mood"]),
                               Convert.ToDouble(reader["prevMeasureBowl"]), Convert.ToDouble(reader["postMeasureBowl"]),
-                              Convert.ToInt16(reader["prevHumidity"]), Convert.ToInt16(reader["postHumidity"]));
+                              Convert.ToInt32(reader["prevHumidity"]), Convert.ToInt32(reader["postHumidity"]));
 
                         waterPlantLogs.Add(waterPlantLog);
 

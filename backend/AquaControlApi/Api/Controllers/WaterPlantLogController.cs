@@ -34,7 +34,7 @@ namespace Api.Controllers
                 if (!ModelState.IsValid) return StatusCode(400, new { message = ModelState.Values.First().Errors.First().ErrorMessage });
 
                 if (idDevice != waterPlantLog.Plant.Device.Id || idDevice != waterPlantLog.Tank.Device.Id)
-                    throw new Exception("Solo se puede dar de alta monitoreos de riegos que pertenezcan al dispositivo que se esta usando");
+                    return StatusCode(403, new { message = "No tiene acceso al dispositivo de riego donde desea agregar el registro de riego" });
 
                 int idGenerated = await new LwaterPlantLog().Add(waterPlantLog);
 
@@ -61,7 +61,7 @@ namespace Api.Controllers
                 if (!ModelState.IsValid) return StatusCode(400, new { message = ModelState.Values.First().Errors.First().ErrorMessage });
 
                 if (idDevice != waterPlantLog.Plant.Device.Id || idDevice != waterPlantLog.Tank.Device.Id)
-                    throw new Exception("Solo se puede actualizar monitoreos de riegos que pertenezcan al dispositivo que se esta usando");
+                    return StatusCode(403, new { message = "No tiene acceso al dispositivo de riego donde desea actualizar el registro de riego" });
 
                 await new LwaterPlantLog().UpdateWaterPlantLogFinished(waterPlantLog);
 
@@ -89,7 +89,7 @@ namespace Api.Controllers
                 WaterPlantLog waterPlantLog = await new LwaterPlantLog().GetLastWaterPlantLog(idPlant, idTank, idDevice);
 
                 if (waterPlantLog is null)
-                    throw new Exception("No hay registro de un ultimo riego aun en este dispositivo");
+                    throw new Exception("No hay registro de un ultimo riego aun");
 
                 return Ok(waterPlantLog);
 

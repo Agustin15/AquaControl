@@ -32,22 +32,13 @@ namespace Logic
 
         public async Task<UserDeviceToken> GetUserDeviceTokenById(string idUserDevice)
         {
-            UserDeviceToken userDeviceToken = null;
-
-            userDeviceToken = await new PuserDeviceToken().GetUserDeviceTokenById(idUserDevice);
-
-            return userDeviceToken;
+            return await new PuserDeviceToken().GetUserDeviceTokenById(idUserDevice);
 
         }
 
         public async Task<List<UserDeviceToken>> GetUserDevicesTokensByIdUser(int idUser)
         {
-
-            List<UserDeviceToken> tokens = new List<UserDeviceToken>();
-
-            tokens = await new PuserDeviceToken().GetUserDevicesTokensByIdUser(idUser);
-
-            return tokens;
+            return await new PuserDeviceToken().GetUserDevicesTokensByIdUser(idUser);
 
         }
     }

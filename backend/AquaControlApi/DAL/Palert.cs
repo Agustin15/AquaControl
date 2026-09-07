@@ -16,6 +16,7 @@ namespace DAL
         public async Task<int> Add(Alert alert)
         {
 
+            SqlTransaction transaction = null;
             SqlConnection connection = new SqlConnection(DBConnection.Cnn);
             try
             {
@@ -32,12 +33,30 @@ namespace DAL
 
                 await connection.OpenAsync();
 
+                transaction = (SqlTransaction)await connection.BeginTransactionAsync();
+
+                command.Transaction = transaction;
+
                 await command.ExecuteNonQueryAsync();
 
-                return (int)parameterIdGenerated.Value;
+                int idGenerated = (int)parameterIdGenerated.Value;
+                alert.Id = idGenerated;
+
+                foreach (UserOfAlert userOfAlert in alert.UsersOfAlert)
+                {
+                    await new PuserOfAlert().Add(alert, userOfAlert, transaction);
+                }
+
+                await transaction.CommitAsync();
+
+                return idGenerated;
+
             }
             catch (Exception ex)
             {
+                if (transaction != null)
+                    await transaction.RollbackAsync();
+
                 throw new Exception(ex.Message);
 
             }
@@ -46,33 +65,7 @@ namespace DAL
                 await connection.CloseAsync();
             }
         }
-        public async Task UpdateAlertState(Alert alert)
-        {
 
-            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
-            try
-            {
-                SqlCommand command = new SqlCommand("UpdateAlertState", connection);
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@id", alert.Id);
-                command.Parameters.AddWithValue("@state", alert.Seen);
-
-                await connection.OpenAsync();
-
-                await command.ExecuteNonQueryAsync();
-
-
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-
-            }
-            finally
-            {
-                await connection.CloseAsync();
-            }
-        }
 
         public async Task Delete(Alert alert)
         {
@@ -80,9 +73,9 @@ namespace DAL
             SqlConnection connection = new SqlConnection(DBConnection.Cnn);
             try
             {
-                SqlCommand command = new SqlCommand("DeleteAlertById", connection);
+                SqlCommand command = new SqlCommand("DeleteAlert", connection);
                 command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@id", alert.Id);
+                command.Parameters.AddWithValue("@idAlert", alert.Id);
 
                 await connection.OpenAsync();
 
@@ -100,17 +93,17 @@ namespace DAL
             }
         }
 
-        public async Task<int> GetAmountAlertsByDevice(int idDevice)
+        public async Task<Alert> GetAlertById(int idAlert)
         {
 
-            int amount = 0;
+            Alert alertFound = null;
             SqlConnection connection = new SqlConnection(DBConnection.Cnn);
             try
             {
 
-                SqlCommand command = new SqlCommand("AmountAlerts", connection);
+                SqlCommand command = new SqlCommand("AlertById", connection);
                 command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@codePlaque", idDevice);
+                command.Parameters.AddWithValue("@code", idAlert);
 
 
                 await connection.OpenAsync();
@@ -120,7 +113,52 @@ namespace DAL
                 if (reader.HasRows)
                 {
                     await reader.ReadAsync();
-                    amount = Convert.ToInt16(reader["amount"]);
+
+                    Device deviceFound = await new Pdevice().GetDeviceById(Convert.ToInt32(reader["idPlaque"]));
+
+                    List<UserOfAlert> usersOfAlert = await new PuserOfAlert().GetUsersOfAlert(idAlert);
+
+                    alertFound = new Alert(Convert.ToInt32(reader["code"]), Convert.ToString(reader["heading"]),
+                           Convert.ToString(reader["text"]), Convert.ToString(reader["category"]), usersOfAlert, deviceFound, Convert.ToDateTime(reader["momentAlert"]));
+
+                }
+
+                await reader.CloseAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+
+            }
+            finally
+            {
+                await connection.CloseAsync();
+            }
+
+            return alertFound;
+        }
+        public async Task<int> GetAmountAlertsByDeviceAndUser(int idDevice, int idUser)
+        {
+
+            int amount = 0;
+            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
+            try
+            {
+
+                SqlCommand command = new SqlCommand("AmountAlertsByUserAndDevice", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@codePlaque", idDevice);
+                command.Parameters.AddWithValue("@codeEntity", idUser);
+
+
+                await connection.OpenAsync();
+
+                SqlDataReader reader = await command.ExecuteReaderAsync();
+
+                if (reader.HasRows)
+                {
+                    await reader.ReadAsync();
+                    amount = Convert.ToInt32(reader["amount"]);
 
                 }
 
@@ -138,7 +176,7 @@ namespace DAL
 
             return amount;
         }
-        public async Task<List<Alert>> GetAlertsByDeviceOffset(int offset, int idDevice)
+        public async Task<List<Alert>> GetAlertsByDeviceAndUserOffset(int offset, int idDevice, int idUser)
         {
 
             List<Alert> alertsOffset = new List<Alert>();
@@ -147,10 +185,11 @@ namespace DAL
             try
             {
 
-                SqlCommand command = new SqlCommand("AlertsOffset", connection);
+                SqlCommand command = new SqlCommand("AlertsByUserAndDeviceOffset", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@offset", offset);
                 command.Parameters.AddWithValue("@codePlaque", idDevice);
+                command.Parameters.AddWithValue("@codeEntity", idUser);
 
                 await connection.OpenAsync();
 
@@ -164,9 +203,10 @@ namespace DAL
                     while (await reader.ReadAsync())
                     {
 
+                        List<UserOfAlert> usersOfAlert = await new PuserOfAlert().GetUsersOfAlert(Convert.ToInt32(reader["code"]));
 
-                        alertsOffset.Add(new Alert(Convert.ToInt16(reader["code"]), Convert.ToString(reader["heading"]),
-                            Convert.ToString(reader["text"]), Convert.ToString(reader["category"]), Convert.ToBoolean(reader["observed"]), deviceFound)
+                        alertsOffset.Add(new Alert(Convert.ToInt32(reader["code"]), Convert.ToString(reader["heading"]),
+                            Convert.ToString(reader["text"]), Convert.ToString(reader["category"]), usersOfAlert, deviceFound, Convert.ToDateTime(reader["momentAlert"]))
                           );
 
                     }

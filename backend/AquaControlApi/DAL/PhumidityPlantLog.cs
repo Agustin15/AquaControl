@@ -42,7 +42,7 @@ namespace DAL
             }
         }
 
-        public async Task<List<HumidityPlantLog>> GetHumidityPlantLogLastWeek(int idPlant, int idDevice)
+        public async Task<List<HumidityPlantLog>> GetHumidityPlantLogsLastWeek(int idPlant, int idDevice)
         {
 
             WeatherData weatherData = null;
@@ -71,8 +71,8 @@ namespace DAL
                     {
                         weatherData = JsonSerializer.Deserialize<WeatherData>((string)reader["ambientData"]);
 
-                        HumidityPlantLog humidityPlantLog = new HumidityPlantLog(Convert.ToInt16(reader["codeHumidityLand"]), plantFound,
-                        Convert.ToInt16(reader["measure"]), weatherData, Convert.ToDateTime(reader["moment"]));
+                        HumidityPlantLog humidityPlantLog = new HumidityPlantLog(Convert.ToInt32(reader["codeHumidityLand"]), plantFound,
+                        Convert.ToInt32(reader["measure"]), weatherData, Convert.ToDateTime(reader["moment"]));
 
                         humidityPlantLogs.Add(humidityPlantLog);
                     }

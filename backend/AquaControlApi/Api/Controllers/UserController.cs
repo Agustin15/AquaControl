@@ -29,7 +29,6 @@ namespace Api.Controllers
 
             try
             {
-
                 if (!ModelState.IsValid) return StatusCode(400, new { message = ModelState.Values.First().Errors.First().ErrorMessage });
 
                 user.ValidationPassword();

@@ -31,7 +31,7 @@ namespace Api.Controllers
                 if (!ModelState.IsValid) return StatusCode(400, new { message = ModelState.Values.First().Errors.First().ErrorMessage });
 
                 if (idDevice != tank.Device.Id)
-                    throw new Exception("El tanque que quiere agregar no pertence al dispositivo que esta usando");
+                    return StatusCode(403, new { message = "No tiene acceso al dispositivo de riego donde desea agregar un nuevo registro de este tanque" });
 
                 List<Tank> tanksOfDevice = await new Ltank().GetAllTanksByDevice(idDevice);
 
@@ -64,7 +64,7 @@ namespace Api.Controllers
                 if (!ModelState.IsValid) return StatusCode(400, new { message = ModelState.Values.First().Errors.First().ErrorMessage });
 
                 if (idDevice != tank.Device.Id)
-                    throw new Exception("El tanque que quiere actualizar no pertence al dispositivo que esta usando");
+                    return StatusCode(403, new { message = "No tiene acceso al dispositivo de riego donde desea actualizar el registro de este tanque" });
 
                 await new Ltank().Update(tank);
 
@@ -89,7 +89,7 @@ namespace Api.Controllers
                 int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
 
                 if (idDevice != tank.Device.Id)
-                    throw new Exception("El tanque que quiere eliminar no pertence al dispositivo que esta usando en este momento");
+                    return StatusCode(403, new { message = "No tiene acceso al dispositivo de riego donde desea eliminar el registro de este tanque" });
 
                 await new Ltank().Delete(tank);
 
@@ -115,7 +115,7 @@ namespace Api.Controllers
 
                 List<Tank> tanks = await new Ltank().GetAllTanksByDevice(idDevice);
 
-                if (tanks == null || tanks.Count == 0) throw new Exception("No hay registros de tanques en el dispositivo");
+                if (tanks == null || tanks.Count == 0) throw new Exception("No hay registros de tanques en el dispositivo de riego");
 
                 return Ok(tanks);
             }

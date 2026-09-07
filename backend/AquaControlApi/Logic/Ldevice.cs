@@ -16,11 +16,11 @@ namespace Logic
             await new Pdevice().Add(device);
 
         }
-        public async Task UpdateDevice(Device device)
+        public async Task Update(Device device)
         {
             if (device is null) throw new Exception("Debe indicar una dispositivo a actualizar");
 
-            await new Pdevice().UpdateDevice(device);
+            await new Pdevice().Update(device);
 
         }
         public async Task Delete(Device device)
@@ -31,14 +31,25 @@ namespace Logic
 
         }
 
-        public async Task<List<Device>> GetAllDevicesByUser(int idUser)
+        public async Task DeleteUserOfDevice(Device device, User user)
+        {
+            await new Pdevice().DeleteUserDevice(device, user);
+
+        }
+
+        public async Task<List<Device>> GetDevicesByIdUser(int idUser)
         {
             List<Device> devices = new List<Device>();
 
-            devices = await new Pdevice().GetAllDevicesByUser(idUser);
+            devices = await new Pdevice().GetDevicesByIdUser(idUser);
 
             return devices;
 
+        }
+
+        public async Task<Device> GetDeviceById(int idDevice)
+        {
+            return await new Pdevice().GetDeviceById(idDevice);
         }
 
     }

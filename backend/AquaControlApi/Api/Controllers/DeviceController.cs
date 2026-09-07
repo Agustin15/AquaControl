@@ -15,7 +15,7 @@ namespace Api.Controllers
 
     public class DeviceController : ControllerBase
     {
-
+        [Authorize(Roles = "Administrador")]
         [Authorize(AuthenticationSchemes = "Bearer")]
         [Route("api/device")]
         [HttpPost]
@@ -30,10 +30,8 @@ namespace Api.Controllers
 
                 if (!ModelState.IsValid) return StatusCode(400, new { message = ModelState.Values.First().Errors.First().ErrorMessage });
 
-                if (device.User.Id != idUser) return StatusCode(400,
-                    new { message = "El usuario que se indico en el dispositivo a agregar, debe ser el mismo que el que esta autenticado" });
-
-                device.Created = DateTime.Now;
+                if (device.Users.Count == 0 || device.Users.First().Id != idUser)
+                    return StatusCode(400, new { message = "El usuario asociado al dispositivo de riego es distinto al usuario logueado" });
 
                 await new Ldevice().Add(device);
 
@@ -46,6 +44,7 @@ namespace Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Administrador")]
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPut]
         [Route("api/device")]
@@ -61,10 +60,12 @@ namespace Api.Controllers
 
                 if (!ModelState.IsValid) return StatusCode(400, new { message = ModelState.Values.First().Errors.First().ErrorMessage });
 
-                if (device.User.Id != idUser) return StatusCode(400,
-                   new { message = "El usuario que se indico en el dispositivo a agregar, debe ser el mismo que el que esta autenticado" });
+                List<Device> devicesUser = await new Ldevice().GetDevicesByIdUser(idUser);
 
-                await new Ldevice().UpdateDevice(device);
+                if (devicesUser.Count == 0 || !devicesUser.Exists(d => d.Id == device.Id))
+                    return StatusCode(403, new { message = "No tiene accesso a este dipositivo de riego" });
+
+                await new Ldevice().Update(device);
 
                 return Ok(device);
             }
@@ -75,9 +76,10 @@ namespace Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Administrador")]
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpDelete]
-        [Route("api/device/")]
+        [Route("api/device")]
         public async Task<IActionResult> DeleteDevice(Device device)
         {
             try
@@ -88,10 +90,42 @@ namespace Api.Controllers
 
                 int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
-                if (device.User.Id != idUser) return StatusCode(400,
-                    new { message = "El usuario que se indico en el dispositivo a agregar, debe ser el mismo que el que esta autenticado" });
+                List<Device> devicesUser = await new Ldevice().GetDevicesByIdUser(idUser);
+
+                if (devicesUser.Count == 0 || !devicesUser.Exists(d => d.Id == device.Id))
+                    return StatusCode(403, new { message = "No tiene accesso a este dipositivo de riego" });
 
                 await new Ldevice().Delete(device);
+
+                return Ok(device);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+
+            }
+        }
+
+        [Authorize(Roles = "Administrador")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpDelete]
+        [Route("api/device/userDevice")]
+        public async Task<IActionResult> DeleteUserOfDevice([FromBody] User user)
+        {
+            try
+            {
+
+                if (!User.Identity.IsAuthenticated || User.FindFirst(ClaimTypes.NameIdentifier) is null || User.FindFirst("IdDevice") is null)
+                    return Unauthorized();
+
+                int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+                int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
+
+                Device device = await new Ldevice().GetDeviceById(idDevice);
+
+                if (device is null) throw new Exception("Dispositivo no encontrado");
+
+                await new Ldevice().DeleteUserOfDevice(device, user);
 
                 return Ok(device);
             }
@@ -105,7 +139,7 @@ namespace Api.Controllers
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet]
         [Route("api/device/allUserDevices")]
-        public async Task<ActionResult> GetAllDevicesByUser()
+        public async Task<ActionResult> GetDevicesByIdUser()
         {
             try
             {
@@ -115,7 +149,7 @@ namespace Api.Controllers
 
                 int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
-                List<Device> devices = await new Ldevice().GetAllDevicesByUser(idUser);
+                List<Device> devices = await new Ldevice().GetDevicesByIdUser(idUser);
 
                 if (devices.Count == 0) throw new Exception("No tiene dispositivos de riegos vinculados aun");
 
@@ -142,17 +176,19 @@ namespace Api.Controllers
 
                 int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
-                if (device.User.Id != idUser) return StatusCode(400,
-                    new { message = "El usuario que se indico en el dispositivo a agregar, debe ser el mismo que el que esta autenticado" });
+                List<Device> devicesUser = await new Ldevice().GetDevicesByIdUser(idUser);
 
-                List<Device> devices = await new Ldevice().GetAllDevicesByUser(idUser);
+                if (devicesUser.Count == 0 || !devicesUser.Exists(d => d.Id == device.Id))
+                    return StatusCode(403, new { message = "No tiene accesso a este dipositivo de riego" });
 
-                if (devices.Find(d => d.Id == device.Id) is null) return StatusCode(404, new { message = "Dispositivo no encontrado" });
+
+                Device deviceFound = devicesUser.Find(d => d.Id == device.Id);
+                User userFound = deviceFound.Users.Find(u => u.Id == idUser);
 
                 Authentication authentication = new Authentication();
 
-                string jwtAccessTokenSerialized = authentication.GenerateAccessJWTtoken(idUser, device.Id);
-                string jwtRefreshTokenSerialized = authentication.GenerateRefreshJWTtoken(idUser, device.Id);
+                string jwtAccessTokenSerialized = authentication.GenerateAccessJWTtoken(userFound, device.Id);
+                string jwtRefreshTokenSerialized = authentication.GenerateRefreshJWTtoken(userFound, device.Id);
 
                 return Ok(new
                 {

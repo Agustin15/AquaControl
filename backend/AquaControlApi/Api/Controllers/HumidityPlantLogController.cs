@@ -15,7 +15,7 @@ namespace Api.Controllers
     {
         [Authorize(AuthenticationSchemes = "Esp32Bearer")]
         [HttpPost]
-        [Route("api/humidityPlantLog/")]
+        [Route("api/humidityPlantLog")]
         public async Task<ActionResult> Add([FromBody] HumidityPlantLog humidityPlantLog)
         {
             try
@@ -28,7 +28,7 @@ namespace Api.Controllers
                 if (!ModelState.IsValid) return StatusCode(400, new { message = ModelState.Values.First().Errors.First().ErrorMessage });
 
                 if (idDevice != humidityPlantLog.Plant.Device.Id)
-                    throw new Exception("Solo se puede dar de alta monitoreos de humedad de planta que pertenezcan a este dispositivo");
+                    return StatusCode(403, new { message = "No tiene acceso al dispositivo de riego donde desea agregar el monitoreo de humedad" });
 
                 await new LhumidityPlantLog().Add(humidityPlantLog);
                 return StatusCode(201, true);
@@ -43,7 +43,7 @@ namespace Api.Controllers
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet]
         [Route("api/humidityPlantLog/plant/{idPlant}/lastWeek")]
-        public async Task<ActionResult> GetHumidityPlantLogsOffset(int idPlant)
+        public async Task<ActionResult> GetHumidityPlantLogsLastWeek(int idPlant)
         {
             try
             {
@@ -52,7 +52,7 @@ namespace Api.Controllers
 
                 int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
 
-                List<HumidityPlantLog> humidityPlantLogs = await new LhumidityPlantLog().GetHumidityPlantLogLastWeek(idPlant, idDevice);
+                List<HumidityPlantLog> humidityPlantLogs = await new LhumidityPlantLog().GetHumidityPlantLogsLastWeek(idPlant, idDevice);
 
                 if (humidityPlantLogs.Count == 0)
                     throw new Exception("No se encontraron registros sobre monitoreos de humedad en este dia");

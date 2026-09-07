@@ -162,7 +162,7 @@ namespace DAL
                     while (await reader.ReadAsync())
                     {
 
-                        Tank tank = new Tank(Convert.ToInt16(reader["codeBowl"]),
+                        Tank tank = new Tank(Convert.ToInt32(reader["codeBowl"]),
                            Convert.ToDouble(reader["limit"]), deviceFound);
 
                         tanks.Add(tank);

@@ -40,17 +40,19 @@ namespace Logic
                 if (!(emailAlreadyUsed is null)) throw new Exception("Correo electronico ya en uso");
 
                 string salt = BCrypt.Net.BCrypt.GenerateSalt(10);
+
                 user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password, salt);
 
                 await connection.OpenAsync();
 
                 transaction = connection.BeginTransaction();
 
-                int idGenerated = await new Puser().AddWithTransaction(user, connection, transaction);
+                int idGenerated = await new Puser().AddWithTransaction(user, transaction);
+                user.Id= idGenerated;
 
                 //creacion del token de acceso y de actualizacion
-                var jwtAccessTokenSerialized = authentication.GenerateAccessJWTtoken(idGenerated, 0);
-                var jwtRefreshTokenSerialized = authentication.GenerateRefreshJWTtoken(idGenerated, 0);
+                var jwtAccessTokenSerialized = authentication.GenerateAccessJWTtoken(user, 0);
+                var jwtRefreshTokenSerialized = authentication.GenerateRefreshJWTtoken(user, 0);
 
                 await transaction.CommitAsync();
 
@@ -61,6 +63,7 @@ namespace Logic
                         id = idGenerated,
                         username = user.Username,
                         email = user.Email,
+                        role = user.Role,
                         password = "",
                         joined = user.Joined,
                     },
@@ -98,8 +101,8 @@ namespace Logic
 
             //creacion del token de acceso y de actualizacion
 
-            string jwtAccessTokenSerialized = authentication.GenerateAccessJWTtoken(userFound.Id, 0);
-            string jwtRefreshTokenSerialized = authentication.GenerateRefreshJWTtoken(userFound.Id, 0);
+            string jwtAccessTokenSerialized = authentication.GenerateAccessJWTtoken(userFound, 0);
+            string jwtRefreshTokenSerialized = authentication.GenerateRefreshJWTtoken(userFound, 0);
 
             return new
             {
@@ -108,6 +111,7 @@ namespace Logic
                     id = userFound.Id,
                     username = userFound.Username,
                     email = userFound.Email,
+                    role = userFound.Role,
                     password = "",
                     joined = userFound.Joined,
                 },
@@ -149,5 +153,6 @@ namespace Logic
             return user;
 
         }
+
     }
 }

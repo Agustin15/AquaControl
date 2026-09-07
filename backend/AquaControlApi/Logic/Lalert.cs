@@ -17,12 +17,6 @@ namespace Logic
 
             return idGenerated;
         }
-        public async Task UpdateAlertState(Alert alert)
-        {
-            if (alert is null) throw new Exception("Debe indicar una alerta a actualizar");
-            await new Palert().UpdateAlertState(alert);
-
-        }
 
         public async Task Delete(Alert alert)
         {
@@ -31,20 +25,26 @@ namespace Logic
 
         }
 
-        public async Task<int> GetAmountAlerts(int idDevice)
+        public async Task<Alert> GetAlertById(int idAlert)
+        {
+            return await new Palert().GetAlertById(idAlert);
+
+        }
+
+
+        public async Task<int> GetAmountAlertsByDeviceAndUser(int idDevice, int idUser)
         {
 
-            int amount = await new Palert().GetAmountAlertsByDevice(idDevice);
+            int amount = await new Palert().GetAmountAlertsByDeviceAndUser(idDevice, idUser);
 
             return amount;
         }
-        public async Task<List<Alert>> GetAlertsOffsetByDevice(int offset, int idDevice)
+        public async Task<List<Alert>> GetAlertsOffsetByDevice(int offset, int idDevice, int idUser)
         {
 
             List<Alert> alertsOffset = new List<Alert>();
 
-            alertsOffset = await new Palert().GetAlertsByDeviceOffset(offset, idDevice);
-            alertsOffset = await new Palert().GetAlertsByDeviceOffset(offset, idDevice);
+            alertsOffset = await new Palert().GetAlertsByDeviceAndUserOffset(offset, idDevice, idUser);
 
             return alertsOffset;
         }

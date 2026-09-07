@@ -9,26 +9,21 @@ namespace Entities
 {
     public class UserDeviceToken
     {
-        string idUserDevice;
-        User user;
+        string id;
         string token;
+        User user;
         DateTime? created;
         DateTime? lastModified;
 
-
-        [Required(ErrorMessage = "Identificador del dispositivo movil es requerido")]
-        public string IdUserDevice
+        [Required(ErrorMessage = "Debe indicar ID del dispositivo movil")]
+        [MaxLength(16, ErrorMessage = "El Id de dispositivo movil no puede tener mas de 16 caracteres")]
+        public string Id
         {
-            set { idUserDevice = value; }
-            get { return idUserDevice; }
+            set { id = value; }
+            get { return id; }
         }
 
-        [Required(ErrorMessage = "Debe indicar un un usuario")]
-        public User User
-        {
-            set { user = value; }
-            get { return user; }
-        }
+
 
         [Required(ErrorMessage = "Debe indicar token")]
         [MaxLength(300, ErrorMessage = "El token no puede exceder los 300 caracteres")]
@@ -36,6 +31,13 @@ namespace Entities
         {
             set { token = value; }
             get { return token; }
+        }
+
+        [Required(ErrorMessage = "Debe indicar un un usuario")]
+        public User User
+        {
+            set { user = value; }
+            get { return user; }
         }
 
         public DateTime? Created
@@ -52,9 +54,9 @@ namespace Entities
 
         public UserDeviceToken() { }
 
-        public UserDeviceToken(string idUserDevice, User user, string token, DateTime created, DateTime lastModified)
+        public UserDeviceToken(string id, User user, string token, DateTime created, DateTime lastModified)
         {
-            IdUserDevice = idUserDevice?.Trim();
+            Id = id;
             User = user;
             Token = token;
             Created = created;

@@ -21,7 +21,7 @@ namespace DAL
             {
                 SqlCommand command = new SqlCommand("AddUserDeviceToken", connection);
                 command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@idUserDevice", userDeviceToken.IdUserDevice);
+                command.Parameters.AddWithValue("@idUserDevice", userDeviceToken.Id);
                 command.Parameters.AddWithValue("@token", userDeviceToken.Token);
                 command.Parameters.AddWithValue("@idUser", userDeviceToken.User.Id);
 
@@ -52,7 +52,7 @@ namespace DAL
             {
                 SqlCommand command = new SqlCommand("UpdateUserDeviceToken", connection);
                 command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@idUserDevice", userDeviceToken.IdUserDevice);
+                command.Parameters.AddWithValue("@idUserDevice", userDeviceToken.Id);
                 command.Parameters.AddWithValue("@token", userDeviceToken.Token);
 
                 await connection.OpenAsync();
@@ -73,11 +73,59 @@ namespace DAL
         }
 
 
+        public async Task<List<UserDeviceToken>> GetUserDevicesTokensByIdUser(int idUser)
+        {
+
+            UserDeviceToken userDeviceToken = null;
+            List<UserDeviceToken> userDevicesTokens = new List<UserDeviceToken>();
+
+            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
+
+            try
+            {
+                SqlCommand command = new SqlCommand("UserDevicesTokensByUser", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@codeEntity", idUser);
+
+                await connection.OpenAsync();
+
+                SqlDataReader reader = await command.ExecuteReaderAsync();
+
+                if (reader.HasRows)
+                {
+                    User userFound = await new Puser().GetUserById(idUser);
+
+                    while (await reader.ReadAsync())
+                    {
+                        DateTime lastUpdated = reader["lastUpdated"] is DBNull ? new DateTime(1970, 1, 1) : Convert.ToDateTime(reader["lastUpdated"]);
+
+                        userDeviceToken = new UserDeviceToken(Convert.ToString(reader["code"]), userFound, Convert.ToString(reader["mark"]),
+                               Convert.ToDateTime(reader["datetimeLog"]), lastUpdated);
+
+                        userDevicesTokens.Add(userDeviceToken);
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                await connection.CloseAsync();
+
+            }
+            return userDevicesTokens;
+
+        }
+
         public async Task<UserDeviceToken> GetUserDeviceTokenById(string idUserDevice)
         {
 
-            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
             UserDeviceToken userDeviceToken = null;
+
+            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
 
             try
             {
@@ -91,6 +139,7 @@ namespace DAL
 
                 if (reader.HasRows)
                 {
+
                     await reader.ReadAsync();
 
                     User userFound = await new Puser().GetUserById(Convert.ToInt32(reader["codeEntity"]));
@@ -113,56 +162,6 @@ namespace DAL
 
             }
             return userDeviceToken;
-
-        }
-
-
-        public async Task<List<UserDeviceToken>> GetUserDevicesTokensByIdUser(int idUser)
-        {
-
-            List<UserDeviceToken> tokens = new List<UserDeviceToken>();
-            UserDeviceToken userDeviceToken = null;
-
-            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
-
-            try
-            {
-                SqlCommand command = new SqlCommand("UserDevicesTokensByUser", connection);
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@codeEntity", idUser);
-
-                await connection.OpenAsync();
-
-                SqlDataReader reader = await command.ExecuteReaderAsync();
-
-                if (reader.HasRows)
-                {
-                    User userFound = await new Puser().GetUserById(idUser);
-
-                    while (await reader.ReadAsync())
-                    {
-
-                        DateTime lastUpdated = reader["lastUpdated"] is DBNull ? new DateTime(1970, 1, 1) : Convert.ToDateTime(reader["lastUpdated"]);
-
-                        userDeviceToken = new UserDeviceToken(Convert.ToString(reader["code"]), userFound, Convert.ToString(reader["mark"]),
-                            Convert.ToDateTime(reader["datetimeLog"]), lastUpdated);
-
-                        tokens.Add(userDeviceToken);
-                    }
-
-                }
-
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-            finally
-            {
-                await connection.CloseAsync();
-
-            }
-            return tokens;
 
         }
     }

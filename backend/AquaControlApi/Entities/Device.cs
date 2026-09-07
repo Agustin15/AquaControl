@@ -14,7 +14,7 @@ namespace Entities
         int id;
         string placeName;
         string location;
-        User user;
+        List<User>? users;
         DateTime? created;
 
         public int Id
@@ -40,11 +40,11 @@ namespace Entities
             get { return location; }
         }
 
-        [Required(ErrorMessage = "Debe indicar un usuario")]
-        public User User
+        [MinLength(1, ErrorMessage = "Debe asociar al menos un usuario al dispositivo")]
+        public List<User>? Users
         {
-            set { user = value; }
-            get { return user; }
+            set { users = value; }
+            get { return users; }
         }
 
         public DateTime? Created
@@ -55,13 +55,13 @@ namespace Entities
 
         public Device() { }
 
-        public Device(int id, string placeName, string location, User user, DateTime created)
+        public Device(int id, string placeName, string location, List<User> users, DateTime created)
         {
 
             Id = id;
             PlaceName = placeName?.Trim();
             Location = location?.Trim();
-            User = user;
+            Users = users;
             Created = created;
 
         }

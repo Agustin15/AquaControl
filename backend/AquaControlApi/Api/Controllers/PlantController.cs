@@ -28,7 +28,7 @@ namespace Api.Controllers
                 if (!ModelState.IsValid) return StatusCode(400, new { message = ModelState.Values.First().Errors.First().ErrorMessage });
 
                 if (idDevice != plant.Device.Id)
-                    throw new Exception("La planta que quiere agregar no pertence al dispositivo que esta usando");
+                    return StatusCode(403, new { message = "No tiene acceso al dispositivo de riego donde desea agregar registro de esta planta" });
 
                 List<Plant> plantsOfDevice = await new Lplant().GetAllPlantsByDevice(plant.Device.Id);
 
@@ -60,7 +60,7 @@ namespace Api.Controllers
                 if (!ModelState.IsValid) return StatusCode(400, new { message = ModelState.Values.First().Errors.First().ErrorMessage });
 
                 if (idDevice != plant.Device.Id)
-                    throw new Exception("La planta que quiere actualizar sus datos no pertence al dispositivo que esta usando");
+                    return StatusCode(403, new { message = "No tiene acceso al dispositivo de riego donde desea actualizar el registro de esta planta" });
 
 
                 await new Lplant().Update(plant);
@@ -86,7 +86,7 @@ namespace Api.Controllers
                 int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
 
                 if (idDevice != plant.Device.Id)
-                    throw new Exception("La planta que quiere eliminar no pertence al dispositivo que esta usando");
+                    return StatusCode(403, new { message = "No tiene acceso al dispositivo de riego donde desea eliminar el registro de esta planta" });
 
                 await new Lplant().Delete(plant);
 
@@ -112,7 +112,7 @@ namespace Api.Controllers
 
                 List<Plant> plants = await new Lplant().GetAllPlantsByDevice(idDevice);
 
-                if (plants.Count == 0) throw new Exception("No hay registros de plantas en este dispositivo");
+                if (plants.Count == 0) throw new Exception("No hay registros de plantas en este dispositivo de riego");
 
                 return Ok(plants);
             }

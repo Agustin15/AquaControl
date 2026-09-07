@@ -24,7 +24,9 @@ namespace DAL
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@username", user.Username);
                 command.Parameters.AddWithValue("@email", user.Email);
+                command.Parameters.AddWithValue("@role", user.Role);
                 command.Parameters.AddWithValue("@password", user.Password);
+
                 SqlParameter returnValue = new SqlParameter();
                 returnValue.Direction = ParameterDirection.ReturnValue;
                 command.Parameters.Add(returnValue);
@@ -50,18 +52,19 @@ namespace DAL
             }
         }
 
-        public async Task<int> AddWithTransaction(User user, SqlConnection connectionTrn, SqlTransaction transaction)
+        public async Task<int> AddWithTransaction(User user, SqlTransaction transaction)
         {
 
             try
             {
 
-                SqlCommand command = new SqlCommand("AddUser", connectionTrn);
-                command.Transaction = transaction;
+                SqlCommand command = new SqlCommand("AddUser", transaction.Connection, transaction);
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@username", user.Username);
                 command.Parameters.AddWithValue("@email", user.Email);
+                command.Parameters.AddWithValue("@role", user.Role);
                 command.Parameters.AddWithValue("@password", user.Password);
+
                 SqlParameter idGenerated = new SqlParameter();
                 idGenerated.Direction = ParameterDirection.ReturnValue;
                 command.Parameters.Add(idGenerated);
@@ -89,6 +92,7 @@ namespace DAL
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@username", user.Username);
                 command.Parameters.AddWithValue("@email", user.Email);
+                command.Parameters.AddWithValue("@role", user.Role);
                 command.Parameters.AddWithValue("@password", user.Password);
 
                 await connection.OpenAsync();
@@ -105,7 +109,7 @@ namespace DAL
                 await connection.CloseAsync();
             }
         }
-      
+
         public async Task<List<User>> GetAllUsers()
         {
 
@@ -127,8 +131,8 @@ namespace DAL
                 {
                     while (await reader.ReadAsync())
                     {
-                        User user = new User(Convert.ToInt16(reader["code"]), Convert.ToString(reader["entity"]),
-                         Convert.ToString(reader["correspondence"]), "", Convert.ToDateTime(reader["created"]));
+                        User user = new User(Convert.ToInt32(reader["code"]), Convert.ToString(reader["entity"]),
+                         Convert.ToString(reader["correspondence"]), Convert.ToString(reader["responsability"]), "", Convert.ToDateTime(reader["created"]));
 
                         users.Add(user);
                     }
@@ -172,8 +176,8 @@ namespace DAL
                 {
                     await reader.ReadAsync();
 
-                    user = new User(Convert.ToInt16(reader["code"]), Convert.ToString(reader["entity"]),
-                         Convert.ToString(reader["correspondence"]), Convert.ToString(reader["entityKey"]), 
+                    user = new User(Convert.ToInt32(reader["code"]), Convert.ToString(reader["entity"]),
+                         Convert.ToString(reader["correspondence"]), Convert.ToString(reader["responsability"]), Convert.ToString(reader["entityKey"]),
                          Convert.ToDateTime(reader["created"]));
                 }
                 await reader.CloseAsync();
@@ -214,8 +218,8 @@ namespace DAL
                 {
                     await reader.ReadAsync();
 
-                    user = new User(Convert.ToInt16(reader["code"]), Convert.ToString(reader["entity"]),
-                              Convert.ToString(reader["correspondence"]), "", Convert.ToDateTime(reader["created"]));
+                    user = new User(Convert.ToInt32(reader["code"]), Convert.ToString(reader["entity"]),
+                              Convert.ToString(reader["correspondence"]), Convert.ToString(reader["responsability"]), "", Convert.ToDateTime(reader["created"]));
                 }
                 await reader.CloseAsync();
 
@@ -245,7 +249,7 @@ namespace DAL
 
                 SqlCommand command = new SqlCommand("UserById", connection);
                 command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@idUser", idUser);
+                command.Parameters.AddWithValue("@code", idUser);
 
                 await connection.OpenAsync();
 
@@ -255,8 +259,8 @@ namespace DAL
                 {
                     await reader.ReadAsync();
 
-                    user = new User(Convert.ToInt16(reader["code"]), Convert.ToString(reader["entity"]),
-                         Convert.ToString(reader["correspondence"]), "", Convert.ToDateTime(reader["created"]));
+                    user = new User(Convert.ToInt32(reader["code"]), Convert.ToString(reader["entity"]),
+                         Convert.ToString(reader["correspondence"]), Convert.ToString(reader["responsability"]), "", Convert.ToDateTime(reader["created"]));
                 }
                 await reader.CloseAsync();
 
@@ -273,7 +277,6 @@ namespace DAL
 
             return user;
         }
-
 
     }
 
