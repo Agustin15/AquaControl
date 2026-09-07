@@ -6,6 +6,7 @@ CREATE TABLE Users(
 idUser INT IDENTITY(1,1) PRIMARY KEY,
 username VARCHAR(15) NOT NULL UNIQUE,
 email VARCHAR(30) NOT NULL UNIQUE CHECK(email LIKE '%@%.%'), 
+role VARCHAR(13) DEFAULT 'Usuario' CHECK(role IN ('Administrador','Usuario')),
 password VARCHAR(60) NOT NULL,
 joined DATETIME NOT NULL DEFAULT GETDATE()
 )
@@ -15,7 +16,12 @@ idDevice INT IDENTITY(1,1) PRIMARY KEY,
 placeName VARCHAR(15) NOT NULL,
 location VARCHAR(25) CHECK(location NOT LIKE '%[^A-Z,]%' and location LIKE '%,%'),
 created DATETIME NOT NULL DEFAULT GETDATE(),
-idUser INT NOT NULL FOREIGN KEY REFERENCES Users(idUser) ON DELETE CASCADE,
+)
+
+CREATE TABLE Users_Devices(
+idDevice INT FOREIGN KEY REFERENCES Devices(idDevice) ON DELETE CASCADE,
+idUser INT FOREIGN KEY REFERENCES Users(idUser) ON DELETE CASCADE,
+PRIMARY KEY(idDevice,idUser)
 )
 
 CREATE TABLE Tanks(
@@ -92,23 +98,30 @@ title VARCHAR(30) NOT NULL,
 message VARCHAR(60) NOT NULL,
 type VARCHAR(11) NOT NULL CHECK(type IN('Advertencia','Exito')),
 datetimeAlert DATETIME NOT NULL DEFAULT GETDATE(),
+idDevice INT NOT NULL FOREIGN KEY (idDevice) REFERENCES Devices(idDevice)
+)
+
+CREATE TABLE Alerts_Users(
+idAlert INT FOREIGN KEY (idAlert) REFERENCES Alerts(id) ON DELETE CASCADE,
+idUser INT FOREIGN KEY (idUser) REFERENCES Users(idUser) ON DELETE CASCADE,
 seen BIT NOT NULL DEFAULT 0,
-idDevice INT NOT NULL FOREIGN KEY (idDevice) REFERENCES Devices(idDevice) ON DELETE CASCADE,
+PRIMARY KEY(idAlert,idUser)
 )
 
 GO
 
-
-GO
-
-
 CREATE OR ALTER  VIEW Entities AS
-select idUser as code,username as entity,email as correspondence,password as entityKey,joined as created from Users;
+select idUser as code,username as entity,email as correspondence,role as responsability,password as entityKey,joined as created from Users;
 
 GO
 
 CREATE OR ALTER  VIEW Plaques AS
-select idDevice as codePlaque, placeName as place,location as geography,created as inserted,idUser as codeEntity from Devices;
+select idDevice as codePlaque, placeName as place,location as geography,created as inserted from Devices;
+
+GO
+
+CREATE OR ALTER VIEW Entities_Plaques AS
+select idUser as codeEntity ,idDevice as codePlaque from Users_Devices
 
 GO
 
@@ -137,29 +150,27 @@ idPlant as idLand,idDevice as idPlaque from WaterPlantLogs;
 GO
 
 CREATE OR ALTER VIEW Notifications AS
-select id as code,title as heading,message as text,type as category,datetimeAlert as momentAlert,seen as observed,idDevice as idPlaque from Alerts;
+select id as code,title as heading,message as text,type as category,datetimeAlert as momentAlert,idDevice as idPlaque from Alerts;
+GO
+
+CREATE OR ALTER VIEW Notifications_Entities AS
+select idAlert as codeNotification, idUser as codeEntity,seen as observed from Alerts_Users;
 GO
 
 CREATE OR ALTER VIEW IdentificationUserDevices AS
 select idUserDevice as code,idUser as codeEntity,token as mark,created as datetimeLog,lastModified as lastUpdated from UserDevicesTokens;
 GO
 
-
------1 Client Error 
------2 Not found Error
------3 Conflict Error 
------4 Server Error 
-
 ------------------------------------------------------------Users--------------------------------------------------------------
 
-CREATE OR ALTER PROCEDURE AddUser @username VARCHAR(15),@email VARCHAR(30),@password VARCHAR(60) AS
+CREATE OR ALTER PROCEDURE AddUser @username VARCHAR(15),@email VARCHAR(30),@role VARCHAR(13)='Usuario',@password VARCHAR(60) AS
 BEGIN
 
 BEGIN TRY
 
-INSERT INTO Users (username,email,password) VALUES(@username,@email,@password)
+INSERT INTO Users (username,email,role,password) VALUES(@username,@email,@role,@password)
 
-RETURN SCOPE_IDENTITY()
+RETURN IDENT_CURRENT('Users')
 
 END TRY 
 BEGIN CATCH
@@ -172,13 +183,12 @@ END
 
 GO
 
-
-CREATE OR ALTER PROCEDURE UpdateUser @idUser INT,@username VARCHAR(15),@email VARCHAR(30),@password VARCHAR(60) AS
+CREATE OR ALTER PROCEDURE UpdateUser @idUser INT,@username VARCHAR(15),@email VARCHAR(30),@role VARCHAR(13)='Usuario',@password VARCHAR(60) AS
 BEGIN
 
 BEGIN TRY
 
-Update Users set username=@username,email=@email,password=@password where idUser=@idUser
+Update Users set username=@username,email=@email,role=@role,password=@password where idUser=@idUser
 
 END TRY
 
@@ -192,7 +202,6 @@ END
 
 GO
 
-
 CREATE OR ALTER PROCEDURE UserByUsername @username VARCHAR(15) AS
 BEGIN
 
@@ -204,15 +213,15 @@ GO
 CREATE OR ALTER PROCEDURE UserByEmail @email VARCHAR(30) AS
 BEGIN
 
-select code,entity,correspondence,created from Entities where correspondence=@email
+select code,entity,correspondence,responsability,created from Entities where correspondence=@email
 END 
 
 GO
 
-CREATE OR ALTER PROCEDURE UserById @idUser INT AS
+CREATE OR ALTER PROCEDURE UserById @code INT AS
 BEGIN
 
-select code,entity,correspondence,created from Entities where code=@idUser
+select code,entity,correspondence,responsability,created from Entities where code=@code	
 END 
 
 GO
@@ -220,7 +229,7 @@ GO
 CREATE OR ALTER PROCEDURE AllUsers @idUser INT AS
 BEGIN
 
-select code,entity,correspondence,created from Entities;
+select code,entity,correspondence,responsability,created from Entities;
 
 END 
 
@@ -228,11 +237,14 @@ END
 GO
 
 ------------------------------------------------------------Devices--------------------------------------------------------------
-CREATE OR ALTER PROCEDURE AddDevice @placeName VARCHAR(15),@location VARCHAR(35),@idUser INT AS
+CREATE OR ALTER PROCEDURE AddDevice @placeName VARCHAR(15),@location VARCHAR(35) AS
 BEGIN
 
 BEGIN TRY 
-INSERT INTO Devices(placeName,location,idUser) Values(@placeName,@location,@idUser)
+INSERT INTO Devices(placeName,location) Values(@placeName,@location)
+
+RETURN IDENT_CURRENT('Devices')
+
 END TRY
 
 BEGIN CATCH
@@ -240,6 +252,27 @@ DECLARE @error NVARCHAR(500)=ERROR_MESSAGE()
 RAISERROR(@error,16,4)
 RETURN
 END CATCH
+
+END 
+
+GO
+
+CREATE OR ALTER PROCEDURE DeleteDevice @idDevice INT AS
+BEGIN
+
+IF NOT EXISTS (select * from Devices where idDevice=@idDevice )
+BEGIN
+RAISERROR('Dispositivo no encontado',16,1)
+RETURN
+END 
+
+DELETE FROM Devices WHERE idDevice=@idDevice 
+
+IF (@@ERROR<>0)
+BEGIN
+RAISERROR('Error inesperado al eliminar dispositivo',16,4)
+RETURN
+END 
 
 END 
 
@@ -262,35 +295,6 @@ END
 
 GO
 
-CREATE OR ALTER PROCEDURE DeleteDevice @idDevice INT AS
-BEGIN
-
-IF NOT EXISTS(select * from Devices where idDevice=@idDevice)
-BEGIN
-RAISERROR('Dispositivo no encontrado',16,2)
-RETURN
-END 
-
-Delete from Devices where idDevice=@idDevice
-
-IF (@@ERROR<>0)
-BEGIN
-RAISERROR('Error inesperado al eliminar dispositivo',16,4)
-RETURN
-END 
-END 
-
-GO
-
-CREATE OR ALTER PROCEDURE AllDevicesByUser @codeEntity INT AS
-BEGIN
-
-select * from Plaques where codeEntity=@codeEntity
-
-END 
-
-GO
-
 
 CREATE OR ALTER PROCEDURE DeviceById @code INT AS
 BEGIN
@@ -300,7 +304,59 @@ select * from Plaques where codePlaque=@code
 END 
 
 GO
+------------------------------------------------------------Users_Devices--------------------------------------------------------------
 
+CREATE OR ALTER PROCEDURE AddUserDevice @idUser INT,@idDevice INT AS
+BEGIN
+
+BEGIN TRY 
+INSERT INTO Users_Devices(idUser,idDevice) Values(@idUser,@idDevice)
+END TRY
+
+BEGIN CATCH
+DECLARE @error NVARCHAR(500)=ERROR_MESSAGE()
+RAISERROR(@error,16,4)
+RETURN
+END CATCH
+
+END 
+
+GO
+
+CREATE OR ALTER PROCEDURE DeleteUserDevice @idUser INT,@idDevice INT AS
+BEGIN
+
+IF NOT EXISTS(select * from Users_Devices where idUser=@idUser and idDevice=@idDevice)
+BEGIN
+RAISERROR('No se encontro el usuario vinculado al dispositivo',16,4)
+RETURN
+END 
+
+DELETE FROM Users_Devices where idUser=@idUser and idDevice=@idDevice
+
+IF (@@ERROR<>0)
+BEGIN
+RAISERROR('Error inesperado al eliminar usuario de dispositivo',16,4)
+RETURN
+END 
+
+
+END 
+
+GO
+
+
+CREATE OR ALTER PROCEDURE DevicesOfUser @codeEntity INT AS
+
+select * from Entities_Plaques where codeEntity=@codeEntity
+
+GO
+
+CREATE OR ALTER PROCEDURE UsersByIdDevice @codePlaque INT AS
+
+select * from Entities_Plaques where codePlaque=@codePlaque
+
+GO
 
 ------------------------------------------------------------Tanks--------------------------------------------------------------
 CREATE OR ALTER PROCEDURE AddTank @id INT,@idDevice INT,@height DECIMAL(4,1) AS
@@ -464,7 +520,7 @@ END
 
 GO
 
-CREATE OR ALTER PROCEDURE WaterTankLogsWithIrrigateCausativeLastWeek @idBowl INT,@codePlaque INT AS
+CREATE OR ALTER PROCEDURE WaterTankLogsLastWeek @idBowl INT,@codePlaque INT AS
 BEGIN
 
 DECLARE @dateStartWeek DATETIME 
@@ -473,11 +529,8 @@ DECLARE @dateEndWeek DATETIME
 select @dateStartWeek= DATEADD (weekday,-(DATEPART(WEEKDAY,GETDATE())-1), GETDATE())
 select @dateEndWeek= DATEADD (weekday,7-DATEPART(WEEKDAY,GETDATE()), GETDATE())
 
-select * from LiquidBowlRecords L 
-OUTER APPLY (select TOP 1 * from PlantWateringRecords P where P.idBowl=L.idBowl and P.idPlaque=L.idPlaque and 
-P.momentStart<L.moment and P.postMeasureBowl=L.measure ORDER BY P.momentStart DESC) A 
-where L.idBowl=@idBowl and L.idPlaque=@codePlaque and CAST(L.moment AS DATE)>=CAST(@dateStartWeek AS DATE) and CAST(L.moment AS DATE)<=CAST(@dateEndWeek AS DATE)
-
+select * from LiquidBowlRecords where idBowl=@idBowl and idPlaque=@codePlaque and 
+CAST(moment AS DATE)>=CAST(@dateStartWeek AS DATE) and CAST(moment AS DATE)<=CAST(@dateEndWeek AS DATE)
 END
 
 GO
@@ -517,7 +570,6 @@ GO
 
 --------------------------------------------------------------WaterPlants-------------------------------------------------------------------
 
-
 CREATE OR ALTER PROCEDURE AddWaterPlantLog @type VARCHAR(10),@levelTankBefore INT,@humidityBefore INT,@idTank INT,@idPlant INT,@idDevice INT AS
 BEGIN
 
@@ -526,7 +578,7 @@ BEGIN TRY
 INSERT INTO WaterPlantLogs(type,state,levelTankBefore,humidityBefore,idTank,idPlant,idDevice) 
 VALUES(@type,'En curso',@levelTankBefore,@humidityBefore,@idTank,@idPlant,@idDevice)
 
-return SCOPE_IDENTITY()
+RETURN IDENT_CURRENT('WaterPlantLogs')
 
 END TRY
 BEGIN CATCH
@@ -585,6 +637,14 @@ END
 
 GO
 
+CREATE OR ALTER PROCEDURE WaterPlantMostNearlyToWaterTank @codePlaque INT,@idBowl INT,@momentWaterTank DATETIME AS
+BEGIN
+
+select TOP 1 * from PlantWateringRecords where idBowl=@idBowl and idPlaque=@codePlaque and momentStart<=@momentWaterTank ORDER BY momentStart
+
+END
+
+GO
 
 --------------------------------------------------------------Alerts-------------------------------------------------------------------
 
@@ -594,7 +654,7 @@ BEGIN
 BEGIN TRY
 INSERT INTO Alerts(title,message,type,idDevice) VALUES(@title,@message,@type,@idDevice)
 
-RETURN SCOPE_IDENTITY();
+RETURN IDENT_CURRENT('Alerts');
 
 END TRY
 
@@ -607,38 +667,43 @@ END
 
 GO
 
+CREATE OR ALTER PROCEDURE AlertById @codeNotification INT AS 
+BEGIN
 
-CREATE OR ALTER PROCEDURE UpdateAlertState @id INT,@seen BIT AS 
+select * from Notifications_Entities where codeNotification=@codeNotification;
+   
+END
+GO
+
+
+--------------------------------------------------------------Alerts_Users-------------------------------------------------------------------
+
+CREATE OR ALTER PROCEDURE AddUserOfAlert @idAlert INT,@idUser INT, @seen BIT AS 
 BEGIN
 
 BEGIN TRY
-Update Alerts set seen=@seen where id=@id
+INSERT INTO Alerts_Users(idAlert,idUser,seen) VALUES(@idAlert,@idUser,@seen)
 END TRY
 
 BEGIN CATCH
-DECLARE @error NVARCHAR(500)=ERROR_MESSAGE()
-RAISERROR(@error,16,4)
-END CATCH
-
-END
-
-GO
-
-CREATE OR ALTER PROCEDURE DeleteAlertById @id INT AS 
-BEGIN
-
-IF NOT EXISTS(select * from Alerts where id=@id)
-BEGIN
-RAISERROR('Alerta no encontrada',16,4)
+RAISERROR('Error al agregar usuario de alerta',16,4)
 RETURN
+END CATCH
+
 END
 
+GO
+
+CREATE OR ALTER PROCEDURE UpdateAlertUserState @idAlert INT ,@idUser INT,@seen BIT AS 
+BEGIN
+
 BEGIN TRY
-DELETE Alerts where id=@id
+Update Alerts_Users set seen=@seen where idAlert=@idAlert and idUser=@idUser
 END TRY
 
 BEGIN CATCH
-RAISERROR('Error al eliminar alerta',16,4)
+DECLARE @error NVARCHAR(500)=ERROR_MESSAGE()
+RAISERROR(@error,16,4)
 END CATCH
 
 END
@@ -646,19 +711,28 @@ END
 GO
 
 
-CREATE OR ALTER PROCEDURE AmountAlerts @codePlaque INT AS 
+CREATE OR ALTER PROCEDURE UsersOfAlert @codeNotification INT AS 
+BEGIN
+select * from Notifications_Entities where codeNotification=@codeNotification
+END
+
+GO
+
+CREATE OR ALTER PROCEDURE AmountAlertsByUserAndDevice @codePlaque INT ,@codeEntity INT AS 
 BEGIN
 
-select COUNT(*) as amount from Notifications where idPlaque=@codePlaque;
+select COUNT(*) as amount from Notifications_Entities NE INNER JOIN Notifications N ON N.code=NE.codeNotification 
+where NE.codeEntity=@codeEntity and N.idPlaque=@codePlaque;
 
 END
 
 GO
 
-CREATE OR ALTER PROCEDURE AlertsOffset @offset INT,@codePlaque INT AS 
+CREATE OR ALTER PROCEDURE AlertsByUserAndDeviceOffset @offset INT,@codePlaque INT,@codeEntity INT AS 
 BEGIN
 
-select * from Notifications where idPlaque=@codePlaque ORDER BY momentAlert DESC OFFSET @offset ROWS FETCH NEXT 10 ROWS ONLY;
+select N.* from Notifications_Entities NE INNER JOIN Notifications N ON N.code=NE.codeNotification 
+where NE.codeEntity=@codeEntity and N.idPlaque=@codePlaque ORDER BY momentAlert DESC OFFSET @offset ROWS FETCH NEXT 10 ROWS ONLY;
    
 END
 GO
@@ -683,7 +757,7 @@ END
 
 GO
 
-CREATE OR ALTER PROCEDURE UpdateUserDeviceToken @idUserDevice VARCHAR(16),@idUser INT,@token NVARCHAR(300) AS
+CREATE OR ALTER PROCEDURE UpdateUserDeviceToken @idUserDevice INT,@token NVARCHAR(300) AS
 BEGIN
 
 BEGIN TRY
@@ -700,7 +774,6 @@ END CATCH
 END
 
 GO
-
 
 CREATE OR ALTER PROCEDURE UserDeviceTokenById @code VARCHAR(16) AS 
 BEGIN
@@ -737,16 +810,21 @@ RAISERROR('Formato de correo incorrecto',16,3)
 RETURN
 END 
 
+IF EXISTS (select * from inserted where role NOT IN ('Administrador','Usuario'))
+BEGIN
+RAISERROR('Rol no valido',16,3)
+RETURN
+END 
+
 IF EXISTS(select * from Users where email=(select email from inserted))
 BEGIN
 RAISERROR('Correo ya en uso',16,3)
 RETURN
 END 
 
-INSERT INTO Users(username,email,password) (select username,email,password from inserted)
+INSERT INTO Users(username,email,role,password) (select username,email,role,password from inserted)
 
 END
-
 
 GO
 
@@ -756,14 +834,21 @@ BEGIN
 DECLARE @idUser INT 
 DECLARE @usernameInserted VARCHAR(15)
 DECLARE @emailInserted VARCHAR(30)
+DECLARE @roleInserted VARCHAR(13)
 DECLARE @passwordInserted VARCHAR(60)
 
-select @emailInserted=email,@usernameInserted=username,@passwordInserted=password from inserted
+select @emailInserted=email,@usernameInserted=username,@roleInserted=role,@passwordInserted=password from inserted
 select @idUser=idUser from deleted
 
 IF (@emailInserted NOT LIKE '%@%.%')
 BEGIN
 RAISERROR('Formato de correo incorrecto',16,3)
+RETURN
+END 
+
+IF(@roleInserted) NOT IN ('Administrador','Usuario')
+BEGIN
+RAISERROR('Rol no valido',16,3)
 RETURN
 END 
 
@@ -785,40 +870,26 @@ RAISERROR('Correo ya en uso',16,3)
 RETURN
 END 
 
-UPDATE Users set username=@usernameInserted,email=@emailInserted,password=@passwordInserted
+UPDATE Users set username=@usernameInserted,email=@emailInserted,role=@roleInserted,password=@passwordInserted
 
 END
 
 GO
---------------------------------------------------------------------Device----------------------------------------------------------------
+
+
+----------------------------------------------------Devices----------------------------------------------------------------
+
 CREATE OR ALTER TRIGGER ValidAddDevice ON Devices INSTEAD OF INSERT AS
 BEGIN
 
-IF ((select location from inserted) LIKE '%[^A-Z,]%' OR (select location from inserted) NOT LIKE '%,%')
+IF NOT EXISTS(select * from inserted where location NOT LIKE '%[^A-Z,]%' and location LIKE '%,%' )
 BEGIN
-RAISERROR('Formato de ubicacion incorrecto',16,2)
+RAISERROR('Formato de ubicacion incorrecto',16,3)
 RETURN
 END 
 
-IF NOT EXISTS(select * from Users where idUser=(select idUser from inserted))
-BEGIN
-RAISERROR('Usuario no encontrado',16,2)
-RETURN
-END 
+INSERT INTO Devices(placeName,location) select placeName,location from inserted
 
-IF EXISTS(select * from Devices where idUser=(select idUser from inserted) and placeName=(select placeName from inserted))
-BEGIN
-RAISERROR('Ya tiene un dispositivo de riego que tiene este nombre de lugar',16,2)
-RETURN
-END 
-
-INSERT INTO Devices(idUser,location,placeName) (select idUser,location,placeName from inserted)
-
- IF (@@ERROR <> 0)
-    BEGIN
-        RAISERROR('Error inesperado al agregar dispositivo',16,4)
-        RETURN
-    END
 END
 
 GO
@@ -826,26 +897,42 @@ GO
 CREATE OR ALTER TRIGGER ValidUpdateDevice ON Devices INSTEAD OF UPDATE AS
 BEGIN
 
-IF ((select location from inserted) LIKE '%[^A-Z,]%' OR (select location from inserted) NOT LIKE '%,%')
+IF NOT EXISTS(select * from inserted where location NOT LIKE '%[^A-Z,]%' and location LIKE '%,%' )
 BEGIN
-RAISERROR('Formato de ubicacion incorrecto',16,2)
+RAISERROR('Formato de ubicacion incorrecto',16,3)
 RETURN
 END 
 
-IF EXISTS(select * from Devices where idUser=(select idUser from deleted) and idDevice!=(select idDevice from deleted) and placeName=(select placeName from inserted))
+UPDATE Devices SET placeName=(select placeName from inserted),location=(select location from inserted) select placeName,location from inserted
+
+END
+
+GO
+
+----------------------------------------------------Users_Devices----------------------------------------------------------------
+
+CREATE OR ALTER TRIGGER ValidAddUserDevice ON Users_Devices INSTEAD OF INSERT AS
 BEGIN
-RAISERROR('Ya tiene un dispositivo de riego que tiene este nombre de lugar',16,2)
+
+IF NOT EXISTS(select * From Devices where idDevice=(select idDevice from inserted))
+BEGIN
+RAISERROR('Dispositivo de riego no encontrado',16,3)
 RETURN
 END 
 
-UPDATE Devices set location=(select location from inserted),placeName=(select placeName from inserted) 
-Where idDevice=(select idDevice from deleted)
+IF NOT EXISTS(select * From Users where idUser=(select idUser from inserted))
+BEGIN
+RAISERROR('Usuario no encontrado',16,3)
+RETURN
+END 
 
- IF (@@ERROR <> 0)
-    BEGIN
-        RAISERROR('Error inesperado al actualizar dispositivo',16,4)
-        RETURN
-    END
+IF EXISTS(select * From Users_Devices where idDevice=(select idDevice from inserted) and idUser=(select idUser from inserted))
+BEGIN
+RAISERROR('Este dispositivo de riego ya esta vinculado al usuario indicado',16,3)
+RETURN
+END 
+
+INSERT INTO Users_Devices(idDevice,idUser) select idDevice,idUser from inserted
 
 END
 
@@ -1166,20 +1253,12 @@ BEGIN
 END
 GO
 
--------------------------------------------------------Alert-----------------------------------------------------------------
+-------------------------------------------------------Alerts-----------------------------------------------------------------
 CREATE OR ALTER TRIGGER ValidAddAlert
 ON Alerts
 INSTEAD OF INSERT
 AS
 BEGIN
-
-    IF NOT EXISTS (
-        SELECT *
-        FROM Devices where idDevice=(select idDevice from inserted))
-    BEGIN
-        RAISERROR('Dispositivo no encontrado',16,2)
-        RETURN
-    END
 
 	  IF EXISTS(
         SELECT *
@@ -1189,7 +1268,16 @@ BEGIN
         RETURN
     END
 
-    INSERT INTO Alerts(title,message,type, idDevice) SELECT title,message,type, idDevice FROM inserted
+    IF NOT EXISTS (
+        SELECT *
+        FROM Devices where idDevice=(select idDevice from inserted))
+    BEGIN
+        RAISERROR('Dispositivo no encontrado',16,2)
+        RETURN
+    END
+
+
+    INSERT INTO Alerts(title,message,type,idDevice) SELECT title,message,type,idDevice FROM inserted
 
     IF (@@ERROR <> 0)
     BEGIN
@@ -1199,22 +1287,58 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER TRIGGER ValidUpdateAlertState
-ON Alerts
+
+-------------------------------------------------------Alerts_Users-----------------------------------------------------------------
+CREATE OR ALTER TRIGGER ValidAddAlertUser
+ON Alerts_Users
+INSTEAD OF INSERT
+AS
+BEGIN
+
+    IF NOT EXISTS (
+        SELECT *
+        FROM Alerts where id=(select idAlert from inserted))
+    BEGIN
+        RAISERROR('Alerta no encontrada',16,2)
+        RETURN
+    END
+
+	  IF NOT EXISTS (
+        SELECT *
+        FROM Users where idUser=(select idUser from inserted))
+    BEGIN
+        RAISERROR('Usuario no encontrado',16,2)
+        RETURN
+    END
+
+
+    INSERT INTO Alerts_Users(idAlert,idUser,seen) SELECT idAlert,idUser,seen FROM inserted
+
+    IF (@@ERROR <> 0)
+    BEGIN
+        RAISERROR('Error inesperado al agregar alerta',16,4)
+        RETURN
+    END
+END
+GO
+
+
+CREATE OR ALTER TRIGGER ValidUpdateAlertUserStateToSeen
+ON Alerts_Users
 INSTEAD OF UPDATE
 AS
 BEGIN
    
     IF NOT EXISTS (
-        SELECT * FROM Alerts
-        WHERE id = (SELECT id FROM deleted)
+        SELECT * FROM Alerts_Users
+        WHERE idAlert = (SELECT idAlert FROM inserted) and idUser=(SELECT idUser FROM inserted)
     )
     BEGIN
         RAISERROR('Alerta no encontrada',16,2)
         RETURN
     END
 
-    UPDATE Alerts SET seen = (SELECT seen FROM inserted) WHERE id IN (SELECT id FROM deleted);
+    UPDATE Alerts_Users SET seen = (SELECT seen FROM inserted)  WHERE idAlert = (SELECT idAlert FROM inserted) and idUser=(SELECT idUser FROM inserted)
 
     IF (@@ERROR <> 0)
     BEGIN
@@ -1223,6 +1347,7 @@ BEGIN
     END
 END
 GO
+
 
 ------------------------------------------------------------UserDevicesToken-------------------------------------------------------------------
 CREATE OR ALTER TRIGGER ValidAddUserDeviceToken ON UserDevicesTokens INSTEAD OF INSERT
@@ -1234,14 +1359,6 @@ BEGIN
         FROM Users where idUser=(select idUser from inserted))
     BEGIN
         RAISERROR('Usuario no encontrado',16,2)
-        RETURN
-    END
-
-    IF EXISTS (
-        SELECT *
-        FROM UserDevicesTokens where idUserDevice=(select idUserDevice from inserted))
-    BEGIN
-        RAISERROR('Este identificador de dipositivo de movil ya existe',16,2)
         RETURN
     END
 
@@ -1272,23 +1389,23 @@ BEGIN
         SELECT *
         FROM UserDevicesTokens where idUserDevice=(select idUserDevice from inserted))
     BEGIN
-        RAISERROR('Registro de token con este identificador de dispositivo movil no encontrado',16,2)
+        RAISERROR('No se encontro el token de dispositivo movil',16,2)
         RETURN
     END
 
 	   IF EXISTS (
         SELECT *
-        FROM UserDevicesTokens where token=(select token from inserted))
+        FROM UserDevicesTokens where token=(select token from inserted) and idUserDevice!=(select idUserDevice from inserted) )
     BEGIN
         RAISERROR('Token ya existente',16,2)
         RETURN
     END
 
-    UPDATE UserDevicesTokens set token=(select token from inserted),lastModified=GETDATE() where idUserDevice=(select idUserDevice from deleted)
+    UPDATE UserDevicesTokens set token=(select token from inserted),lastModified=GETDATE() where idUserDevice=(select idUserDevice from inserted)
 
     IF (@@ERROR <> 0)
     BEGIN
-        RAISERROR('Error inesperado al actualizar token del movil del usuario',16,4)
+        RAISERROR('Error inesperado al actualizar token del dispositivo movil del usuario',16,4)
         RETURN
     END
 END
