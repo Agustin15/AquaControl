@@ -11,6 +11,7 @@ export const SignUpProvider = ({ children }) => {
     username: "",
     email: "",
     password: "",
+    role: "Usuario",
   });
   const [errors, setErrors] = useState({
     username: "",

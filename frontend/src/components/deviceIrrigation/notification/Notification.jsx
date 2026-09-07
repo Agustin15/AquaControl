@@ -30,7 +30,7 @@ export const Notification = () => {
 
   const handleHideNotification = () => {
     setClassNotification(styles.notification + " " + styles.hideNotification);
-    
+
     setTimeout(() => {
       setClassNotification(styles.notification);
       setNotificationReceived(null);

@@ -15,7 +15,7 @@ export const EditPlace = () => {
     fetchPostOrPut,
   } = useCrudDevice();
 
-  const { getUserDevices, deviceSelected, setDeviceSelected } = useDevice();
+  const { getUserDevices, setDeviceSelected } = useDevice();
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -43,7 +43,7 @@ export const EditPlace = () => {
 
     const deviceUpdated = await fetchPostOrPut("PUT", true);
 
-    if (deviceUpdated && deviceSelected) {
+    if (deviceUpdated) {
       await saveInfo(deviceUpdated);
       setDeviceSelected(deviceUpdated);
 

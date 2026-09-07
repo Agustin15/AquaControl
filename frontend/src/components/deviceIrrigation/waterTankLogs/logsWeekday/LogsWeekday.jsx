@@ -28,7 +28,7 @@ export const LogsWeekday = () => {
 
     const result = weekdayLogs.filter(
       (log) =>
-        new Date(log.waterTankLog.datetimeLog).getDay() + 1 == weekdaySelected,
+        new Date(log.datetimeLog).getDay() + 1 == weekdaySelected,
     );
 
     if (result.length == 0)

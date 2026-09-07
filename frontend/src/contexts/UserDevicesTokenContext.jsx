@@ -2,15 +2,18 @@ import { PushNotifications } from "@capacitor/push-notifications";
 import { Device } from "@capacitor/device";
 import { getTokenSaved } from "../securityStorage.js";
 import { useAuth } from "./AuthContext.jsx";
+import { useAlert } from "./AlertContext.jsx";
 import { createContext, useContext, useState } from "react";
 import { alertError } from "../components/alertSwal/alertSwal.js";
+
 const localhostBackend = import.meta.env.VITE_BACKEND_LOCALHOST;
 
 const UserDevicesTokensContext = createContext();
 
 export const UserDevicesTokensProvider = ({ children }) => {
-  const { updateAccessToken, userAuth } = useAuth();
   const [notificationReceived, setNotificationReceived] = useState(null);
+  const { updateAccessToken, userAuth } = useAuth();
+  const { updateAlertStateToSeen } = useAlert();
 
   const registerNotifications = async () => {
     let permStatus = await PushNotifications.checkPermissions();
@@ -49,6 +52,7 @@ export const UserDevicesTokensProvider = ({ children }) => {
       "pushNotificationReceived",
       (notification) => {
         setNotificationReceived(notification);
+        updateAlertStateToSeen(notification.data.idAlert, false);
       },
     );
   };
@@ -68,7 +72,7 @@ export const UserDevicesTokensProvider = ({ children }) => {
           Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({
-          idUserDevice: idMobileDevice,
+          id: idMobileDevice,
           user: userAuth,
           token: token,
         }),

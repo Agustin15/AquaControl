@@ -44,12 +44,14 @@ export const Devices = () => {
         {showMenu && <SubMenuProfile />}
       </nav>
 
-      <div className={styles.addDevice}>
-        <button onClick={() => setShowFormAdd(true)}>
-          Nuevo Dispositivo
-          <img src={iconAdd}></img>
-        </button>
-      </div>
+      {useAuth && userAuth.role == "Administrador" && (
+        <div className={styles.addDevice}>
+          <button onClick={() => setShowFormAdd(true)}>
+            Nuevo Dispositivo
+            <img src={iconAdd}></img>
+          </button>
+        </div>
+      )}
 
       <div className={styles.devices}>
         {loadingDevices && (

@@ -44,7 +44,7 @@ export const CrudDeviceProvider = ({ children }) => {
           id: valuesForm.id,
           placeName: valuesForm.placeName,
           location: valuesForm.location,
-          user: userAuth,
+          users: [userAuth],
         }),
       });
 

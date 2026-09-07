@@ -16,6 +16,7 @@ import { Irrigation } from "./irrigation/Irrigation";
 import { StateMqttConnection } from "./stateMqttConnection/StateMqttConnection";
 import { CurrentWeather } from "./currentWeather/CurrentWeather";
 import { Notification } from "./notification/Notification";
+import { AlertProvider } from "../../contexts/AlertContext";
 
 export const DeviceIrrigation = () => {
   const [optionSelected, setOptionSelected] = useState("Irrigation");
@@ -26,16 +27,18 @@ export const DeviceIrrigation = () => {
 
   return (
     <div id="contentBody" className={styles.contentBody}>
-      <UserDevicesTokensProvider>
-        <Notification />
-      </UserDevicesTokensProvider>
-      
+      <AlertProvider>
+        <UserDevicesTokensProvider>
+          <Notification />
+        </UserDevicesTokensProvider>
+      </AlertProvider>
+
       <div className={styles.menuDevice}>
         {deviceSelected.location && (
           <CurrentWeather currentWeather={currentWeather} />
         )}
         <StateMqttConnection />
-        
+
         <img src={iconDevice}></img>
         <h3>{deviceSelected.placeName}</h3>
         <button className={styles.back} onClick={() => navigate("/devices")}>

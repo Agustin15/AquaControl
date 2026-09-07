@@ -32,7 +32,7 @@ export const WaterTankLogs = () => {
 
   const loadWaterLogsOfTank = async (idTank) => {
     getWeekdayLogs(
-      `/api/waterTankLogAndIrrigateCausative/tank/${idTank}/lastWeek`,
+      `/api/waterTankLog/tank/${idTank}/lastWeek`,
     );
   };
 
