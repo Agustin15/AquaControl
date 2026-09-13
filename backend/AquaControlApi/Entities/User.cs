@@ -15,7 +15,7 @@ namespace Entities
         int id;
         string username;
         string email;
-        string role;
+        string? role;
         string password;
         DateTime joined;
 
@@ -41,9 +41,8 @@ namespace Entities
             get { return email; }
         }
 
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Debe indicar un rol")]
-        [AllowedValues(["Administrador", "Usuario"], ErrorMessage = "Rol solo acepta los valores:Administrador o Usuario")]
-        public string Role
+        [AllowedValues([null, "Administrador", "Usuario"], ErrorMessage = "Rol solo acepta los valores:Administrador o Usuario")]
+        public string? Role
         {
             set { role = value; }
             get { return role; }

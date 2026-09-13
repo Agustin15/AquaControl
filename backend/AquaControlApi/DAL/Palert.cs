@@ -112,15 +112,17 @@ namespace DAL
 
                 if (reader.HasRows)
                 {
-                    await reader.ReadAsync();
+                    if (await reader.ReadAsync())
+                    {
 
-                    Device deviceFound = await new Pdevice().GetDeviceById(Convert.ToInt32(reader["idPlaque"]));
+                        Device deviceFound = await new Pdevice().GetDeviceById(Convert.ToInt32(reader["idPlaque"]));
 
-                    List<UserOfAlert> usersOfAlert = await new PuserOfAlert().GetUsersOfAlert(idAlert);
+                        List<UserOfAlert> usersOfAlert = await new PuserOfAlert().GetUsersOfAlert(idAlert);
 
-                    alertFound = new Alert(Convert.ToInt32(reader["code"]), Convert.ToString(reader["heading"]),
-                           Convert.ToString(reader["text"]), Convert.ToString(reader["category"]), usersOfAlert, deviceFound, Convert.ToDateTime(reader["momentAlert"]));
-
+                        alertFound = new Alert(Convert.ToInt32(reader["code"]), Convert.ToString(reader["heading"]),
+                               Convert.ToString(reader["text"]), Convert.ToString(reader["category"]),
+                               usersOfAlert, deviceFound, Convert.ToDateTime(reader["momentAlert"]));
+                    }
                 }
 
                 await reader.CloseAsync();
@@ -157,9 +159,10 @@ namespace DAL
 
                 if (reader.HasRows)
                 {
-                    await reader.ReadAsync();
-                    amount = Convert.ToInt32(reader["amount"]);
-
+                    if (await reader.ReadAsync())
+                    {
+                        amount = Convert.ToInt32(reader["amount"]);
+                    }
                 }
 
                 await reader.CloseAsync();
@@ -206,7 +209,8 @@ namespace DAL
                         List<UserOfAlert> usersOfAlert = await new PuserOfAlert().GetUsersOfAlert(Convert.ToInt32(reader["code"]));
 
                         alertsOffset.Add(new Alert(Convert.ToInt32(reader["code"]), Convert.ToString(reader["heading"]),
-                            Convert.ToString(reader["text"]), Convert.ToString(reader["category"]), usersOfAlert, deviceFound, Convert.ToDateTime(reader["momentAlert"]))
+                            Convert.ToString(reader["text"]), Convert.ToString(reader["category"]),
+                            usersOfAlert, deviceFound, Convert.ToDateTime(reader["momentAlert"]))
                           );
 
                     }

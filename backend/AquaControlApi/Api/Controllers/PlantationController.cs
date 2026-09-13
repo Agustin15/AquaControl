@@ -1,4 +1,6 @@
-﻿using Entities;
+﻿using Api.Filters;
+using DAL;
+using Entities;
 using Logic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,32 +12,29 @@ using System.Threading.Tasks;
 namespace Api.Controllers
 {
     [ApiController]
-    public class PlantController : ControllerBase
+    public class PlantationController : ControllerBase
     {
 
-        [Authorize(AuthenticationSchemes = "Bearer")]
+        [Authorize(AuthenticationSchemes = "Bearer", Policy = "HasIdDevice")]
+        [ValidateModelFilter]
         [HttpPost]
-        [Route("api/plant")]
-        public async Task<ActionResult> Add([FromBody] Plant plant)
+        [Route("api/plantation")]
+        public async Task<ActionResult> Add([FromBody] Plantation plantation)
         {
             try
             {
-                if (!User.Identity.IsAuthenticated || User.FindFirst("IdDevice") is null)
-                    return Unauthorized();
 
                 int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
 
-                if (!ModelState.IsValid) return StatusCode(400, new { message = ModelState.Values.First().Errors.First().ErrorMessage });
-
-                if (idDevice != plant.Device.Id)
+                if (idDevice != plantation.Device.Id)
                     return StatusCode(403, new { message = "No tiene acceso al dispositivo de riego donde desea agregar registro de esta planta" });
 
-                List<Plant> plantsOfDevice = await new Lplant().GetAllPlantsByDevice(plant.Device.Id);
+                List<Plantation> plantsOfDevice = await new Lplantation().GetAllPlantationsByDevice(plantation.Device.Id);
 
-                if (plantsOfDevice.Count == 0) plant.Id = 1;
-                else plant.Id = plantsOfDevice.Count + 1;
+                if (plantsOfDevice.Count == 0) plantation.Id = 1;
+                else plantation.Id = plantsOfDevice.Count + 1;
 
-                await new Lplant().Add(plant);
+                await new Lplantation().Add(plantation);
 
                 return StatusCode(201, true);
             }
@@ -45,27 +44,24 @@ namespace Api.Controllers
             }
         }
 
-        [Authorize(AuthenticationSchemes = "Bearer")]
+        [Authorize(AuthenticationSchemes = "Bearer", Policy = "HasIdDevice")]
+        [ValidateModelFilter]
         [HttpPut]
-        [Route("api/plant")]
-        public async Task<ActionResult> Update([FromBody] Plant plant)
+        [Route("api/plantation")]
+        public async Task<ActionResult> Update([FromBody] Plantation plantation)
         {
             try
             {
-                if (!User.Identity.IsAuthenticated || User.FindFirst("IdDevice") is null)
-                    return Unauthorized();
 
                 int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
 
-                if (!ModelState.IsValid) return StatusCode(400, new { message = ModelState.Values.First().Errors.First().ErrorMessage });
-
-                if (idDevice != plant.Device.Id)
+                if (idDevice != plantation.Device.Id)
                     return StatusCode(403, new { message = "No tiene acceso al dispositivo de riego donde desea actualizar el registro de esta planta" });
 
 
-                await new Lplant().Update(plant);
+                await new Lplantation().Update(plantation);
 
-                return Ok(plant);
+                return Ok(plantation);
             }
             catch (Exception ex)
             {
@@ -73,24 +69,23 @@ namespace Api.Controllers
             }
         }
 
-        [Authorize(AuthenticationSchemes = "Bearer")]
+        [Authorize(AuthenticationSchemes = "Bearer", Policy = "HasIdDevice")]
+        [ValidateModelFilter]
         [HttpDelete]
-        [Route("api/plant")]
-        public async Task<ActionResult> Delete(Plant plant)
+        [Route("api/plantation")]
+        public async Task<ActionResult> Delete(Plantation plantation)
         {
             try
             {
-                if (!User.Identity.IsAuthenticated || User.FindFirst("IdDevice") is null)
-                    return Unauthorized();
 
                 int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
 
-                if (idDevice != plant.Device.Id)
+                if (idDevice != plantation.Device.Id)
                     return StatusCode(403, new { message = "No tiene acceso al dispositivo de riego donde desea eliminar el registro de esta planta" });
 
-                await new Lplant().Delete(plant);
+                await new Lplantation().Delete(plantation);
 
-                return Ok(plant);
+                return Ok(plantation);
             }
             catch (Exception ex)
             {
@@ -98,19 +93,17 @@ namespace Api.Controllers
             }
         }
 
-        [Authorize(AuthenticationSchemes = "Bearer")]
+        [Authorize(AuthenticationSchemes = "Bearer", Policy = "HasIdDevice")]
         [HttpGet]
-        [Route("api/plant")]
+        [Route("api/plantation")]
         public async Task<ActionResult> GetAllPlantsByDevice()
         {
             try
             {
-                if (!User.Identity.IsAuthenticated || User.FindFirst("IdDevice") is null)
-                    return Unauthorized();
-
+       
                 int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
 
-                List<Plant> plants = await new Lplant().GetAllPlantsByDevice(idDevice);
+                List<Plantation> plants = await new Lplantation().GetAllPlantationsByDevice(idDevice);
 
                 if (plants.Count == 0) throw new Exception("No hay registros de plantas en este dispositivo de riego");
 

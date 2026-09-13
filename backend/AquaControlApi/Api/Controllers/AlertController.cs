@@ -1,14 +1,15 @@
-﻿using DAL;
+﻿using Api.Filters;
+using DAL;
 using Entities;
 using Logic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Net.Http.Headers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
@@ -29,7 +30,8 @@ namespace Api.Controllers
             _httpClientFactory = httpClientFactory;
         }
 
-        [Authorize(AuthenticationSchemes = "Esp32Bearer")]
+        [Authorize(AuthenticationSchemes = "Esp32Bearer", Policy = "HasIdDevice")]
+        [ValidateModelFilter]
         [HttpPost]
         [Route("api/alert")]
         public async Task<ActionResult> Add([FromBody] Alert alert)
@@ -37,12 +39,8 @@ namespace Api.Controllers
             int idAlertGenerated = 0;
             try
             {
-                if (!User.Identity.IsAuthenticated || User.FindFirst("IdDevice") is null)
-                    return Unauthorized();
 
                 int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
-
-                if (!ModelState.IsValid) return StatusCode(400, new { message = ModelState.Values.First().Errors.First().ErrorMessage });
 
                 if (idDevice != alert.Device.Id)
                     return StatusCode(403, new { message = "No tiene acceso al dispositivo de riego de donde desea enviar la alerta" });
@@ -75,8 +73,6 @@ namespace Api.Controllers
                 var accessToken = await GenerateTokenFCM.GenerateAccessToken();
 
                 var client = _httpClientFactory.CreateClient();
-                var requestMessage = new HttpRequestMessage(HttpMethod.Post, fcmEnpointApi);
-                requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
                 foreach (UserDeviceToken userDeviceToken in usersDevicesTokens)
                 {
@@ -86,13 +82,20 @@ namespace Api.Controllers
                         {
                             token = userDeviceToken.Token,
                             notification = new { title = alert.Title, body = alert.Message },
-                            data = new { idAlert = idAlertGenerated, alertType = alert.Type }
+                            data = new { idAlert = idAlertGenerated.ToString(), alertType = alert.Type?.ToString() }
                         }
                     };
 
+                    using var requestMessage = new HttpRequestMessage(HttpMethod.Post, fcmEnpointApi);
+                    requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                     requestMessage.Content = new StringContent(JsonSerializer.Serialize(notification), Encoding.UTF8);
-                    await client.SendAsync(requestMessage);
 
+                    HttpResponseMessage responseMessage = await client.SendAsync(requestMessage);
+
+                    if (responseMessage.IsSuccessStatusCode == false)
+                    {
+                        throw new Exception("Algo salio mal al enviar la alerta");
+                    }
                 }
 
                 return StatusCode(201, true);
@@ -112,14 +115,12 @@ namespace Api.Controllers
         }
 
 
-        [Authorize(AuthenticationSchemes = "Bearer")]
+        [Authorize(AuthenticationSchemes = "Bearer", Policy = "HasIdDeviceAndUser")]
         [HttpGet("api/alert/pagination/{offset}")]
         public async Task<ActionResult> GetAlertsOffset(int offset)
         {
             try
             {
-                if (!User.Identity.IsAuthenticated || User.FindFirst("IdDevice") is null || User.FindFirst(ClaimTypes.NameIdentifier) is null)
-                    return Unauthorized();
 
                 int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
                 int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);

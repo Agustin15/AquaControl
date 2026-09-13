@@ -1,0 +1,287 @@
+﻿20 matches found: 
+<match path=C:\develop\AquaControl\backend\AquaControlApi\Entities\Tank.cs>
+    File: `backend/AquaControlApi/Entities/Tank.cs`
+```c#
+/*...*/using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+
+namespace Entities
+{
+    /*...*/
+}
+
+```
+</match>
+<match path=C:\develop\AquaControl\backend\AquaControlApi\Entities\Plant.cs>
+    File: `backend/AquaControlApi/Entities/Plant.cs`
+```c#
+/*...*/using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+
+namespace Entities
+{
+    /*...*/
+}
+
+```
+</match>
+<match path=C:\develop\AquaControl\backend\AquaControlApi\Entities\Plant.cs>
+    // Lines 62 to 86
+</match>
+<match path=C:\develop\AquaControl\backend\AquaControlApi\Entities\Device.cs>
+    File: `backend/AquaControlApi/Entities/Device.cs`
+```c#
+/*...*/using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+
+namespace Entities
+{
+    /*...*/
+}
+
+```
+</match>
+<match path=C:\develop\AquaControl\backend\AquaControlApi\Entities\Alert.cs>
+    File: `backend/AquaControlApi/Entities/Alert.cs`
+```c#
+/*...*/using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Entities
+{
+    /*...*/
+}
+
+```
+</match>
+<match path=C:\develop\AquaControl\backend\AquaControlApi\Entities\User.cs>
+    File: `backend/AquaControlApi/Entities/User.cs`
+```c#
+/*...*/using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+
+
+namespace Entities
+{
+    /*...*/
+}
+
+```
+</match>
+<match path=C:\develop\AquaControl\backend\AquaControlApi\Api\Controllers\WaterPlantLogController.cs>
+    File: `backend/AquaControlApi/Api/Controllers/WaterPlantLogController.cs`
+```c#
+/*...*/using Api.Model;
+using DAL;
+using Entities;
+using Logic;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Security.Claims;
+using System.Threading.Tasks;
+
+namespace Api.Controllers
+{
+    /*...*/}
+```
+</match>
+<match path=C:\develop\AquaControl\backend\AquaControlApi\Api\Program.cs>
+    File: `backend/AquaControlApi/Api/Program.cs`
+```c#
+using dotenv.net;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+builder.Services.AddHttpClient();
+
+
+DotEnv.Load(options: new DotEnvOptions(
+   envFilePaths: ["../.env"]
+));
+
+var localhostFrontend = Environment.GetEnvironmentVariable("LOCALHOST_FRONTEND");
+var localhostBackend = Environment.GetEnvironmentVariable("LOCALHOST_BACKEND");
+var accessTokenSecretKey = Environment.GetEnvironmentVariable("ACCESS_TOKEN_SECRET_KEY");
+var refreshTokenSecretKey = Environment.GetEnvironmentVariable("REFRESH_TOKEN_SECRET_KEY");
+var deviceTokenSecretKey = Environment.GetEnvironmentVariable("DEVICE_TOKEN_SECRET_KEY");
+
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.SuppressModelStateInvalidFilter = true;
+
+});
+
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "AllowedHost",
+                      policy =>
+                      {
+
+                          policy.WithOrigins(localhostFrontend);
+                          policy.AllowAnyHeader();
+                          policy.AllowAnyMethod();
+                          policy.AllowCredentials();
+
+                      });
+});
+
+builder.Services.AddAuthentication()
+    /*...*/
+```
+</match>
+<match path=C:\develop\AquaControl\backend\AquaControlApi\Api\Controllers\AlertController.cs>
+    // Lines 26 to 30
+</match>
+<match path=C:\develop\AquaControl\backend\AquaControlApi\Logic\Ltank.cs>
+    File: `backend/AquaControlApi/Logic/Ltank.cs`
+```c#
+/*...*/using DAL;
+using Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Logic
+{
+    /*...*/
+}
+
+```
+</match>
+<match path=C:\develop\AquaControl\README.md>
+    // Lines 42 to 78
+</match>
+<match path=C:\develop\AquaControl\frontend\src\components\deviceIrrigation\settings\plants\info\Info.jsx>
+    File: `frontend/src/components/deviceIrrigation/settings/plants/info/Info.jsx`
+```javascript
+import styles from "./Info.module.css";
+import iconInfo from "../../../../../assets/img/info.png";
+import iconPlant from "../../../../../assets/img/plant.png";
+import { usePlant } from "../../../../../contexts/plantContext/PlantContext";
+
+export const Info = () => {
+  const { setInfoPlant, infoPlant } = usePlant();
+  return (
+    <div className={styles.infoPlant}>
+      <div className={styles.header}>
+        <img src={iconInfo}></img>
+        <h3>Detalles planta N° {infoPlant.id}</h3>
+        <button onClick={() => setInfoPlant(false)}>Cerrar</button>
+      </div>
+
+      <div className={styles.info}>
+        <div className={styles.containImage}>
+          {infoPlant.image ? (
+            <div className={styles.image}>
+              <img src={"data:image/jpg;base64," + infoPlant.image}></img>
+            </div>
+          ) : (
+            <div className={styles.noImage}>
+              <img src={iconPlant}></img>
+              <span>Sin imagen </span>
+            </div>
+          )}
+        </div>
+      /*...*/
+```
+</match>
+<match path=C:\develop\AquaControl\frontend\src\components\deviceIrrigation\settings\plants\Plants.jsx>
+    File: `frontend/src/components/deviceIrrigation/settings/plants/Plants.jsx`
+```javascript
+import styles from "./Plants.module.css";
+import iconNoPlants from "../../../../assets/img/noPlants.png";
+import iconAdd from "../../../../assets/img/add.png";
+import iconDelete from "../../../../assets/img/delete.png";
+import iconInfo from "../../../../assets/img/info.png";
+import iconEdit from "../../../../assets/img/edit.png";
+import iconPlant from "../../../../assets/img/plant.png";
+import { usePlant } from "../../../../contexts/plantContext/PlantContext";
+import { useEffect } from "react";
+import { useFormPlant } from "../../../../contexts/plantContext/FormPlantContext";
+import { Options } from "./options/Options";
+
+export const Plants = () => {
+  const {
+    plants,
+    loadingPlants,
+    errorPlants,
+    getPlants,
+    setShowFormAdd,
+    setInfoPlant,
+    setEditPlant,
+    setDeletePlant,
+  } = usePlant();
+
+  const { setValuesForm } = useFormPlant();
+
+  useEffect(() => {
+    getPlants();
+  }, []);
+
+  return (
+    <div className={styles.containPlants}>
+      {loadingPlants && (
+        /*...*/
+```
+</match>
+<match path=C:\develop\AquaControl\backend\AquaControlApi\Entities\WaterPlantLog.cs>
+    // Lines 95 to 123
+</match>
+<match path=C:\develop\AquaControl\backend\AquaControlApi\Entities\WaterPlantLog.cs>
+    // Lines 11 to 40
+</match>
+<match path=C:\develop\AquaControl\backend\AquaControlApi\Entities\WaterTankLog.cs>
+    // Lines 54 to 66
+</match>
+<match path=C:\develop\AquaControl\backend\AquaControlApi\Entities\WaterTankLog.cs>
+    // Lines 54 to 66
+</match>
+<match path=C:\develop\AquaControl\backend\AquaControlApi\DAL\Pplant.cs>
+    // Lines 48 to 63
+</match>
+<match path=C:\develop\AquaControl\backend\AquaControlApi\DAL\Pplant.cs>
+    // Lines 19 to 48
+</match>
+<match path=C:\develop\AquaControl\backend\AquaControlApi\Entities\HumidityPlantLog.cs>
+    // Lines 50 to 62
+</match>

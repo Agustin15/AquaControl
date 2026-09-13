@@ -2,6 +2,7 @@ using dotenv.net;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -46,6 +47,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddAuthentication()
     .AddJwtBearer("Bearer", options =>
     {
+
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
@@ -56,6 +58,7 @@ builder.Services.AddAuthentication()
             ValidAudience = localhostBackend,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(accessTokenSecretKey))
         };
+
     }).AddJwtBearer("RefreshBearer", options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
@@ -80,7 +83,14 @@ builder.Services.AddAuthentication()
             ValidAudience = localhostBackend,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(deviceTokenSecretKey))
         };
-    }); ;
+    });
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("HasIdDeviceAndUser", policy => policy.RequireClaim("IdDevice").RequireClaim(ClaimTypes.NameIdentifier));
+    options.AddPolicy("HasIdDevice", policy => policy.RequireClaim("IdDevice"));
+    options.AddPolicy("HasUser", policy => policy.RequireClaim(ClaimTypes.NameIdentifier));
+});
 
 var app = builder.Build();
 

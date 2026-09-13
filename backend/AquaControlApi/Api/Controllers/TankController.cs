@@ -1,4 +1,5 @@
 ﻿
+using Api.Filters;
 using Entities;
 using Logic;
 using Microsoft.AspNetCore.Authorization;
@@ -16,19 +17,16 @@ namespace Api.Controllers
     public class TankController : ControllerBase
     {
 
-        [Authorize(AuthenticationSchemes = "Bearer")]
+        [Authorize(AuthenticationSchemes = "Bearer", Policy = "HasIdDevice")]
+        [ValidateModelFilter]
         [HttpPost]
         [Route("api/tank")]
         public async Task<ActionResult> Add([FromBody] Tank tank)
         {
             try
             {
-                if (!User.Identity.IsAuthenticated || User.FindFirst("IdDevice") is null)
-                    return Unauthorized();
 
                 int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
-
-                if (!ModelState.IsValid) return StatusCode(400, new { message = ModelState.Values.First().Errors.First().ErrorMessage });
 
                 if (idDevice != tank.Device.Id)
                     return StatusCode(403, new { message = "No tiene acceso al dispositivo de riego donde desea agregar un nuevo registro de este tanque" });
@@ -49,19 +47,16 @@ namespace Api.Controllers
             }
         }
 
-        [Authorize(AuthenticationSchemes = "Bearer")]
+        [Authorize(AuthenticationSchemes = "Bearer", Policy = "HasIdDevice")]
+        [ValidateModelFilter]
         [HttpPut]
         [Route("api/tank")]
         public async Task<ActionResult> Update([FromBody] Tank tank)
         {
             try
             {
-                if (!User.Identity.IsAuthenticated || User.FindFirst("IdDevice") is null)
-                    return Unauthorized();
 
                 int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
-
-                if (!ModelState.IsValid) return StatusCode(400, new { message = ModelState.Values.First().Errors.First().ErrorMessage });
 
                 if (idDevice != tank.Device.Id)
                     return StatusCode(403, new { message = "No tiene acceso al dispositivo de riego donde desea actualizar el registro de este tanque" });
@@ -76,15 +71,14 @@ namespace Api.Controllers
             }
         }
 
-        [Authorize(AuthenticationSchemes = "Bearer")]
+        [Authorize(AuthenticationSchemes = "Bearer", Policy = "HasIdDevice")]
+        [ValidateModelFilter]
         [HttpDelete]
         [Route("api/tank")]
         public async Task<ActionResult> Delete(Tank tank)
         {
             try
             {
-                if (!User.Identity.IsAuthenticated || User.FindFirst("IdDevice") is null)
-                    return Unauthorized();
 
                 int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
 
@@ -101,7 +95,7 @@ namespace Api.Controllers
             }
         }
 
-        [Authorize(AuthenticationSchemes = "Bearer")]
+        [Authorize(AuthenticationSchemes = "Bearer", Policy = "HasIdDevice")]
         [HttpGet]
         [Route("api/tank")]
         public async Task<ActionResult> GetAllTanksByDevice()

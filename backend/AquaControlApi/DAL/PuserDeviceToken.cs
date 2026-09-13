@@ -99,8 +99,8 @@ namespace DAL
                     {
                         DateTime lastUpdated = reader["lastUpdated"] is DBNull ? new DateTime(1970, 1, 1) : Convert.ToDateTime(reader["lastUpdated"]);
 
-                        userDeviceToken = new UserDeviceToken(Convert.ToString(reader["code"]), userFound, Convert.ToString(reader["mark"]),
-                               Convert.ToDateTime(reader["datetimeLog"]), lastUpdated);
+                        userDeviceToken = new UserDeviceToken(Convert.ToString(reader["code"]), Convert.ToString(reader["mark"]),
+                               userFound, Convert.ToDateTime(reader["inserted"]), lastUpdated);
 
                         userDevicesTokens.Add(userDeviceToken);
                     }
@@ -144,10 +144,11 @@ namespace DAL
 
                     User userFound = await new Puser().GetUserById(Convert.ToInt32(reader["codeEntity"]));
 
-                    DateTime lastUpdated = reader["lastUpdated"] is DBNull ? new DateTime(1970, 1, 1) : Convert.ToDateTime(reader["lastUpdated"]);
+                    DateTime lastUpdated =
+                        reader["lastUpdated"] is DBNull ? new DateTime(1970, 1, 1) : Convert.ToDateTime(reader["lastUpdated"]);
 
-                    userDeviceToken = new UserDeviceToken(Convert.ToString(reader["code"]), userFound, Convert.ToString(reader["mark"]),
-                        Convert.ToDateTime(reader["datetimeLog"]), lastUpdated);
+                    userDeviceToken = new UserDeviceToken(Convert.ToString(reader["code"]), Convert.ToString(reader["mark"]), userFound,
+                        Convert.ToDateTime(reader["inserted"]), lastUpdated);
 
                 }
 

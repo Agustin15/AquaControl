@@ -54,11 +54,11 @@ namespace Entities
 
         public UserDeviceToken() { }
 
-        public UserDeviceToken(string id, User user, string token, DateTime created, DateTime lastModified)
+        public UserDeviceToken(string id, string token, User user, DateTime created, DateTime lastModified)
         {
             Id = id;
-            User = user;
             Token = token;
+            User = user;
             Created = created;
             LastModified = lastModified;
         }

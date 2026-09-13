@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Entities
 {
-    public class WaterPlantLog
+    public class WaterPlantationLog
     {
         int id;
         string type;
@@ -17,7 +17,7 @@ namespace Entities
         int humidityBefore;
         int? humidityAfter;
         Tank tank;
-        Plant plant;
+        Plantation plantation;
         DateTime? datetimeStart;
         DateTime? datetimeEnd;
 
@@ -82,11 +82,11 @@ namespace Entities
             get { return tank; }
         }
 
-        [Required(ErrorMessage = "Debe ingresar una planta")]
-        public Plant Plant
+        [Required(ErrorMessage = "Debe ingresar una plantacion")]
+        public Plantation Plantation
         {
-            set { plant = value; }
-            get { return plant; }
+            set { plantation = value; }
+            get { return plantation; }
         }
 
         public DateTime? DatetimeStart
@@ -101,25 +101,24 @@ namespace Entities
             get { return datetimeEnd; }
         }
 
-        public WaterPlantLog() { }
+        public WaterPlantationLog() { }
 
 
-        public WaterPlantLog(int id, Tank tank, Plant plant, DateTime datetimeStart, DateTime datetimeEnd, string type, string state,
-         double levelTankBefore, double levelTankAfter, int humidityBefore, int humidityAfter)
+        public WaterPlantationLog(int id,string type, string state, double levelTankBefore, double levelTankAfter, 
+            int humidityBefore, int humidityAfter, Tank tank, Plantation plantation, DateTime datetimeStart, DateTime datetimeEnd)
         {
 
             Id = id;
-            Tank = tank;
-            Plant = plant;
-            DatetimeStart = datetimeStart;
-            DatetimeEnd = datetimeEnd;
             State = state.Trim();
             Type = type.Trim();
             LevelTankBefore = levelTankBefore;
             LevelTankAfter = levelTankAfter;
             HumidityBefore = humidityBefore;
             HumidityAfter = humidityAfter;
-
+            Tank = tank;
+            Plantation = plantation;
+            DatetimeStart = datetimeStart;
+            DatetimeEnd = datetimeEnd;
         }
 
     }

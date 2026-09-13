@@ -27,7 +27,7 @@ namespace Entities
 
 
         [Required(AllowEmptyStrings = false, ErrorMessage = "Titulo no puede estar vacio")]
-        [MaxLength(30, ErrorMessage = "Titulo no puede tener mas de 30 caracteres")]
+        [MaxLength(50, ErrorMessage = "Titulo no puede tener mas de 50 caracteres")]
         public string Title
         {
             set { title = value; }

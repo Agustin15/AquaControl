@@ -1,4 +1,5 @@
-﻿using Api.Model;
+﻿using Api.Filters;
+using Api.Model;
 using DAL;
 using Entities;
 using Logic;
@@ -15,20 +16,17 @@ namespace Api.Controllers
 
     public class DeviceController : ControllerBase
     {
-        [Authorize(Roles = "Administrador")]
-        [Authorize(AuthenticationSchemes = "Bearer")]
+
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "Administrador", Policy = "HasUser")]
+        [ValidateModelFilter]
         [Route("api/device")]
         [HttpPost]
         public async Task<IActionResult> AddDevice([FromBody] Device device)
         {
             try
             {
-                if (!User.Identity.IsAuthenticated || User.FindFirst(ClaimTypes.NameIdentifier) is null)
-                    return Unauthorized();
 
                 int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-
-                if (!ModelState.IsValid) return StatusCode(400, new { message = ModelState.Values.First().Errors.First().ErrorMessage });
 
                 if (device.Users.Count == 0 || device.Users.First().Id != idUser)
                     return StatusCode(400, new { message = "El usuario asociado al dispositivo de riego es distinto al usuario logueado" });
@@ -44,8 +42,8 @@ namespace Api.Controllers
             }
         }
 
-        [Authorize(Roles = "Administrador")]
-        [Authorize(AuthenticationSchemes = "Bearer")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "Administrador", Policy = "HasUser")]
+        [ValidateModelFilter]
         [HttpPut]
         [Route("api/device")]
         public async Task<IActionResult> UpdateDevice([FromBody] Device device)
@@ -53,12 +51,7 @@ namespace Api.Controllers
             try
             {
 
-                if (!User.Identity.IsAuthenticated || User.FindFirst(ClaimTypes.NameIdentifier) is null)
-                    return Unauthorized();
-
                 int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-
-                if (!ModelState.IsValid) return StatusCode(400, new { message = ModelState.Values.First().Errors.First().ErrorMessage });
 
                 List<Device> devicesUser = await new Ldevice().GetDevicesByIdUser(idUser);
 
@@ -76,17 +69,14 @@ namespace Api.Controllers
             }
         }
 
-        [Authorize(Roles = "Administrador")]
-        [Authorize(AuthenticationSchemes = "Bearer")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "Administrador", Policy = "HasUser")]
+        [ValidateModelFilter]
         [HttpDelete]
         [Route("api/device")]
         public async Task<IActionResult> DeleteDevice(Device device)
         {
             try
             {
-
-                if (!User.Identity.IsAuthenticated || User.FindFirst(ClaimTypes.NameIdentifier) is null)
-                    return Unauthorized();
 
                 int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
@@ -106,8 +96,8 @@ namespace Api.Controllers
             }
         }
 
-        [Authorize(Roles = "Administrador")]
-        [Authorize(AuthenticationSchemes = "Bearer")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "Administrador", Policy = "HasIdDeviceAndUser")]
+        [ValidateModelFilter]
         [HttpDelete]
         [Route("api/device/userDevice")]
         public async Task<IActionResult> DeleteUserOfDevice([FromBody] User user)
@@ -115,15 +105,14 @@ namespace Api.Controllers
             try
             {
 
-                if (!User.Identity.IsAuthenticated || User.FindFirst(ClaimTypes.NameIdentifier) is null || User.FindFirst("IdDevice") is null)
-                    return Unauthorized();
-
                 int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
                 int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
 
                 Device device = await new Ldevice().GetDeviceById(idDevice);
 
-                if (device is null) throw new Exception("Dispositivo no encontrado");
+                if (device is null) return StatusCode(404, new { message = "Dispositivo no encontrado" });
+
+                if (device.Users.Find(user => user.Id == idUser) == null) return StatusCode(403, new { message = "No tiene accesso a este dispositivo" });
 
                 await new Ldevice().DeleteUserOfDevice(device, user);
 
@@ -136,16 +125,13 @@ namespace Api.Controllers
             }
         }
 
-        [Authorize(AuthenticationSchemes = "Bearer")]
+        [Authorize(AuthenticationSchemes = "Bearer", Policy = "HasUser")]
         [HttpGet]
         [Route("api/device/allUserDevices")]
         public async Task<ActionResult> GetDevicesByIdUser()
         {
             try
             {
-
-                if (!User.Identity.IsAuthenticated || User.FindFirst(ClaimTypes.NameIdentifier) is null)
-                    return Unauthorized();
 
                 int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
@@ -163,16 +149,14 @@ namespace Api.Controllers
             }
         }
 
-        [Authorize(AuthenticationSchemes = "Bearer")]
+        [Authorize(AuthenticationSchemes = "Bearer", Policy = "HasUser")]
+        [ValidateModelFilter]
         [Route("api/device/deviceSelected")]
         [HttpPost]
         public async Task<IActionResult> SelectDevice([FromBody] Device device)
         {
             try
             {
-
-                if (!User.Identity.IsAuthenticated || User.FindFirst(ClaimTypes.NameIdentifier) is null)
-                    return Unauthorized();
 
                 int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 

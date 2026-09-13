@@ -1,0 +1,431 @@
+﻿22 matches found: 
+<match path=C:\develop\AquaControl\backend\AquaControlApi\Entities\Plant.cs>
+    // Lines 41 to 86
+</match>
+<match path=C:\develop\AquaControl\backend\AquaControlApi\Entities\Plant.cs>
+    // Lines 11 to 40
+</match>
+<match path=C:\develop\AquaControl\backend\AquaControlApi\Entities\WaterPlantLog.cs>
+    // Lines 11 to 40
+</match>
+<match path=C:\develop\AquaControl\backend\AquaControlApi\Entities\WaterPlantLog.cs>
+    // Lines 11 to 40
+</match>
+<match path=C:\develop\AquaControl\frontend\src\components\deviceIrrigation\settings\Settings.jsx>
+    File: `frontend/src/components/deviceIrrigation/settings/Settings.jsx`
+```javascript
+import styles from "./Settings.module.css";
+import iconConfig from "../../../assets/img/config.png";
+import { useState } from "react";
+import { PlantProvider } from "../../../contexts/plantContext/PlantContext";
+import { FormPlantProvider } from "../../../contexts/plantContext/FormPlantContext";
+import { TankProvider } from "../../../contexts/tankContext/TankContext";
+import { FormTankProvider } from "../../../contexts/tankContext/FormTankContext";
+import { Tanks } from "./tank/Tanks";
+import { Plants } from "./plants/Plants";
+
+
+export const Settings = () => {
+  const [option, setOption] = useState("plants");
+
+  return (
+    <div className={styles.settings}>
+      <h3>
+        <img src={iconConfig}></img> Ajustes
+      </h3>
+      <div className={styles.crud}>
+        <ul className={styles.menu}>
+          <li
+            className={option == "plants" ? styles.selected : ""}
+            onClick={() => setOption("plants")}
+          >
+            Plantas
+          </li>
+          <li
+            className={option == "tank" ? styles.selected : ""}
+            /*...*/
+```
+</match>
+<match path=C:\develop\AquaControl\frontend\src\components\deviceIrrigation\settings\Settings.jsx>
+    File: `frontend/src/components/deviceIrrigation/settings/Settings.jsx`
+```javascript
+import styles from "./Settings.module.css";
+import iconConfig from "../../../assets/img/config.png";
+import { useState } from "react";
+import { PlantProvider } from "../../../contexts/plantContext/PlantContext";
+import { FormPlantProvider } from "../../../contexts/plantContext/FormPlantContext";
+import { TankProvider } from "../../../contexts/tankContext/TankContext";
+import { FormTankProvider } from "../../../contexts/tankContext/FormTankContext";
+import { Tanks } from "./tank/Tanks";
+import { Plants } from "./plants/Plants";
+
+
+export const Settings = () => {
+  const [option, setOption] = useState("plants");
+
+  return (
+    <div className={styles.settings}>
+      <h3>
+        <img src={iconConfig}></img> Ajustes
+      </h3>
+      <div className={styles.crud}>
+        <ul className={styles.menu}>
+          <li
+            className={option == "plants" ? styles.selected : ""}
+            onClick={() => setOption("plants")}
+          >
+            Plantas
+          </li>
+          <li
+            className={option == "tank" ? styles.selected : ""}
+            /*...*/
+```
+</match>
+<match path=C:\develop\AquaControl\frontend\src\components\deviceIrrigation\settings\plants\info\Info.jsx>
+    File: `frontend/src/components/deviceIrrigation/settings/plants/info/Info.jsx`
+```javascript
+import styles from "./Info.module.css";
+import iconInfo from "../../../../../assets/img/info.png";
+import iconPlant from "../../../../../assets/img/plant.png";
+import { usePlant } from "../../../../../contexts/plantContext/PlantContext";
+
+export const Info = () => {
+  const { setInfoPlant, infoPlant } = usePlant();
+  return (
+    <div className={styles.infoPlant}>
+      <div className={styles.header}>
+        <img src={iconInfo}></img>
+        <h3>Detalles planta N° {infoPlant.id}</h3>
+        <button onClick={() => setInfoPlant(false)}>Cerrar</button>
+      </div>
+
+      <div className={styles.info}>
+        <div className={styles.containImage}>
+          {infoPlant.image ? (
+            <div className={styles.image}>
+              <img src={"data:image/jpg;base64," + infoPlant.image}></img>
+            </div>
+          ) : (
+            <div className={styles.noImage}>
+              <img src={iconPlant}></img>
+              <span>Sin imagen </span>
+            </div>
+          )}
+        </div>
+      /*...*/
+```
+</match>
+<match path=C:\develop\AquaControl\frontend\src\components\deviceIrrigation\settings\plants\info\Info.jsx>
+    File: `frontend/src/components/deviceIrrigation/settings/plants/info/Info.jsx`
+```javascript
+import styles from "./Info.module.css";
+import iconInfo from "../../../../../assets/img/info.png";
+import iconPlant from "../../../../../assets/img/plant.png";
+import { usePlant } from "../../../../../contexts/plantContext/PlantContext";
+
+export const Info = () => {
+  const { setInfoPlant, infoPlant } = usePlant();
+  return (
+    <div className={styles.infoPlant}>
+      <div className={styles.header}>
+        <img src={iconInfo}></img>
+        <h3>Detalles planta N° {infoPlant.id}</h3>
+        <button onClick={() => setInfoPlant(false)}>Cerrar</button>
+      </div>
+
+      <div className={styles.info}>
+        <div className={styles.containImage}>
+          {infoPlant.image ? (
+            <div className={styles.image}>
+              <img src={"data:image/jpg;base64," + infoPlant.image}></img>
+            </div>
+          ) : (
+            <div className={styles.noImage}>
+              <img src={iconPlant}></img>
+              <span>Sin imagen </span>
+            </div>
+          )}
+        </div>
+      /*...*/
+```
+</match>
+<match path=C:\develop\AquaControl\frontend\src\components\deviceIrrigation\irrigation\record\info\Info.jsx>
+    File: `frontend/src/components/deviceIrrigation/irrigation/record/info/Info.jsx`
+```javascript
+import styles from "./Info.module.css";
+import iconInfo from "../../../../../assets/img/info.png";
+import { LevelHumidity } from "../../../humidityPlantLogs/logs/levelHumidity/LevelHumidity";
+import { LevelTank } from "../../../waterTankLogs/logs/levelTank/LevelTank";
+
+export const Info = ({ info, setInfo }) => {
+
+  return (
+    <div className={styles.info}>
+      <div className={styles.header}>
+        <img src={iconInfo}></img>
+        <h3>Detalles del riego</h3>
+        <button onClick={() => setInfo(null)}>Cerrar</button>
+      </div>
+
+      <div className={styles.row}>
+        <div className={styles.plant}>
+          <h3>Planta:</h3>
+          <div className={styles.detail}>
+            <span>Humedad previa: {info.humidityBefore}%</span>
+            <LevelHumidity humidity={info.humidityBefore} />
+          </div>
+          <div className={styles.detail}>
+            <span>Humedad posterior: {info.humidityAfter}%</span>
+          /*...*/
+```
+</match>
+<match path=C:\develop\AquaControl\frontend\src\components\deviceIrrigation\irrigation\record\info\Info.jsx>
+    File: `frontend/src/components/deviceIrrigation/irrigation/record/info/Info.jsx`
+```javascript
+import styles from "./Info.module.css";
+import iconInfo from "../../../../../assets/img/info.png";
+import { LevelHumidity } from "../../../humidityPlantLogs/logs/levelHumidity/LevelHumidity";
+import { LevelTank } from "../../../waterTankLogs/logs/levelTank/LevelTank";
+
+export const Info = ({ info, setInfo }) => {
+
+  return (
+    <div className={styles.info}>
+      <div className={styles.header}>
+        <img src={iconInfo}></img>
+        <h3>Detalles del riego</h3>
+        <button onClick={() => setInfo(null)}>Cerrar</button>
+      </div>
+
+      <div className={styles.row}>
+        <div className={styles.plant}>
+          <h3>Planta:</h3>
+          <div className={styles.detail}>
+            <span>Humedad previa: {info.humidityBefore}%</span>
+            <LevelHumidity humidity={info.humidityBefore} />
+          </div>
+          <div className={styles.detail}>
+            <span>Humedad posterior: {info.humidityAfter}%</span>
+          /*...*/
+```
+</match>
+<match path=C:\develop\AquaControl\backend\AquaControlApi\Entities\obj\Debug\net8.0\Entities.csproj.FileListAbsolute.txt>
+    // Lines 7 to 12
+</match>
+<match path=C:\develop\AquaControl\backend\AquaControlApi\Entities\obj\Debug\net8.0\Entities.csproj.FileListAbsolute.txt>
+    File: `backend/AquaControlApi/Entities/obj/Debug/net8.0/Entities.csproj.FileListAbsolute.txt`
+```text
+C:\develop\AquaControl\backend\AquaControlApi\Entities\bin\Debug\net8.0\Entities.deps.json
+C:\develop\AquaControl\backend\AquaControlApi\Entities\bin\Debug\net8.0\Entities.dll
+C:\develop\AquaControl\backend\AquaControlApi\Entities\bin\Debug\net8.0\Entities.pdb
+C:\develop\AquaControl\backend\AquaControlApi\Entities\obj\Debug\net8.0\Entities.GeneratedMSBuildEditorConfig.editorconfig
+C:\develop\AquaControl\backend\AquaControlApi\Entities\obj\Debug\net8.0\Entities.AssemblyInfoInputs.cache
+C:\develop\AquaControl\backend\AquaControlApi\Entities\obj\Debug\net8.0\Entities.AssemblyInfo.cs
+C:\develop\AquaControl\backend\AquaControlApi\Entities\obj\Debug\net8.0\Entities.csproj.CoreCompileInputs.cache
+...
+```
+</match>
+<match path=C:\develop\AquaControl\backend\AquaControlApi\Entities\obj\Debug\net8.0\Entities.AssemblyInfo.cs>
+    File: `backend/AquaControlApi/Entities/obj/Debug/net8.0/Entities.AssemblyInfo.cs`
+```c#
+//------------------------------------------------------------------------------
+// <auto-generated>
+//     Este código fue generado por una herramienta.
+//     Versión de runtime:4.0.30319.42000
+//
+//     Los cambios en este archivo podrían causar un comportamiento incorrecto y se perderán si
+//     se vuelve a generar el código.
+// </auto-generated>
+//------------------------------------------------------------------------------
+
+using System;
+using System.Reflection;
+
+[assembly: System.Reflection.AssemblyCompanyAttribute("Entities")]
+[assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
+[assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+79692079aaf0c4c6306dd37d34d7c04e6e594667")]
+[assembly: System.Reflection.AssemblyProductAttribute("Entities")]
+[assembly: System.Reflection.AssemblyTitleAttribute("Entities")]
+[assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
+
+// Generado por la clase WriteCodeFragment de MSBuild.
+
+
+```
+</match>
+<match path=C:\develop\AquaControl\backend\AquaControlApi\Entities\obj\Debug\net8.0\Entities.AssemblyInfo.cs>
+    File: `backend/AquaControlApi/Entities/obj/Debug/net8.0/Entities.AssemblyInfo.cs`
+```c#
+//------------------------------------------------------------------------------
+// <auto-generated>
+//     Este código fue generado por una herramienta.
+//     Versión de runtime:4.0.30319.42000
+//
+//     Los cambios en este archivo podrían causar un comportamiento incorrecto y se perderán si
+//     se vuelve a generar el código.
+// </auto-generated>
+//------------------------------------------------------------------------------
+
+using System;
+using System.Reflection;
+
+[assembly: System.Reflection.AssemblyCompanyAttribute("Entities")]
+[assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
+[assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+79692079aaf0c4c6306dd37d34d7c04e6e594667")]
+[assembly: System.Reflection.AssemblyProductAttribute("Entities")]
+[assembly: System.Reflection.AssemblyTitleAttribute("Entities")]
+[assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
+
+// Generado por la clase WriteCodeFragment de MSBuild.
+
+
+```
+</match>
+<match path=C:\develop\AquaControl\backend\AquaControlApi\Entities\Alert.cs>
+    File: `backend/AquaControlApi/Entities/Alert.cs`
+```c#
+/*...*/using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Entities
+{
+    /*...*/
+}
+
+```
+</match>
+<match path=C:\develop\AquaControl\backend\AquaControlApi\Entities\Alert.cs>
+    File: `backend/AquaControlApi/Entities/Alert.cs`
+```c#
+/*...*/using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Entities
+{
+    /*...*/
+}
+
+```
+</match>
+<match path=C:\develop\AquaControl\backend\AquaControlApi\Entities\Tank.cs>
+    File: `backend/AquaControlApi/Entities/Tank.cs`
+```c#
+/*...*/using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+
+namespace Entities
+{
+    /*...*/
+}
+
+```
+</match>
+<match path=C:\develop\AquaControl\backend\AquaControlApi\Entities\Tank.cs>
+    File: `backend/AquaControlApi/Entities/Tank.cs`
+```c#
+/*...*/using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+
+namespace Entities
+{
+    /*...*/
+}
+
+```
+</match>
+<match path=C:\develop\AquaControl\backend\AquaControlApi\Entities\User.cs>
+    File: `backend/AquaControlApi/Entities/User.cs`
+```c#
+/*...*/using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+
+
+namespace Entities
+{
+    /*...*/
+}
+
+```
+</match>
+<match path=C:\develop\AquaControl\backend\AquaControlApi\Entities\User.cs>
+    File: `backend/AquaControlApi/Entities/User.cs`
+```c#
+/*...*/using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+
+
+namespace Entities
+{
+    /*...*/
+}
+
+```
+</match>
+<match path=C:\develop\AquaControl\backend\AquaControlApi\Entities\Device.cs>
+    File: `backend/AquaControlApi/Entities/Device.cs`
+```c#
+/*...*/using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+
+namespace Entities
+{
+    /*...*/
+}
+
+```
+</match>
+<match path=C:\develop\AquaControl\backend\AquaControlApi\Entities\WaterTankLog.cs>
+    File: `backend/AquaControlApi/Entities/WaterTankLog.cs`
+```c#
+/*...*/using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Entities
+{
+    /*...*/
+}
+
+```
+</match>

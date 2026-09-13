@@ -147,7 +147,8 @@ namespace DAL
                     await reader.ReadAsync();
 
                     device = new Device(Convert.ToInt32(reader["codePlaque"]), Convert.ToString(reader["place"]),
-                           reader["geography"] is DBNull ? null : Convert.ToString(reader["geography"]), users, Convert.ToDateTime(reader["inserted"]));
+                           reader["geography"] is DBNull ? null : Convert.ToString(reader["geography"]),
+                           users, Convert.ToDateTime(reader["inserted"]));
 
                 }
                 await reader.CloseAsync();

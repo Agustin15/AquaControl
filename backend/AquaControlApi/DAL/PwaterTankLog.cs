@@ -44,7 +44,7 @@ namespace DAL
         {
 
             WaterTankLog waterTankLog = null;
-            WaterPlantLog waterPlantLogMostNearly = null;
+            WaterPlantationLog waterPlantationLogMostNearly = null;
             List<WaterTankLog> waterTankLogs = new List<WaterTankLog>();
 
             SqlConnection connection = new SqlConnection(DBConnection.Cnn);
@@ -63,15 +63,16 @@ namespace DAL
                 {
                     List<Tank> tanks = await new Ptank().GetAllTanksByDevice(idDevice);
                     Tank tankFound = tanks.Find(t => t.Id == idTank);
-
                     while (await reader.ReadAsync())
                     {
-                        waterPlantLogMostNearly = await new PwaterPlantLog().GetWaterPlantLogMostNearylToWaterTank(idTank, idDevice, Convert.ToDateTime(reader["moment"]));
+                        waterPlantationLogMostNearly = await new PwaterPlantationLog().
+                            GetWaterPlantationLogMostNearylToWaterTank(idTank, idDevice, Convert.ToDateTime(reader["moment"]), Convert.ToDouble(reader["measure"]));
 
-                        waterTankLog = new WaterTankLog(Convert.ToInt32(reader["codeLiquidBowl"]), tankFound, Convert.ToDouble(reader["measure"]),
-                        (waterPlantLogMostNearly.LevelTankAfter == Convert.ToDouble(reader["measure"]) ? waterPlantLogMostNearly : null),
-                        Convert.ToDateTime(reader["moment"]));
 
+                        waterTankLog = new WaterTankLog(Convert.ToInt32(reader["codeLiquidBowl"]), Convert.ToDouble(reader["measure"]),
+                            tankFound, (waterPlantationLogMostNearly != null ? waterPlantationLogMostNearly : null), Convert.ToDateTime(reader["moment"]));
+
+                        waterTankLogs.Add(waterTankLog);
                     }
                 }
             }

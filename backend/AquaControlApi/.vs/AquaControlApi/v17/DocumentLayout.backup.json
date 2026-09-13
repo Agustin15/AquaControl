@@ -3,8 +3,20 @@
   "WorkspaceRootPath": "C:\\develop\\AquaControl\\backend\\AquaControlApi\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{1ECA56E5-04A1-493C-AF8B-2C637F7CA81B}|Api\\Api.csproj|c:\\develop\\aquacontrol\\backend\\aquacontrolapi\\api\\controllers\\devicecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1ECA56E5-04A1-493C-AF8B-2C637F7CA81B}|Api\\Api.csproj|solutionrelative:api\\controllers\\devicecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1ECA56E5-04A1-493C-AF8B-2C637F7CA81B}|Api\\Api.csproj|c:\\develop\\aquacontrol\\backend\\aquacontrolapi\\api\\controllers\\waterplantationlogcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1ECA56E5-04A1-493C-AF8B-2C637F7CA81B}|Api\\Api.csproj|solutionrelative:api\\controllers\\waterplantationlogcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{171D7675-23B1-490E-958E-EB371170F68F}|DAL\\DAL.csproj|c:\\develop\\aquacontrol\\backend\\aquacontrolapi\\dal\\pwaterplantationlog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{171D7675-23B1-490E-958E-EB371170F68F}|DAL\\DAL.csproj|solutionrelative:dal\\pwaterplantationlog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{171D7675-23B1-490E-958E-EB371170F68F}|DAL\\DAL.csproj|c:\\develop\\aquacontrol\\backend\\aquacontrolapi\\dal\\pwatertanklog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{171D7675-23B1-490E-958E-EB371170F68F}|DAL\\DAL.csproj|solutionrelative:dal\\pwatertanklog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{171D7675-23B1-490E-958E-EB371170F68F}|DAL\\DAL.csproj|c:\\develop\\aquacontrol\\backend\\aquacontrolapi\\dal\\pplantation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{171D7675-23B1-490E-958E-EB371170F68F}|DAL\\DAL.csproj|solutionrelative:dal\\pplantation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -23,14 +35,53 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "DeviceController.cs",
-              "DocumentMoniker": "C:\\develop\\AquaControl\\backend\\AquaControlApi\\Api\\Controllers\\DeviceController.cs",
-              "RelativeDocumentMoniker": "Api\\Controllers\\DeviceController.cs",
-              "ToolTip": "C:\\develop\\AquaControl\\backend\\AquaControlApi\\Api\\Controllers\\DeviceController.cs",
-              "RelativeToolTip": "Api\\Controllers\\DeviceController.cs",
-              "ViewState": "AgIAAKUAAAAAAAAAAAAowLAAAAAQAAAAAAAAAA==",
+              "Title": "WaterPlantationLogController.cs",
+              "DocumentMoniker": "C:\\develop\\AquaControl\\backend\\AquaControlApi\\Api\\Controllers\\WaterPlantationLogController.cs",
+              "RelativeDocumentMoniker": "Api\\Controllers\\WaterPlantationLogController.cs",
+              "ToolTip": "C:\\develop\\AquaControl\\backend\\AquaControlApi\\Api\\Controllers\\WaterPlantationLogController.cs",
+              "RelativeToolTip": "Api\\Controllers\\WaterPlantationLogController.cs",
+              "ViewState": "AgIAAGEAAAAAAAAAAAAkwHYAAAAjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-06T23:05:28.492Z",
+              "WhenOpened": "2026-09-12T21:57:32.346Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "PwaterPlantationLog.cs",
+              "DocumentMoniker": "C:\\develop\\AquaControl\\backend\\AquaControlApi\\DAL\\PwaterPlantationLog.cs",
+              "RelativeDocumentMoniker": "DAL\\PwaterPlantationLog.cs",
+              "ToolTip": "C:\\develop\\AquaControl\\backend\\AquaControlApi\\DAL\\PwaterPlantationLog.cs",
+              "RelativeToolTip": "DAL\\PwaterPlantationLog.cs",
+              "ViewState": "AgIAANwAAAAAAAAAAAArwO4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-12T21:53:52.865Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "PwaterTankLog.cs",
+              "DocumentMoniker": "C:\\develop\\AquaControl\\backend\\AquaControlApi\\DAL\\PwaterTankLog.cs",
+              "RelativeDocumentMoniker": "DAL\\PwaterTankLog.cs",
+              "ToolTip": "C:\\develop\\AquaControl\\backend\\AquaControlApi\\DAL\\PwaterTankLog.cs",
+              "RelativeToolTip": "DAL\\PwaterTankLog.cs",
+              "ViewState": "AgIAADQAAAAAAAAAAAAQwEQAAABGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-12T21:10:06.353Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Pplantation.cs",
+              "DocumentMoniker": "C:\\develop\\AquaControl\\backend\\AquaControlApi\\DAL\\Pplantation.cs",
+              "RelativeDocumentMoniker": "DAL\\Pplantation.cs",
+              "ToolTip": "C:\\develop\\AquaControl\\backend\\AquaControlApi\\DAL\\Pplantation.cs",
+              "RelativeToolTip": "DAL\\Pplantation.cs",
+              "ViewState": "AgIAAHgAAAAAAAAAAAAYwIEAAABUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-12T18:11:45.063Z",
               "EditorCaption": ""
             }
           ]

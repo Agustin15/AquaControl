@@ -11,20 +11,20 @@ using System.Threading.Tasks;
 
 namespace DAL
 {
-    public class PhumidityPlantLog
+    public class PhumidityPlantationLog
     {
-        public async Task Add(HumidityPlantLog humidityPlantLog)
+        public async Task Add(HumidityPlantationLog humidityPlantationLog)
         {
 
             SqlConnection connection = new SqlConnection(DBConnection.Cnn);
             try
             {
-                SqlCommand command = new SqlCommand("AddHumidityPlantLog", connection);
+                SqlCommand command = new SqlCommand("AddHumidityPlantationLog", connection);
                 command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@percentege", humidityPlantLog.Percentege);
-                command.Parameters.AddWithValue("@weatherData", JsonSerializer.Serialize(humidityPlantLog.WeatherData));
-                command.Parameters.AddWithValue("@idPlant", humidityPlantLog.Plant.Id);
-                command.Parameters.AddWithValue("@idDevice", humidityPlantLog.Plant.Device.Id);
+                command.Parameters.AddWithValue("@percentege", humidityPlantationLog.Percentege);
+                command.Parameters.AddWithValue("@weatherData", JsonSerializer.Serialize(humidityPlantationLog.WeatherData));
+                command.Parameters.AddWithValue("@idPlantation", humidityPlantationLog.Plantation.Id);
+                command.Parameters.AddWithValue("@idDevice", humidityPlantationLog.Plantation.Device.Id);
 
                 await connection.OpenAsync();
 
@@ -42,27 +42,27 @@ namespace DAL
             }
         }
 
-        public async Task<List<HumidityPlantLog>> GetHumidityPlantLogsLastWeek(int idPlant, int idDevice)
+        public async Task<List<HumidityPlantationLog>> GetHumidityPlantationLogsLastWeek(int idPlantation, int idDevice)
         {
 
             WeatherData weatherData = null;
-            List<HumidityPlantLog> humidityPlantLogs = new List<HumidityPlantLog>();
+            List<HumidityPlantationLog> humidityPlantLogs = new List<HumidityPlantationLog>();
             SqlConnection connection = new SqlConnection(DBConnection.Cnn);
 
             try
             {
-                SqlCommand command = new SqlCommand("HumidityPlantLogsLastWeek", connection);
+                SqlCommand command = new SqlCommand("HumidityPlantationLogsLastWeek", connection);
                 command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@idLand", idPlant);
+                command.Parameters.AddWithValue("@idLand", idPlantation);
                 command.Parameters.AddWithValue("@codePlaque", idDevice);
 
                 await connection.OpenAsync();
 
                 SqlDataReader reader = await command.ExecuteReaderAsync();
 
-                List<Plant> plants = await new Pplant().GetAllPlantsByDevice(idPlant);
+                List<Plantation> plantations = await new Pplantation().GetAllPlantationsByDevice(idPlantation);
 
-                Plant plantFound = plants.Find(plant => plant.Id == idPlant);
+                Plantation plantationFound = plantations.Find(plant => plant.Id == idPlantation);
 
                 if (reader.HasRows)
                 {
@@ -71,8 +71,8 @@ namespace DAL
                     {
                         weatherData = JsonSerializer.Deserialize<WeatherData>((string)reader["ambientData"]);
 
-                        HumidityPlantLog humidityPlantLog = new HumidityPlantLog(Convert.ToInt32(reader["codeHumidityLand"]), plantFound,
-                        Convert.ToInt32(reader["measure"]), weatherData, Convert.ToDateTime(reader["moment"]));
+                        HumidityPlantationLog humidityPlantLog = new HumidityPlantationLog(Convert.ToInt32(reader["codeHumidityLand"]),
+                        Convert.ToInt32(reader["measure"]), plantationFound, weatherData, Convert.ToDateTime(reader["moment"]));
 
                         humidityPlantLogs.Add(humidityPlantLog);
                     }

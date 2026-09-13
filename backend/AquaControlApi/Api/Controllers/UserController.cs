@@ -1,4 +1,5 @@
-﻿using Api.Model;
+﻿using Api.Filters;
+using Api.Model;
 using dotenv.net;
 using Entities;
 using Logic;
@@ -22,6 +23,7 @@ namespace Api.Controllers
     {
 
         [AllowAnonymous]
+        [ValidateModelFilter]
         [HttpPost]
         [Route("api/user/signup")]
         public async Task<ActionResult> SignUp([FromBody] User user)
@@ -29,8 +31,6 @@ namespace Api.Controllers
 
             try
             {
-                if (!ModelState.IsValid) return StatusCode(400, new { message = ModelState.Values.First().Errors.First().ErrorMessage });
-
                 user.ValidationPassword();
 
                 var result = await new Luser().Signup(user);

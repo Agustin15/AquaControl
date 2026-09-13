@@ -1,4 +1,5 @@
-﻿using Entities;
+﻿using Api.Filters;
+using Entities;
 using Logic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -11,7 +12,8 @@ namespace Api.Controllers
     [ApiController]
     public class UserDeviceTokenController : ControllerBase
     {
-        [Authorize(AuthenticationSchemes = "Bearer")]
+        [Authorize(AuthenticationSchemes = "Bearer", Policy = "HasUser")]
+        [ValidateModelFilter]
         [HttpPost]
         [Route("api/userDeviceToken")]
         public async Task<ActionResult> VerifyIfExistsUserDeviceToken([FromBody] UserDeviceToken userDeviceToken)
@@ -20,12 +22,7 @@ namespace Api.Controllers
 
             {
 
-                if (!User.Identity.IsAuthenticated || User.FindFirst(ClaimTypes.NameIdentifier) is null)
-                    return Unauthorized();
-
                 int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-
-                if (!ModelState.IsValid) return StatusCode(400, new { message = ModelState.Values.First().Errors.First().ErrorMessage });
 
                 if (userDeviceToken.User.Id != idUser)
                     return StatusCode(403, new { message = "Usuario del token del dispositivo movil ingresado, no coindice con el logueado" });

@@ -22,6 +22,8 @@ namespace Logic
         public async Task<object> Signup(User user)
         {
 
+            user.Role = "Usuario";
+
             SqlConnection connection = new SqlConnection(DBConnection.Cnn);
             SqlTransaction transaction = null;
 
@@ -48,7 +50,7 @@ namespace Logic
                 transaction = connection.BeginTransaction();
 
                 int idGenerated = await new Puser().AddWithTransaction(user, transaction);
-                user.Id= idGenerated;
+                user.Id = idGenerated;
 
                 //creacion del token de acceso y de actualizacion
                 var jwtAccessTokenSerialized = authentication.GenerateAccessJWTtoken(user, 0);

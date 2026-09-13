@@ -12,7 +12,7 @@ namespace Entities
         int id;
         double percentege;
         Tank tank;
-        WaterPlantLog? waterPlantMostNearly;
+        WaterPlantationLog? waterPlantationMostNearly;
         DateTime? datetimeLog;
 
         public int Id
@@ -38,10 +38,10 @@ namespace Entities
             get { return tank; }
         }
 
-        public WaterPlantLog? WaterPlantMostNearly
+        public WaterPlantationLog? WaterPlantationMostNearly
         {
-            set { waterPlantMostNearly = value; }
-            get { return waterPlantMostNearly; }
+            set { waterPlantationMostNearly = value; }
+            get { return waterPlantationMostNearly; }
         }
 
 
@@ -54,13 +54,13 @@ namespace Entities
 
         public WaterTankLog() { }
 
-        public WaterTankLog(int id, Tank tank, double percentege, WaterPlantLog waterPlantMostNearly, DateTime datetimeLog)
+        public WaterTankLog(int id, double percentege, Tank tank, WaterPlantationLog waterPlantationMostNearly, DateTime datetimeLog)
         {
 
             Id = id;
-            Tank = tank;
             Percentege = percentege;
-            WaterPlantMostNearly = waterPlantMostNearly;
+            Tank = tank;
+            WaterPlantationMostNearly = waterPlantationMostNearly;
             DatetimeLog = datetimeLog;
 
         }

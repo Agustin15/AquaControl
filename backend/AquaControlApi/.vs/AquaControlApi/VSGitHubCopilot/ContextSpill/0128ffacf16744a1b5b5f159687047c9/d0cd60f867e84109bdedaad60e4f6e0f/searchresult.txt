@@ -1,0 +1,461 @@
+﻿16 matches found: 
+<match path=C:\develop\AquaControl\backend\AquaControlApi\Entities\Plant.cs>
+    // Lines 41 to 86
+</match>
+<match path=C:\develop\AquaControl\backend\AquaControlApi\Entities\Plant.cs>
+    // Lines 11 to 40
+</match>
+<match path=C:\develop\AquaControl\frontend\src\components\deviceIrrigation\settings\Settings.jsx>
+    File: `frontend/src/components/deviceIrrigation/settings/Settings.jsx`
+```javascript
+import styles from "./Settings.module.css";
+import iconConfig from "../../../assets/img/config.png";
+import { useState } from "react";
+import { PlantProvider } from "../../../contexts/plantContext/PlantContext";
+import { FormPlantProvider } from "../../../contexts/plantContext/FormPlantContext";
+import { TankProvider } from "../../../contexts/tankContext/TankContext";
+import { FormTankProvider } from "../../../contexts/tankContext/FormTankContext";
+import { Tanks } from "./tank/Tanks";
+import { Plants } from "./plants/Plants";
+
+
+export const Settings = () => {
+  const [option, setOption] = useState("plants");
+
+  return (
+    <div className={styles.settings}>
+      <h3>
+        <img src={iconConfig}></img> Ajustes
+      </h3>
+      <div className={styles.crud}>
+        <ul className={styles.menu}>
+          <li
+            className={option == "plants" ? styles.selected : ""}
+            onClick={() => setOption("plants")}
+          >
+            Plantas
+          </li>
+          <li
+            className={option == "tank" ? styles.selected : ""}
+            /*...*/
+```
+</match>
+<match path=C:\develop\AquaControl\frontend\src\components\deviceIrrigation\settings\Settings.jsx>
+    File: `frontend/src/components/deviceIrrigation/settings/Settings.jsx`
+```javascript
+import styles from "./Settings.module.css";
+import iconConfig from "../../../assets/img/config.png";
+import { useState } from "react";
+import { PlantProvider } from "../../../contexts/plantContext/PlantContext";
+import { FormPlantProvider } from "../../../contexts/plantContext/FormPlantContext";
+import { TankProvider } from "../../../contexts/tankContext/TankContext";
+import { FormTankProvider } from "../../../contexts/tankContext/FormTankContext";
+import { Tanks } from "./tank/Tanks";
+import { Plants } from "./plants/Plants";
+
+
+export const Settings = () => {
+  const [option, setOption] = useState("plants");
+
+  return (
+    <div className={styles.settings}>
+      <h3>
+        <img src={iconConfig}></img> Ajustes
+      </h3>
+      <div className={styles.crud}>
+        <ul className={styles.menu}>
+          <li
+            className={option == "plants" ? styles.selected : ""}
+            onClick={() => setOption("plants")}
+          >
+            Plantas
+          </li>
+          <li
+            className={option == "tank" ? styles.selected : ""}
+            /*...*/
+```
+</match>
+<match path=C:\develop\AquaControl\backend\AquaControlApi\Entities\WaterPlantLog.cs>
+    // Lines 11 to 40
+</match>
+<match path=C:\develop\AquaControl\frontend\src\components\deviceIrrigation\irrigation\currentIrrigation\waterTank\recipient\Recipient.jsx>
+    File: `frontend/src/components/deviceIrrigation/irrigation/currentIrrigation/waterTank/recipient/Recipient.jsx`
+```javascript
+import iconDrop from "../../../../../../assets/img/drop.svg";
+
+export const Recipient = () => {
+  return (
+    <>
+      <image width={30} height={30} x={42} y={82} href={iconDrop}></image>
+
+      <ellipse
+        rx={58}
+        ry={20}
+        cx={55}
+        cy={30}
+        opacity={0.2}
+        fill={"rgb(240, 240, 240)"}
+      />
+
+      <rect
+        x={"0"}
+        y={"31"}
+        rx={1}
+        ry={1}
+        width={110}
+        height={130}
+        opacity={0.2}
+        fill={"rgb(174, 171, 171)"}
+      ></rect>
+    </>
+  );
+};
+
+```
+</match>
+<match path=C:\develop\AquaControl\frontend\src\components\deviceIrrigation\irrigation\currentIrrigation\waterTank\recipient\Recipient.jsx>
+    File: `frontend/src/components/deviceIrrigation/irrigation/currentIrrigation/waterTank/recipient/Recipient.jsx`
+```javascript
+import iconDrop from "../../../../../../assets/img/drop.svg";
+
+export const Recipient = () => {
+  return (
+    <>
+      <image width={30} height={30} x={42} y={82} href={iconDrop}></image>
+
+      <ellipse
+        rx={58}
+        ry={20}
+        cx={55}
+        cy={30}
+        opacity={0.2}
+        fill={"rgb(240, 240, 240)"}
+      />
+
+      <rect
+        x={"0"}
+        y={"31"}
+        rx={1}
+        ry={1}
+        width={110}
+        height={130}
+        opacity={0.2}
+        fill={"rgb(174, 171, 171)"}
+      ></rect>
+    </>
+  );
+};
+
+```
+</match>
+<match path=C:\develop\AquaControl\frontend\src\components\deviceIrrigation\settings\plants\info\Info.jsx>
+    File: `frontend/src/components/deviceIrrigation/settings/plants/info/Info.jsx`
+```javascript
+import styles from "./Info.module.css";
+import iconInfo from "../../../../../assets/img/info.png";
+import iconPlant from "../../../../../assets/img/plant.png";
+import { usePlant } from "../../../../../contexts/plantContext/PlantContext";
+
+export const Info = () => {
+  const { setInfoPlant, infoPlant } = usePlant();
+  return (
+    <div className={styles.infoPlant}>
+      <div className={styles.header}>
+        <img src={iconInfo}></img>
+        <h3>Detalles planta N° {infoPlant.id}</h3>
+        <button onClick={() => setInfoPlant(false)}>Cerrar</button>
+      </div>
+
+      <div className={styles.info}>
+        <div className={styles.containImage}>
+          {infoPlant.image ? (
+            <div className={styles.image}>
+              <img src={"data:image/jpg;base64," + infoPlant.image}></img>
+            </div>
+          ) : (
+            <div className={styles.noImage}>
+              <img src={iconPlant}></img>
+              <span>Sin imagen </span>
+            </div>
+          )}
+        </div>
+      /*...*/
+```
+</match>
+<match path=C:\develop\AquaControl\frontend\src\components\deviceIrrigation\settings\plants\info\Info.jsx>
+    File: `frontend/src/components/deviceIrrigation/settings/plants/info/Info.jsx`
+```javascript
+import styles from "./Info.module.css";
+import iconInfo from "../../../../../assets/img/info.png";
+import iconPlant from "../../../../../assets/img/plant.png";
+import { usePlant } from "../../../../../contexts/plantContext/PlantContext";
+
+export const Info = () => {
+  const { setInfoPlant, infoPlant } = usePlant();
+  return (
+    <div className={styles.infoPlant}>
+      <div className={styles.header}>
+        <img src={iconInfo}></img>
+        <h3>Detalles planta N° {infoPlant.id}</h3>
+        <button onClick={() => setInfoPlant(false)}>Cerrar</button>
+      </div>
+
+      <div className={styles.info}>
+        <div className={styles.containImage}>
+          {infoPlant.image ? (
+            <div className={styles.image}>
+              <img src={"data:image/jpg;base64," + infoPlant.image}></img>
+            </div>
+          ) : (
+            <div className={styles.noImage}>
+              <img src={iconPlant}></img>
+              <span>Sin imagen </span>
+            </div>
+          )}
+        </div>
+      /*...*/
+```
+</match>
+<match path=C:\develop\AquaControl\frontend\src\components\deviceIrrigation\settings\plants\addPlant\form\takePhoto\TakePhoto.jsx>
+    File: `frontend/src/components/deviceIrrigation/settings/plants/addPlant/form/takePhoto/TakePhoto.jsx`
+```javascript
+import styles from "./TakePhoto.module.css";
+import { Filesystem } from "@capacitor/filesystem";
+import { Camera } from "@capacitor/camera";
+import { alertError } from "../../../../../../alertSwal/alertSwal.js";
+import { useFormPlant } from "../../../../../../../contexts/plantContext/FormPlantContext.jsx";
+
+export const TakePhoto = () => {
+  const { loadingForm, setValuesForm, valuesForm } = useFormPlant();
+
+  const handleTakePhoto = async () => {
+    try {
+      const result = await Camera.takePhoto({
+        quality: 90,
+        includeMetadata: true,
+        targetWidth: 150,
+        targetHeight: 130,
+        editable: "in-app",
+      });
+
+      const { data } = await Filesystem.readFile({ path: result.uri });
+      setValuesForm({ ...valuesForm, image: data });
+      return;
+    } catch (error) {
+      if (error.indexOf("canceled") > -1) return;
+      return alertError("Ups algo salio mal al capturar la foto", "");
+      /*...*/
+```
+</match>
+<match path=C:\develop\AquaControl\frontend\src\components\deviceIrrigation\settings\plants\addPlant\form\takePhoto\TakePhoto.jsx>
+    File: `frontend/src/components/deviceIrrigation/settings/plants/addPlant/form/takePhoto/TakePhoto.jsx`
+```javascript
+import styles from "./TakePhoto.module.css";
+import { Filesystem } from "@capacitor/filesystem";
+import { Camera } from "@capacitor/camera";
+import { alertError } from "../../../../../../alertSwal/alertSwal.js";
+import { useFormPlant } from "../../../../../../../contexts/plantContext/FormPlantContext.jsx";
+
+export const TakePhoto = () => {
+  const { loadingForm, setValuesForm, valuesForm } = useFormPlant();
+
+  const handleTakePhoto = async () => {
+    try {
+      const result = await Camera.takePhoto({
+        quality: 90,
+        includeMetadata: true,
+        targetWidth: 150,
+        targetHeight: 130,
+        editable: "in-app",
+      });
+
+      const { data } = await Filesystem.readFile({ path: result.uri });
+      setValuesForm({ ...valuesForm, image: data });
+      return;
+    } catch (error) {
+      if (error.indexOf("canceled") > -1) return;
+      return alertError("Ups algo salio mal al capturar la foto", "");
+      /*...*/
+```
+</match>
+<match path=C:\develop\AquaControl\frontend\src\components\deviceIrrigation\irrigation\currentIrrigation\humitiyPlant\animationIrrigate\Rain.jsx>
+    File: `frontend/src/components/deviceIrrigation/irrigation/currentIrrigation/humitiyPlant/animationIrrigate/Rain.jsx`
+```javascript
+export const Rain = ({ cx, cy,duration }) => {
+  return (
+    <circle cx={cx} cy={cy} r={4} fill="#3cbbd1">
+      <animate
+        attributeName="cy"
+        from={cy}
+        to={74}
+        dur={duration}
+        repeatCount={"indefinite"}
+      ></animate>
+    </circle>
+  );
+};
+
+```
+</match>
+<match path=C:\develop\AquaControl\frontend\src\components\deviceIrrigation\irrigation\record\info\Info.jsx>
+    File: `frontend/src/components/deviceIrrigation/irrigation/record/info/Info.jsx`
+```javascript
+import styles from "./Info.module.css";
+import iconInfo from "../../../../../assets/img/info.png";
+import { LevelHumidity } from "../../../humidityPlantLogs/logs/levelHumidity/LevelHumidity";
+import { LevelTank } from "../../../waterTankLogs/logs/levelTank/LevelTank";
+
+export const Info = ({ info, setInfo }) => {
+
+  return (
+    <div className={styles.info}>
+      <div className={styles.header}>
+        <img src={iconInfo}></img>
+        <h3>Detalles del riego</h3>
+        <button onClick={() => setInfo(null)}>Cerrar</button>
+      </div>
+
+      <div className={styles.row}>
+        <div className={styles.plant}>
+          <h3>Planta:</h3>
+          <div className={styles.detail}>
+            <span>Humedad previa: {info.humidityBefore}%</span>
+            <LevelHumidity humidity={info.humidityBefore} />
+          </div>
+          <div className={styles.detail}>
+            <span>Humedad posterior: {info.humidityAfter}%</span>
+          /*...*/
+```
+</match>
+<match path=C:\develop\AquaControl\frontend\src\components\deviceIrrigation\irrigation\record\info\Info.jsx>
+    File: `frontend/src/components/deviceIrrigation/irrigation/record/info/Info.jsx`
+```javascript
+import styles from "./Info.module.css";
+import iconInfo from "../../../../../assets/img/info.png";
+import { LevelHumidity } from "../../../humidityPlantLogs/logs/levelHumidity/LevelHumidity";
+import { LevelTank } from "../../../waterTankLogs/logs/levelTank/LevelTank";
+
+export const Info = ({ info, setInfo }) => {
+
+  return (
+    <div className={styles.info}>
+      <div className={styles.header}>
+        <img src={iconInfo}></img>
+        <h3>Detalles del riego</h3>
+        <button onClick={() => setInfo(null)}>Cerrar</button>
+      </div>
+
+      <div className={styles.row}>
+        <div className={styles.plant}>
+          <h3>Planta:</h3>
+          <div className={styles.detail}>
+            <span>Humedad previa: {info.humidityBefore}%</span>
+            <LevelHumidity humidity={info.humidityBefore} />
+          </div>
+          <div className={styles.detail}>
+            <span>Humedad posterior: {info.humidityAfter}%</span>
+          /*...*/
+```
+</match>
+<match path=C:\develop\AquaControl\frontend\src\components\deviceIrrigation\settings\plants\Plants.module.css>
+    File: `frontend/src/components/deviceIrrigation/settings/plants/Plants.module.css`
+```css
+.containPlants {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 1rem;
+}
+
+
+.addPlant {
+    width: 95%;
+    height: auto;
+
+}
+
+.addPlant button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    width: 9rem;
+    padding: 0.3rem;
+    height: 2.2rem;
+    background: rgba(4, 27, 71, 0.374);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 12px;
+}
+
+.addPlant button img {
+    width: 19px;
+    height: 19px;
+}
+
+.loadingFilter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+    font-size: 13px;
+...
+```
+</match>
+<match path=C:\develop\AquaControl\frontend\src\components\deviceIrrigation\settings\plants\addPlant\form\takePhoto\TakePhoto.module.css>
+    File: `frontend/src/components/deviceIrrigation/settings/plants/addPlant/form/takePhoto/TakePhoto.module.css`
+```css
+.takePhoto {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    width: 85%;
+    gap: 0.7rem;
+    font-size: 13px;
+}
+
+.takePhoto img {
+    width: 250px;
+    height: 130px;
+    border-radius: 10px;
+}
+
+.takePhoto .row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.takePhoto .row button {
+    color: white;
+    font-weight: bold;
+    border: none;
+    font-size: 12px;
+    width: 8rem;
+    height: 1.8rem;
+    border-radius: 5px;
+}
+
+
+.takePhoto .btnTake {
+    background: rgb(3, 142, 234);
+}
+
+.takePhoto .btnTake:hover {
+    background: rgb(4, 131, 215);
+
+}
+
+
+.takePhoto .btnDelete {
+    background: rgb(205, 51, 51);
+}
+...
+```
+</match>

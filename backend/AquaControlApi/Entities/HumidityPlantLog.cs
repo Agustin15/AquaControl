@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Entities
 {
-    public class HumidityPlantLog
+    public class HumidityPlantationLog
     {
         int id;
         double percentege;
-        Plant plant;
+        Plantation plantation;
         WeatherData weatherData;
         DateTime? datetimeLog;
 
@@ -29,11 +29,11 @@ namespace Entities
             get { return percentege; }
         }
 
-        [Required(ErrorMessage = "Debe indicar planta a la que pertenece el registro de humedad")]
-        public Plant Plant
+        [Required(ErrorMessage = "Debe indicar la plantacion a la que pertenece el registro de humedad")]
+        public Plantation Plantation
         {
-            set { plant = value; }
-            get { return plant; }
+            set { plantation = value; }
+            get { return plantation; }
         }
 
         [Required(ErrorMessage = "Debe indicar informacion del clima")]
@@ -48,14 +48,14 @@ namespace Entities
             get { return datetimeLog; }
         }
 
-        public HumidityPlantLog() { }
+        public HumidityPlantationLog() { }
 
-        public HumidityPlantLog(int id, Plant plant, double percentege, WeatherData weatherData, DateTime datetimeLog)
+        public HumidityPlantationLog(int id, double percentege, Plantation plantation, WeatherData weatherData, DateTime datetimeLog)
         {
 
             Id = id;
-            Plant = plant;
             Percentege = percentege;
+            Plantation = plantation;
             WeatherData = weatherData;
             DatetimeLog = datetimeLog;
 
