@@ -110,11 +110,17 @@ Real-time connectivity: Data is continuously transmitted using the MQTT protocol
      REFRESH_TOKEN_EXPIRED_MINUTES=<minutes refresh token expiration>
      LOCALHOST_FRONTEND=<url of frontend>
      LOCALHOST_BACKEND=<url of backend>
+     URL_MQTT_BROKER=<url of websocket MQTT broker>
+     BROKER_USERNAME=<username to access MQTT broker>
+     BROKER_PASSWORD=<password to access MQTT broker>
+     FCM_ENDPOINT_API=<enpoint of Firebase cloud message of my project firebase to send notifications>
+     FILE_PATH_GOOGLE_APPLICATION_CREDENTIALS=<Path of file sdk of our project firebase where get the credentials to create token to access to FCM API>
+     CLOUDINARY_URL=<url of the cloud in Cloudinary to store images>
 
 
 ![Devices](/captures/Devices.jpg)
 
-![Humidity week logs ](/captures/HumidityPlantLogs.jpg)
+![Humidity week logs ](/captures/HumidityPlantationLogs.jpg)
 
 ![Water level tank week logs ](/captures/WaterLevelLogs.jpg)
 
@@ -124,6 +130,6 @@ Real-time connectivity: Data is continuously transmitted using the MQTT protocol
 
 ![Irrigation details](/captures/DetailsIrrigation.jpg)
 
-![Plants](/captures/Plants.jpg)
+![Plants](/captures/Plantations.jpg)
 
 ![Tanks](/captures/Tanks.jpg)
