@@ -1,17 +1,17 @@
 import styles from "./Record.module.css";
 import iconInfo from "../../../../assets/img/info.png";
 import { formatDate, calculateDuration } from "./function.js";
-import { useWaterPlant } from "../../../../contexts/WaterPlantContext";
+import { useWaterPlantation } from "../../../../contexts/WaterPlantationContext";
 
 export const Tbody = ({ info, setInfo }) => {
-  const { loadingLogs, errorWaterPlant, waterPlantLogs } = useWaterPlant();
+  const { loadingLogs, errorWaterPlantation, waterPlantationLogs } = useWaterPlantation();
 
   return (
     <tbody>
-      {errorWaterPlant && (
+      {errorWaterPlantation && (
         <tr>
           <td colSpan={5} rowSpan={5}>
-            <span> {errorWaterPlant}</span>
+            <span>{errorWaterPlantation}</span>
           </td>
         </tr>
       )}
@@ -22,26 +22,26 @@ export const Tbody = ({ info, setInfo }) => {
           </td>
         </tr>
       )}
-      {waterPlantLogs.length > 0 &&
-        waterPlantLogs.map((waterPlantLog, index) => (
+      {waterPlantationLogs.length > 0 &&
+        waterPlantationLogs.map((waterPlantationLog, index) => (
           <tr key={index}>
-            <td>{waterPlantLog.type}</td>
+            <td>{waterPlantationLog.type}</td>
             <td>
               <div className={styles.date}>
-                {formatDate(new Date(waterPlantLog.datetimeStart))}
+                {formatDate(new Date(waterPlantationLog.datetimeStart))}
               </div>
             </td>
             <td>
-              {waterPlantLog.datetimeEnd
+              {waterPlantationLog.datetimeEnd
                 ? calculateDuration(
-                    new Date(waterPlantLog.datetimeStart),
-                    new Date(waterPlantLog.datetimeEnd),
+                    new Date(waterPlantationLog.datetimeStart),
+                    new Date(waterPlantationLog.datetimeEnd),
                   )
                 : "Riego no completado"}
             </td>
-            <td>{waterPlantLog.state}</td>
+            <td>{waterPlantationLog.state}</td>
             <td>
-              <img onClick={() => setInfo(waterPlantLog)} src={iconInfo}></img>
+              <img onClick={() => setInfo(waterPlantationLog)} src={iconInfo}></img>
             </td>
           </tr>
         ))}

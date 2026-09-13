@@ -5,10 +5,10 @@ import { useDevice } from "../../contexts/DeviceContext";
 import { useNavigate } from "react-router";
 import { useWeather } from "../../contexts/WeatherContext";
 import { LogsWeekdayProvider } from "../../contexts/LogsWeekdayContext";
-import { PlantProvider } from "../../contexts/plantContext/PlantContext";
+import { PlantationProvider } from "../../contexts/plantationContext/PlantationContext";
 import { TankProvider } from "../../contexts/tankContext/TankContext";
 import { UserDevicesTokensProvider } from "../../contexts/UserDevicesTokenContext";
-import { HumidityPlantLogs } from "./humidityPlantLogs/HumidityPlantLogs";
+import { HumidityPlantationLogs } from "./humidityPlantationLogs/HumidityPlantationLogs";
 import { Menu } from "./menu/Menu";
 import { WaterTankLogs } from "./waterTankLogs/WaterTankLogs";
 import { Settings } from "./settings/Settings";
@@ -60,20 +60,20 @@ export const DeviceIrrigation = () => {
             </TankProvider>
           )}
 
-          {optionSelected == "HumidityPlantLogs" && (
-            <PlantProvider>
+          {optionSelected == "HumidityPlantationLogs" && (
+            <PlantationProvider>
               <LogsWeekdayProvider>
-                <HumidityPlantLogs />
+                <HumidityPlantationLogs />
               </LogsWeekdayProvider>
-            </PlantProvider>
+            </PlantationProvider>
           )}
 
           {optionSelected == "Irrigation" && (
-            <PlantProvider>
+            <PlantationProvider>
               <TankProvider>
                 <Irrigation />
               </TankProvider>
-            </PlantProvider>
+            </PlantationProvider>
           )}
 
           {optionSelected == "Settings" && <Settings />}

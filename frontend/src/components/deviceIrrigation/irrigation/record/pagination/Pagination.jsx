@@ -1,8 +1,8 @@
 import styles from "./Pagination.module.css";
-import { useWaterPlant } from "../../../../../contexts/WaterPlantContext";
+import { useWaterPlantation } from "../../../../../contexts/WaterPlantationContext";
 
 export const Pagination = () => {
-  const { pages, index, setIndex } = useWaterPlant();
+  const { pages, index, setIndex } = useWaterPlantation();
 
   return (
     <div className={styles.pagination}>

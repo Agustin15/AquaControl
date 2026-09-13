@@ -1,87 +1,43 @@
 import styles from "./CurrentIrrigation.module.css";
-import iconHumidityOptime from "../../../../assets/img/adviceHumidityOptime.png";
-import iconNoWater from "../../../../assets/img/adviceNoWater.png";
-import iconAdviceRainPlant from "../../../../assets/img/adviceRainPlant.png";
-import { usePlant } from "../../../../contexts/plantContext/PlantContext";
+import { usePlantation } from "../../../../contexts/plantationContext/PlantationContext";
 import { useTank } from "../../../../contexts/tankContext/TankContext";
-import { useWaterPlant } from "../../../../contexts/WaterPlantContext";
-import { useWeather } from "../../../../contexts/WeatherContext.jsx";
-import { useEffect } from "react";
-import { HumidityPlant } from "./humitiyPlant/HumidityPlant";
+import { HumidityPlantation } from "./humidityPlantation/HumidityPlantation";
 import { WaterTank } from "./waterTank/WaterTank";
-import { LastWaterPlant } from "./lastWaterPlant/LastWaterPlant.jsx";
-import { alertErrorIrrigation } from "../../../alertSwal/alertSwal.js";
+import { DrawingLevelTank } from "../../drawingLevelTank/DrawingLevelTank.jsx";
+import { DrawingLevelHumidity } from "../../drawingLevelHumidity/DrawingLevelHumidity.jsx";
 
 export const CurrentIrrigation = () => {
-  const { plantSelected, currentHumidityPlant } = usePlant();
+  const { plantationSelected, currentHumidityPlantation } = usePlantation();
   const { currentLevelTank } = useTank();
-  const { currentWeather } = useWeather();
-  const {
-    sendStartWaterPlant,
-    sendStopWaterPlant,
-    waterPlantInProgress,
-    fetchGetLastWaterPlant,
-    lastWaterPlant,
-  } = useWaterPlant();
-
-  const handleStartIrrigation = () => {
-    if (currentHumidityPlant >= plantSelected.umbralHumidity)
-      return alertErrorIrrigation(
-        "La planta ya esta en su nivel optimo de humedad",
-        iconHumidityOptime,
-      );
-
-    if (currentLevelTank <= 15)
-      return alertErrorIrrigation(
-        "El nivel de agua del tanque es insuficiente para el iniciar el riego",
-        iconNoWater,
-      );
-
-    if (
-      currentWeather &&
-      currentWeather.precipitationChance >= 75 &&
-      plantSelected.indoor == false
-    )
-      return alertErrorIrrigation(
-        "Hay alta probabilidad de lluvia, como su planta se encuentra afuera, no es necesario el riego",
-        iconAdviceRainPlant,
-      );
-
-    sendStartWaterPlant();
-  };
-
-  const handleStopIrrigation = () => {
-    sendStopWaterPlant();
-  };
-
-  useEffect(() => {
-    fetchGetLastWaterPlant(false);
-  }, []);
 
   return (
     <div className={styles.currentIrrigate}>
-      <WaterTank />
-      <div className={styles.column}>
-        <button
-          disabled={waterPlantInProgress}
-          onClick={() => handleStartIrrigation()}
-          className={styles.startIrrigate}
-        >
-          {waterPlantInProgress ? "Riego en progreso" : "Iniciar riego"}
-        </button>
+      <svg width={310} height={150} viewBox="0 0 310 150">
+        <WaterTank />
+        <HumidityPlantation plantationSelected={plantationSelected} />
+      </svg>
+      <div className={styles.details}>
+        <div className={styles.waterLevelTank}>
+          <DrawingLevelTank currentLevelTank={currentLevelTank} />
+          <div className={styles.column}>
+            <span>Nivel de agua:{currentLevelTank}%</span>
+            <b color={currentLevelTank <= 20 ? "#b73131" : "#2ba522"}>
+              {currentLevelTank <= 20 ? "¡Reponga el tanque" : "Nivel adecuado"}
+            </b>
+          </div>
+        </div>
 
-        {lastWaterPlant && <LastWaterPlant lastWaterPlant={lastWaterPlant} />}
-        {waterPlantInProgress && (
-          <button
-            onClick={() => handleStopIrrigation()}
-            className={styles.cancelIrrigate}
-          >
-            Detener riego
-          </button>
-        )}
+        <div className={styles.humidityPlantation}>
+          <DrawingLevelHumidity humidity={currentHumidityPlantation} />
+          <div className={styles.column}>
+            <span>
+              Humedad tierra:{currentHumidityPlantation}/
+              {plantationSelected.cropType.humidityMax}%
+            </span>
+            <b>Humedad adecuada</b>
+          </div>
+        </div>
       </div>
-
-      <HumidityPlant plantSelected={plantSelected} />
     </div>
   );
 };

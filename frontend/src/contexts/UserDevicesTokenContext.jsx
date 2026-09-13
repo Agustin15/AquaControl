@@ -35,10 +35,7 @@ export const UserDevicesTokensProvider = ({ children }) => {
             true,
           );
         } catch (error) {
-          alertError(
-            "Ups algo salio mal",
-            "No se pudieron activar las notificaciones push",
-          );
+          console.log("No se pudieron activar las notificaciones push");
           return;
         }
       });

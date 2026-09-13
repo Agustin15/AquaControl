@@ -1,13 +1,13 @@
 import styles from "./Menu.module.css";
-import { usePlant } from "../../../../contexts/plantContext/PlantContext";
+import { usePlantation } from "../../../../contexts/plantationContext/PlantationContext";
 import { useEffect } from "react";
 
 export const Menu = ({ optionSelected, setOptionSelected }) => {
-  const { plants, setPlantSelected } = usePlant();
+  const { plantations, setPlantationSelected } = usePlantation();
 
   useEffect(() => {
-    setPlantSelected(plants[0]);
-  }, [plants]);
+    setPlantationSelected(plantations[0]);
+  }, [plantations]);
 
   return (
     <ul className={styles.menu}>

@@ -1,19 +1,24 @@
 import styles from "./Irrigation.module.css";
-import iconNoPlants from "../../../assets/img/noPlants.png";
+import iconNoPlantations from "../../../assets/img/noPlantations.png";
 import iconNoTanks from "../../../assets/img/noTanks.png";
 import { useEffect, useState } from "react";
-import { usePlant } from "../../../contexts/plantContext/PlantContext";
+import { usePlantation } from "../../../contexts/plantationContext/PlantationContext";
 import { useTank } from "../../../contexts/tankContext/TankContext";
 import { CurrentIrrigation } from "./currentIrrigation/CurrentIrrigation";
 import { Record } from "./record/Record";
 import { Menu } from "./menu/Menu";
-import { WaterPlantProvider } from "../../../contexts/WaterPlantContext";
+import { WaterPlantationProvider } from "../../../contexts/WaterPlantationContext";
 
 export const Irrigation = () => {
   const [optionSelected, setOptionSelected] = useState("Irrigate");
   const [loadingInit, setLoadingInit] = useState(true);
-  const { getPlants, errorPlants, plants, plantSelected, setPlantSelected } =
-    usePlant();
+  const {
+    getPlantations,
+    errorPlantations,
+    plantations,
+    plantationSelected,
+    setPlantationSelected,
+  } = usePlantation();
   const { getTanks, errorTanks, setTankSelected } = useTank();
 
   useEffect(() => {
@@ -24,10 +29,10 @@ export const Irrigation = () => {
     if (!loadingInit) setLoadingInit(true);
     try {
       const tanks = await getTanks();
-      const plants = await getPlants();
+      const plantations = await getPlantations();
 
-      if (tanks) setTankSelected(plants[0]);
-      if (plants) setPlantSelected(plants[0]);
+      if (tanks) setTankSelected(plantations[0]);
+      if (plantations) setPlantationSelected(plantations[0]);
     } catch (error) {
     } finally {
       setLoadingInit(false);
@@ -48,33 +53,43 @@ export const Irrigation = () => {
         </div>
       )}
 
-      {!loadingInit && (errorPlants || errorTanks) && (
+      {!loadingInit && (errorPlantations || errorTanks) && (
         <div className={styles.noData}>
-          <img src={errorPlants ? iconNoPlants : iconNoTanks}></img>
-          <p>{errorPlants ? errorPlants : errorTanks}</p>
+          <img src={errorPlantations ? iconNoPlantations : iconNoTanks}></img>
+          <p>{errorPlantations ? errorPlantations : errorTanks}</p>
         </div>
       )}
 
-      {!loadingInit && !errorPlants && !errorTanks && plantSelected && (
-        <div className={styles.option}>
-          <select>
-            {plants.map((plant, index) => (
-              <option key={index} value={plant.id}>
-                Planta {plant.id}
-              </option>
-            ))}
-          </select>
-          {optionSelected == "Irrigate" ? (
-            <WaterPlantProvider>
-              <CurrentIrrigation />
-            </WaterPlantProvider>
-          ) : (
-            <WaterPlantProvider>
-              <Record />
-            </WaterPlantProvider>
-          )}
-        </div>
-      )}
+      {!loadingInit &&
+        !errorPlantations &&
+        !errorTanks &&
+        plantationSelected && (
+          <div className={styles.option}>
+            <ul>
+              {plantations.map((plantation, index) => (
+                <li
+                  className={
+                    plantation.id == plantationSelected.id
+                      ? styles.selected
+                      : ""
+                  }
+                  key={index}
+                >
+                  <img src={plantation.cropType.image}></img>
+                </li>
+              ))}
+            </ul>
+            {optionSelected == "Irrigate" ? (
+              <WaterPlantationProvider>
+                <CurrentIrrigation />
+              </WaterPlantationProvider>
+            ) : (
+              <WaterPlantationProvider>
+                <Record />
+              </WaterPlantationProvider>
+            )}
+          </div>
+        )}
     </div>
   );
 };

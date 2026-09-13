@@ -75,7 +75,7 @@ export const DeviceProvider = ({ children }) => {
   const fetchSelectDevice = async (device, retry, navigate) => {
     try {
       const deviceSelected = await getInfoSaved("deviceSelected");
-      
+
       if (deviceSelected && deviceSelected.id == device.id) {
         setDeviceSelected(deviceSelected);
         navigate("/deviceIrrigate");

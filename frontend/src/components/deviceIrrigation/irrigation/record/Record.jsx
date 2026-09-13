@@ -1,7 +1,7 @@
 import styles from "./Record.module.css";
 import { useEffect, useState } from "react";
-import { useWaterPlant } from "../../../../contexts/WaterPlantContext";
-import { usePlant } from "../../../../contexts/plantContext/PlantContext";
+import { useWaterPlantation } from "../../../../contexts/WaterPlantationContext";
+import { usePlantation } from "../../../../contexts/plantationContext/PlantationContext";
 import { useTank } from "../../../../contexts/tankContext/TankContext";
 import { createPortal } from "react-dom";
 import { Info } from "./info/Info.jsx";
@@ -10,8 +10,8 @@ import { Pagination } from "./pagination/Pagination.jsx";
 import { Tbody } from "./Tbody.jsx";
 
 export const Record = () => {
-  const { fetchGetLogs, index, pages } = useWaterPlant();
-  const { plantSelected } = usePlant();
+  const { fetchGetLogs, index, pages } = useWaterPlantation();
+  const { plantationSelected } = usePlantation();
   const { tankSelected } = useTank();
   const [info, setInfo] = useState(null);
 
@@ -21,13 +21,13 @@ export const Record = () => {
   }, [index]);
 
   const loadRecord = async (offset) => {
-    await fetchGetLogs(tankSelected.id, plantSelected.id, offset, true);
+    await fetchGetLogs(tankSelected.id, plantationSelected.id, offset, true);
   };
 
   return (
     <>
       <div className={styles.record}>
-        <h3>Historial de riegos de planta N° {plantSelected.id}</h3>
+        <h3>Historial de riegos de plantacion N° {plantationSelected.id}</h3>
 
         <table>
           <thead>

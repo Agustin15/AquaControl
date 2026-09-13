@@ -3,7 +3,7 @@ import iconNoTanks from "../../../../assets/img/noTanks.png";
 import iconAdd from "../../../../assets/img/add.png";
 import iconDelete from "../../../../assets/img/delete.png";
 import iconEdit from "../../../../assets/img/edit.png";
-import { LevelTank } from "../../waterTankLogs/logs/levelTank/LevelTank";
+import { DrawingLevelTank } from "../../drawingLevelTank/DrawingLevelTank";
 import { useEffect } from "react";
 import { useTank } from "../../../../contexts/tankContext/TankContext";
 import { Options } from "./options/Options";
@@ -54,7 +54,7 @@ export const Tanks = () => {
       <ul className={styles.tanks}>
         {tanks.map((tank, index) => (
           <li key={index}>
-            <LevelTank currentLevelTank={100} />
+            <DrawingLevelTank currentLevelTank={100} />
             <span>Tanque N°{tank.id}</span>
 
             <div className={styles.edit}>

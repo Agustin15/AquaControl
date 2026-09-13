@@ -1,13 +1,11 @@
 .currentIrrigate {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: start;
     width: 100%;
     height: auto;
     border-radius: 9px;
     padding-bottom: 1rem;
-
-
 }
 
 .currentIrrigate .column {
@@ -44,4 +42,33 @@
 .currentIrrigate .startIrrigate:hover {
     background: rgb(37, 133, 57);
 
+}
+
+.currentIrrigate .details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.currentIrrigate .details .waterLevelTank,
+.currentIrrigate .details .humidityPlantation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    gap: 0.3rem;
+    font-size: 10px;
+    background: rgba(5, 32, 95, 0.266);
+    border-radius: 5px;
+    width: 15.5rem;
+    height: 5rem;
+}
+
+
+.currentIrrigate .details .column {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 0.3rem;
 }

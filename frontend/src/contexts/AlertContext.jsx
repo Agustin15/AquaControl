@@ -22,10 +22,10 @@ export const AlertProvider = ({ children }) => {
             "Content-type": "application/json",
             Authorization: `Bearer ${accessToken}`,
           },
-          body: {
+          body: JSON.stringify({
             seen: true,
             user: userAuth,
-          },
+          }),
         },
       );
 

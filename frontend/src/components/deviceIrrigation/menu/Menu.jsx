@@ -1,5 +1,5 @@
 import iconHumidity from "../../../assets/img/humidity.png";
-import iconWaterPlant from "../../../assets/img/waterPlant.png";
+import iconWaterPlantation from "../../../assets/img/waterPlantation.png";
 import iconWaterTank from "../../../assets/img/waterTank.png";
 import iconSetting from "../../../assets/img/config.png";
 import styles from "./Menu.module.css";
@@ -18,9 +18,9 @@ export const Menu = ({ optionSelected, setOptionSelected }) => {
         </li>
         <li>
           <button
-            onClick={() => setOptionSelected("HumidityPlantLogs")}
+            onClick={() => setOptionSelected("HumidityPlantationLogs")}
             className={
-              optionSelected == "HumidityPlantLogs" ? styles.selected : ""
+              optionSelected == "HumidityPlantationLogs" ? styles.selected : ""
             }
           >
             <img width={"30px"} height={"30px"} src={iconHumidity} />
@@ -28,7 +28,7 @@ export const Menu = ({ optionSelected, setOptionSelected }) => {
         </li>
         <li className={optionSelected == "Irrigation" ? styles.selected : ""}>
           <button onClick={() => setOptionSelected("Irrigation")}>
-            <img width={"31px"} height={"31px"} src={iconWaterPlant} />
+            <img width={"31px"} height={"31px"} src={iconWaterPlantation} />
           </button>
         </li>
         <li>

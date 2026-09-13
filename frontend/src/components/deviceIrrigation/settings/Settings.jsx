@@ -1,16 +1,16 @@
 import styles from "./Settings.module.css";
 import iconConfig from "../../../assets/img/config.png";
 import { useState } from "react";
-import { PlantProvider } from "../../../contexts/plantContext/PlantContext";
-import { FormPlantProvider } from "../../../contexts/plantContext/FormPlantContext";
+import { PlantationProvider } from "../../../contexts/plantationContext/PlantationContext";
+import { FormPlantationProvider } from "../../../contexts/plantationContext/FormPlantationContext";
 import { TankProvider } from "../../../contexts/tankContext/TankContext";
 import { FormTankProvider } from "../../../contexts/tankContext/FormTankContext";
 import { Tanks } from "./tank/Tanks";
-import { Plants } from "./plants/Plants";
+import { Plantations } from "./plantations/Plantations";
 
 
 export const Settings = () => {
-  const [option, setOption] = useState("plants");
+  const [option, setOption] = useState("plantations");
 
   return (
     <div className={styles.settings}>
@@ -20,10 +20,10 @@ export const Settings = () => {
       <div className={styles.crud}>
         <ul className={styles.menu}>
           <li
-            className={option == "plants" ? styles.selected : ""}
-            onClick={() => setOption("plants")}
+            className={option == "plantations" ? styles.selected : ""}
+            onClick={() => setOption("plantations")}
           >
-            Plantas
+            Plantaciones
           </li>
           <li
             className={option == "tank" ? styles.selected : ""}
@@ -33,12 +33,12 @@ export const Settings = () => {
           </li>
         </ul>
 
-        {option == "plants" && (
-          <PlantProvider>
-            <FormPlantProvider>
-              <Plants />
-            </FormPlantProvider>
-          </PlantProvider>
+        {option == "plantations" && (
+          <PlantationProvider>
+            <FormPlantationProvider>
+              <Plantations />
+            </FormPlantationProvider>
+          </PlantationProvider>
         )}
 
         {option == "tank" && (

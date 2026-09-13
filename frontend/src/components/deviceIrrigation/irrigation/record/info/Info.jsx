@@ -1,7 +1,7 @@
 import styles from "./Info.module.css";
 import iconInfo from "../../../../../assets/img/info.png";
-import { LevelHumidity } from "../../../humidityPlantLogs/logs/levelHumidity/LevelHumidity";
-import { LevelTank } from "../../../waterTankLogs/logs/levelTank/LevelTank";
+import { DrawingLevelHumidity } from "../../../drawingLevelHumidity/DrawingLevelHumidity";
+import { DrawingLevelTank } from "../../../drawingLevelTank/DrawingLevelTank";
 
 export const Info = ({ info, setInfo }) => {
 
@@ -14,15 +14,15 @@ export const Info = ({ info, setInfo }) => {
       </div>
 
       <div className={styles.row}>
-        <div className={styles.plant}>
-          <h3>Planta:</h3>
+        <div className={styles.plantation}>
+          <h3>Plantacion:</h3>
           <div className={styles.detail}>
             <span>Humedad previa: {info.humidityBefore}%</span>
-            <LevelHumidity humidity={info.humidityBefore} />
+            <DrawingLevelHumidity humidity={info.humidityBefore} />
           </div>
           <div className={styles.detail}>
             <span>Humedad posterior: {info.humidityAfter}%</span>
-            <LevelHumidity humidity={info.humidityAfter} />
+            <DrawingLevelHumidity humidity={info.humidityAfter} />
           </div>
         </div>
 
@@ -30,12 +30,12 @@ export const Info = ({ info, setInfo }) => {
           <h3>Tanque:</h3>
           <div className={styles.detail}>
             <span>Nivel de agua previo: {info.levelTankBefore}%</span>
-            <LevelTank currentLevelTank={info.levelTankBefore} />
+            <DrawingLevelTank currentLevelTank={info.levelTankBefore} />
           </div>
 
           <div className={styles.detail}>
             <span>Nivel de agua posterior: {info.levelTankAfter}%</span>
-            <LevelTank currentLevelTank={info.levelTankAfter} />
+            <DrawingLevelTank currentLevelTank={info.levelTankAfter} />
           </div>
         </div>
       </div>
