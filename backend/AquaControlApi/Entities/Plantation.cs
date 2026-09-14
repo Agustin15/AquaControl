@@ -60,7 +60,7 @@ namespace Entities
 
 
         [Required(ErrorMessage = "Debe indicar cantidad de plantas sembradas")]
-        [Range(1, 6, ErrorMessage = "Plantas sembradas debe ser entre 1 y 6")]
+        [Range(1,int.MaxValue, ErrorMessage = "Debe indicar al menos una planta sembrada")]
         public int AmountPlants
         {
             set { amountPlants = value; }
