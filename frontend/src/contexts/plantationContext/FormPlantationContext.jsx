@@ -96,8 +96,8 @@ export const FormPlantationProvider = ({ children }) => {
         }
         break;
       case "amountPlants":
-        if (value.length == 0 || value <= 0 || value > 10)
-          messageError = "Cantidad de plantas debe ser entre 1 y 10";
+        if (value.length == 0 || value <= 0)
+          messageError = "Debe indicar al menos una planta para sembrada";
         break;
     }
 
