@@ -10,7 +10,7 @@ import { Menu } from "./menu/Menu";
 import { WaterPlantationProvider } from "../../../contexts/WaterPlantationContext";
 
 export const Irrigation = () => {
-  const [optionSelected, setOptionSelected] = useState("Irrigate");
+  const [optionSelected, setOptionSelected] = useState("Irrigation");
   const [loadingInit, setLoadingInit] = useState(true);
   const {
     getPlantations,
@@ -65,9 +65,10 @@ export const Irrigation = () => {
         !errorTanks &&
         plantationSelected && (
           <div className={styles.option}>
-            <ul>
+            <ul className={styles.crops}>
               {plantations.map((plantation, index) => (
                 <li
+                  onClick={() => setPlantationSelected(plantation)}
                   className={
                     plantation.id == plantationSelected.id
                       ? styles.selected
@@ -79,7 +80,7 @@ export const Irrigation = () => {
                 </li>
               ))}
             </ul>
-            {optionSelected == "Irrigate" ? (
+            {optionSelected == "Irrigation" ? (
               <WaterPlantationProvider>
                 <CurrentIrrigation />
               </WaterPlantationProvider>

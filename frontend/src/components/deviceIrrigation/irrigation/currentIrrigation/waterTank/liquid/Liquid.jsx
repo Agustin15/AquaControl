@@ -17,7 +17,7 @@ export const Liquid = ({ currentLevelTank }) => {
         <animate
           attributeName={"height"}
           begin={0}
-          dur={"1s"}
+          dur={"3s"}
           from={72}
           to={liquidHeight}
           repeatCount={1}
@@ -35,7 +35,7 @@ export const Liquid = ({ currentLevelTank }) => {
         <animate
           attributeName={"cy"}
           begin={0}
-          dur={"0.9s"}
+          dur={"2.4s"}
           from={160}
           to={cyLiquidEllipse}
           repeatCount={1}

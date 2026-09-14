@@ -44,7 +44,7 @@
     align-items: center;
     justify-content: center;
     gap: 1rem;
-    margin-top: 3rem;
+    margin-top: 5rem;
     font-size: 15px;
 }
 
@@ -67,7 +67,7 @@
     font-size: 13px;
     width: 99%;
     height: auto;
-    margin-top: 3rem;
+    margin-top: 5rem;
 }
 
 .noTanks img {

@@ -1,3 +1,4 @@
+import styles from "./ActionIrrigation.module.css";
 import iconHumidityOptime from "../../../../../assets/img/adviceHumidityOptime.png";
 import iconNoWater from "../../../../../assets/img/adviceNoWater.png";
 import iconAdviceRainPlantation from "../../../../../assets/img/adviceRainPlantation.png";
@@ -5,9 +6,14 @@ import { alertErrorIrrigation } from "../../../../alertSwal/alertSwal.js";
 import { useWaterPlantation } from "../../../../../contexts/WaterPlantationContext";
 import { useWeather } from "../../../../../contexts/WeatherContext.jsx";
 import { useEffect } from "react";
+import { useTank } from "../../../../../contexts/tankContext/TankContext.jsx";
+import { usePlantation } from "../../../../../contexts/plantationContext/PlantationContext.jsx";
+import { LastWaterPlantation } from "./LastWaterPlantation.jsx";
 
 export const ActionIrrigation = () => {
   const { currentWeather } = useWeather();
+  const { currentLevelTank } = useTank();
+  const { currentHumidityPlantation, plantationSelected } = usePlantation();
   const {
     sendStartWaterPlantation,
     sendStopWaterPlantation,
@@ -49,4 +55,30 @@ export const ActionIrrigation = () => {
   useEffect(() => {
     fetchGetLastWaterPlantation(false);
   }, []);
+
+  return (
+    <li className={styles.actionIrrigation}>
+      <div className={styles.column}>
+        Ultimo riego:
+        {lastWaterPlantation && (
+          <LastWaterPlantation lastWaterPlantation={lastWaterPlantation} />
+        )}
+      </div>
+
+      <button
+        onClick={() => {
+          waterPlantationInProgress
+            ? handleStopIrrigation()
+            : handleStartIrrigation();
+        }}
+        className={
+          waterPlantationInProgress
+            ? styles.irrigationInCurse
+            : styles.irrigationStop
+        }
+      >
+        {!waterPlantationInProgress ? "Iniciar riego" : "Detener riego"}
+      </button>
+    </li>
+  );
 };

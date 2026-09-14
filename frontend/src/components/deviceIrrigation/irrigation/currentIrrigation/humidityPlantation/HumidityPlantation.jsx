@@ -1,10 +1,6 @@
-import { useState } from "react";
 import iconGarden from "../../../../../assets/img/garden.png";
 
 export const HumidityPlantation = ({ plantationSelected }) => {
-  const [waterPlantationInProgress, setWaterPlantationInProgress] =
-    useState(false);
-
   let xPair = 189;
   let yPair = 42;
   let xImpair = 212;

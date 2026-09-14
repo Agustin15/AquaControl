@@ -5,7 +5,8 @@
     align-items: center;
     gap: 1rem;
     width: 100%;
-    height: 79vh;
+    height: auto;
+    padding-bottom: 1rem;
 }
 
 
@@ -17,6 +18,7 @@
     width: 100%;
     height: 100%;
     gap: 1rem;
+    margin-top: 5rem;
     font-size: 15px;
 }
 
@@ -35,6 +37,7 @@
     justify-content: center;
     align-items: center;
     gap: 0.5rem;
+    margin-top: 5rem;
     color: white;
     font-weight: bold;
     width: 99%;
@@ -81,16 +84,19 @@
     gap: 1rem;
 }
 
-.irrigate .option ul {
+.irrigate .option .crops {
     display: flex;
     justify-content: start;
     align-items: center;
     gap: 1rem;
     width: 100%;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    scrollbar-width: none;
 }
 
 
-.irrigate .option ul li {
+.irrigate .option .crops li {
     width: 3rem;
     height: 3rem;
     background: rgb(158, 222, 248);
@@ -101,12 +107,12 @@
     position: relative;
 }
 
-.irrigate .option ul .selected {
+.irrigate .option .crops .selected {
     border: 2px solid orange;
 }
 
 
-.irrigate .option ul li img {
+.irrigate .option .crops li img {
     width: 33px;
     height: 33px;
 

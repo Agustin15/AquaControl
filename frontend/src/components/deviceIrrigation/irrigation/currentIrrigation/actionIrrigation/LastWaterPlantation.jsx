@@ -1,5 +1,3 @@
-import styles from "./LastWaterPlantation.module.css";
-
 export const LastWaterPlantation = ({ lastWaterPlantation }) => {
   let ago;
   let datetimeStart = new Date(lastWaterPlantation.datetimeStart);
@@ -32,9 +30,5 @@ export const LastWaterPlantation = ({ lastWaterPlantation }) => {
       break;
   }
 
-  return (
-    <div className={styles.lastWaterPlantation}>
-      <span>Ultimo riego: {ago}</span>
-    </div>
-  );
+  return <span>{ago}</span>
 };

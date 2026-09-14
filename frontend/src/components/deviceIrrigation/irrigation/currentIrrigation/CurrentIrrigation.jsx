@@ -5,39 +5,52 @@ import { HumidityPlantation } from "./humidityPlantation/HumidityPlantation";
 import { WaterTank } from "./waterTank/WaterTank";
 import { DrawingLevelTank } from "../../drawingLevelTank/DrawingLevelTank.jsx";
 import { DrawingLevelHumidity } from "../../drawingLevelHumidity/DrawingLevelHumidity.jsx";
+import { ActionIrrigation } from "./actionIrrigation/ActionIrrigation.jsx";
+import {
+  getCustomsToHumidityAccordigMeasure,
+  getCustomsToTankAccordigMeasure,
+} from "./function.js";
 
 export const CurrentIrrigation = () => {
   const { plantationSelected, currentHumidityPlantation } = usePlantation();
   const { currentLevelTank } = useTank();
 
+  const { messageTank, colorMessageTank } =
+    getCustomsToTankAccordigMeasure(currentLevelTank);
+
+  const { messageHumidity, colorMessageHumidity } =
+    getCustomsToHumidityAccordigMeasure(currentHumidityPlantation);
+
   return (
     <div className={styles.currentIrrigate}>
-      <svg width={310} height={150} viewBox="0 0 310 150">
-        <WaterTank />
-        <HumidityPlantation plantationSelected={plantationSelected} />
-      </svg>
-      <div className={styles.details}>
-        <div className={styles.waterLevelTank}>
+      <div className={styles.tankAndPlantation}>
+        <svg width={310} height={150} viewBox="0 0 310 150">
+          <WaterTank />
+          <HumidityPlantation plantationSelected={plantationSelected} />
+        </svg>
+        <ActionIrrigation />
+      </div>
+      
+      <ul className={styles.details}>
+        <li>
           <DrawingLevelTank currentLevelTank={currentLevelTank} />
           <div className={styles.column}>
             <span>Nivel de agua:{currentLevelTank}%</span>
-            <b color={currentLevelTank <= 20 ? "#b73131" : "#2ba522"}>
-              {currentLevelTank <= 20 ? "¡Reponga el tanque" : "Nivel adecuado"}
-            </b>
+            <b style={{ color: colorMessageTank }}>{messageTank}</b>
           </div>
-        </div>
+        </li>
 
-        <div className={styles.humidityPlantation}>
+        <li>
           <DrawingLevelHumidity humidity={currentHumidityPlantation} />
           <div className={styles.column}>
             <span>
               Humedad tierra:{currentHumidityPlantation}/
               {plantationSelected.cropType.humidityMax}%
             </span>
-            <b>Humedad adecuada</b>
+            <b style={{ color: colorMessageHumidity }}>{messageHumidity}</b>
           </div>
-        </div>
-      </div>
+        </li>
+      </ul>
     </div>
   );
 };

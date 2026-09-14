@@ -7,7 +7,8 @@ export const DrawingLevelHumidity = ({ humidity }) => {
   const { plantationSelected } = usePlantation();
 
   let optimePercentege = (humidity * 100) / plantationSelected.humidityMax;
-
+  let heightLevel =
+    optimePercentege > 100 ? 100 : (optimePercentege * 41) / 100;
   let colorLevel = detailsHumidity(optimePercentege);
 
   return (
@@ -34,9 +35,7 @@ export const DrawingLevelHumidity = ({ humidity }) => {
             rx={4}
             ry={4}
             width={9}
-            height={
-              ((optimePercentege > 100 ? 100 : optimePercentege) * 41) / 100
-            }
+            height={heightLevel}
             fill={colorLevel}
           >
             <animate
@@ -44,13 +43,11 @@ export const DrawingLevelHumidity = ({ humidity }) => {
               dur={"1s"}
               begin={0}
               from={0}
-              to={
-                ((optimePercentege > 100 ? 100 : optimePercentege) * 41) / 100
-              }
+              to={heightLevel}
               repeatCount={1}
             ></animate>
           </rect>
-          
+
           {/* shadow */}
           <rect
             x={18.6}
@@ -58,9 +55,7 @@ export const DrawingLevelHumidity = ({ humidity }) => {
             rx={4}
             ry={4}
             width={4}
-            height={
-              ((optimePercentege > 100 ? 100 : optimePercentege) * 41) / 100
-            }
+            height={heightLevel}
             fill={"#5555552d"}
           >
             <animate
@@ -68,9 +63,7 @@ export const DrawingLevelHumidity = ({ humidity }) => {
               dur={"1s"}
               begin={0}
               from={0}
-              to={
-                ((optimePercentege > 100 ? 100 : optimePercentege) * 41) / 100
-              }
+              to={heightLevel}
               repeatCount={1}
             ></animate>
           </rect>
@@ -81,7 +74,13 @@ export const DrawingLevelHumidity = ({ humidity }) => {
 
         {/* imagen humedad plantationa */}
         <image x={36} y={17} width={18} height={18} href={humidityIcon}></image>
-        <image x={36} y={40} width={25} height={25} href={plantationSelected.cropType.image}></image>
+        <image
+          x={36}
+          y={40}
+          width={25}
+          height={25}
+          href={plantationSelected.cropType.image}
+        ></image>
       </svg>
     </div>
   );

@@ -3,7 +3,7 @@ import iconDrop from "../../../../assets/img/drop.svg";
 export const Recipient = () => {
   return (
     <>
-      <image width={14} height={14} x={18} y={28} href={iconDrop}></image>
+      <image width={14} height={14} x={22} y={29} href={iconDrop}></image>
 
       <ellipse
         rx={20}

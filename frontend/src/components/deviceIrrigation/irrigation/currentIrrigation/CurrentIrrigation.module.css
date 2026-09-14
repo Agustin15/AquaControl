@@ -1,48 +1,17 @@
 .currentIrrigate {
     display: flex;
     justify-content: space-between;
-    align-items: start;
+    align-items: center;
     width: 100%;
-    height: auto;
-    border-radius: 9px;
-    padding-bottom: 1rem;
 }
 
-.currentIrrigate .column {
+.currentIrrigate .tankAndPlantation {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
-    font-size: 12px;
-    color: white;
+    gap: 0.3rem;
 }
 
-.currentIrrigate button {
-    width: 10rem;
-    height: 2.2rem;
-    border-radius: 20px;
-    border: none;
-    color: white;
-    font-weight: bold;
-}
-
-.currentIrrigate .startIrrigate {
-    background: rgb(40, 160, 86);
-}
-
-.currentIrrigate .cancelIrrigate {
-    background: rgb(222, 63, 63);
-}
-
-.currentIrrigate .cancelIrrigate:hover {
-    background: rgb(190, 49, 49);
-
-}
-
-.currentIrrigate .startIrrigate:hover {
-    background: rgb(37, 133, 57);
-
-}
 
 .currentIrrigate .details {
     display: flex;
@@ -51,18 +20,18 @@
     gap: 1rem;
 }
 
-.currentIrrigate .details .waterLevelTank,
-.currentIrrigate .details .humidityPlantation {
+.currentIrrigate .details li {
     display: flex;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
     color: white;
     gap: 0.3rem;
-    font-size: 10px;
-    background: rgba(5, 32, 95, 0.266);
-    border-radius: 5px;
-    width: 15.5rem;
+    padding-left: 0.2rem;
+    width: 15rem;
     height: 5rem;
+    font-size: 11px;
+    background: rgba(23, 74, 113, 0.159);
+    border-radius: 5px;
 }
 
 

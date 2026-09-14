@@ -2,6 +2,12 @@ import styles from "./DrawingLevelTank.module.css";
 import { Recipient } from "./recipient/Recipient";
 
 export const DrawingLevelTank = ({ currentLevelTank }) => {
+  const liquidHeight =
+    currentLevelTank < 16 ? 0 : (currentLevelTank * 50) / 100;
+
+  const topLiquidHeight =
+    (currentLevelTank * 56) / 100 < 16 ? 16 : (currentLevelTank * 56) / 100;
+
   return (
     <div className={styles.levelTank}>
       <svg
@@ -28,15 +34,15 @@ export const DrawingLevelTank = ({ currentLevelTank }) => {
             x={11}
             y={10}
             width={28}
-            height={currentLevelTank < 16 ? 0 : (currentLevelTank * 50) / 100}
+            height={liquidHeight}
             fill={"rgb(57, 182, 191)"}
           >
             <animate
               attributeName={"height"}
               begin={0}
-              dur={"1s"}
+              dur={"3s"}
               from={50}
-              to={(currentLevelTank * 50) / 100}
+              to={liquidHeight}
               repeatCount={1}
             />
           </rect>
@@ -45,23 +51,15 @@ export const DrawingLevelTank = ({ currentLevelTank }) => {
             rx={14}
             ry={7}
             cx={25}
-            cy={
-              (currentLevelTank * 56) / 100 < 16
-                ? 16
-                : (currentLevelTank * 56) / 100
-            }
+            cy={topLiquidHeight}
             fill={"rgb(78, 210, 219)"}
             strokeWidth={2}
           >
             <animate
               attributeName={"cy"}
-              dur={"1s"}
+              dur={"2.3s"}
               from={56}
-              to={
-                (currentLevelTank * 56) / 100 < 16
-                  ? 16
-                  : (currentLevelTank * 56) / 100
-              }
+              to={topLiquidHeight}
               repeatCount={1}
             />
           </ellipse>

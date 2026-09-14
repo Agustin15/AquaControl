@@ -72,7 +72,7 @@ export const HumidityPlantationLogs = () => {
       {loadingPlantations && (
         <div className={styles.loadingFilter}>
           <span className={styles.loader}></span>
-          <p>Cargando plantationas...</p>
+          <p>Cargando plantaciones...</p>
         </div>
       )}
 

@@ -16,7 +16,8 @@ export const WaterPlantationProvider = ({ children }) => {
   const [waterPlantationLogs, setWaterPlantationLogs] = useState([]);
   const [loadingLogs, setLoadingLogs] = useState(true);
   const [errorWaterPlantation, setErrorWaterPlantation] = useState(null);
-  const [waterPlantationInProgress, setWaterPlantationInProgress] = useState(false);
+  const [waterPlantationInProgress, setWaterPlantationInProgress] =
+    useState(false);
   const [lastWaterPlantation, setLastWaterPlantation] = useState(null);
   const { deviceSelected } = useDevice();
   const { tankSelected } = useTank();
@@ -146,6 +147,8 @@ export const WaterPlantationProvider = ({ children }) => {
     const result = await mqttClient.publishAsync(
       `device/${deviceSelected.id}/waterPlantation`,
       JSON.stringify({
+        idPlantation: plantationSelected.id,
+        idTank: tankSelected.id,
         state: "Interrumpido",
       }),
       { qos: 2, retain: true },
