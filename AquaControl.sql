@@ -46,7 +46,7 @@ idDevice INT NOT NULL FOREIGN KEY REFERENCES Devices(idDevice) ON DELETE CASCADE
 type VARCHAR(30) NOT NULL FOREIGN KEY REFERENCES CropsTypes(name) ON DELETE CASCADE,
 humidityMin INT NOT NULL CHECK(humidityMin>=0 and humidityMin  <=100),
 humidityMax INT NOT NULL CHECK(humidityMax >=0 and humidityMax <=100),
-amountPlants INT NOT NULL CHECK(amountPlants BETWEEN 1 and 10),
+amountPlants INT NOT NULL CHECK(amountPlants >1),
 indoor BIT NOT NULL DEFAULT 0,
 image VARCHAR(100),
 PRIMARY KEY(id,idDevice)
@@ -1209,9 +1209,9 @@ RETURN
 END
 
 
-IF((select amountPlants from inserted) NOT BETWEEN 1 AND 10)
+IF((select amountPlants from inserted)<=0)
 BEGIN
-RAISERROR('Cantidad de plantas debe estar entre 1 y 10',16,1)
+RAISERROR('Debe haber al menos una planta sembrada',16,1)
 RETURN
 END
 
@@ -1250,9 +1250,9 @@ RAISERROR('Humedad maxima debes estar entre o 100',16,1)
 RETURN
 END
 
-IF((select amountPlants from inserted) NOT BETWEEN 1 AND 10)
+IF((select amountPlants from inserted)<=0)
 BEGIN
-RAISERROR('Cantidad de plantas debe estar entre 1 y 10',16,1)
+RAISERROR('Debe haber al menos una planta sembrada',16,1)
 RETURN
 END
 
