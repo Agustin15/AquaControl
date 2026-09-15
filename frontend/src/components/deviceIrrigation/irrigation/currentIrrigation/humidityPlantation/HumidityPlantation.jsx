@@ -11,7 +11,10 @@ export const HumidityPlantation = ({ plantationSelected }) => {
     { x: xImpair, y: yImpair },
   ];
 
-  for (let i = 3; i <= plantationSelected.amountPlants; i++) {
+  let limitDrawingSown =
+    plantationSelected.amountPlants > 10 ? 10 : plantationSelected.amountPlants;
+
+  for (let i = 3; i <= limitDrawingSown; i++) {
     if (i % 2 == 0) {
       xPair -= 24;
       yPair += 11;
