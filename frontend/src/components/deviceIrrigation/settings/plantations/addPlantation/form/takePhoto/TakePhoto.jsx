@@ -1,6 +1,6 @@
 import styles from "./TakePhoto.module.css";
 import { Filesystem } from "@capacitor/filesystem";
-import { Camera } from "@capacitor/camera";
+import { Camera, EncodingType } from "@capacitor/camera";
 import { alertError } from "../../../../../../alertSwal/alertSwal.js";
 import { useFormPlantation } from "../../../../../../../contexts/plantationContext/FormPlantationContext.jsx";
 
@@ -15,6 +15,7 @@ export const TakePhoto = () => {
         targetWidth: 150,
         targetHeight: 130,
         editable: "in-app",
+        encodingType: EncodingType.JPEG,
       });
 
       const { data } = await Filesystem.readFile({ path: result.uri });

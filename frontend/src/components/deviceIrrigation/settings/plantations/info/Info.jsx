@@ -17,7 +17,7 @@ export const Info = () => {
         <div className={styles.containImage}>
           {infoPlantation.image ? (
             <div className={styles.image}>
-              <img src={"data:image/jpg;base64," + infoPlantation.image}></img>
+              <img src={infoPlantation.image}></img>
             </div>
           ) : (
             <div className={styles.noImage}>
