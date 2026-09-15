@@ -1,6 +1,7 @@
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Api.Filters
 {
@@ -14,7 +15,7 @@ namespace Api.Filters
                 return;
             }
 
-            string firstError = context.ModelState.Values.First().Errors.First().ErrorMessage;
+            string firstError=context.ModelState.Values.Where(v =>v.ValidationState==ModelValidationState.Invalid).First().Errors.First().ErrorMessage;
 
             context.Result = new BadRequestObjectResult(new { message = firstError });
         }

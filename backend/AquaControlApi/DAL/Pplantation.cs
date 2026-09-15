@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
 
 namespace DAL
 {
@@ -17,11 +19,14 @@ namespace DAL
         public async Task Add(Plantation plantation)
         {
 
+            string urlImage = "";
             SqlConnection connection = new SqlConnection(DBConnection.Cnn);
             SqlTransaction transaction = null;
 
             try
             {
+                if (plantation.Image != null)
+                    urlImage = await CloudinaryClient.Instance.AddImage(plantation);
 
                 SqlCommand command = new SqlCommand("AddPlantation", connection);
                 command.CommandType = CommandType.StoredProcedure;
@@ -58,6 +63,7 @@ namespace DAL
             catch (Exception ex)
             {
                 if (transaction != null) await transaction.RollbackAsync();
+                if (urlImage.Length != 0) await CloudinaryClient.Instance.DeleteImage(plantation);
 
                 throw new Exception(ex.Message);
             }
@@ -69,12 +75,26 @@ namespace DAL
 
         public async Task Update(Plantation plantation)
         {
-
+            string urlImage = "";
             SqlConnection connection = new SqlConnection(DBConnection.Cnn);
             SqlTransaction transaction = null;
 
             try
             {
+
+                List<Plantation> plantations = await new Pplantation().GetAllPlantationsByDevice(plantation.Device.Id);
+                Plantation plantationFound = plantations.Find(p => p.Id == plantation.Id);
+
+                if (plantationFound == null) throw new Exception("Plantacion no encontrada");
+
+                if (plantationFound.Image != plantation.Image)
+                {
+                    if (plantationFound.Image != null && String.IsNullOrEmpty(plantation.Image))
+                        await CloudinaryClient.Instance.DeleteImage(plantationFound);
+                    else
+                        urlImage = await CloudinaryClient.Instance.AddImage(plantation);
+
+                }
 
                 SqlCommand command = new SqlCommand("UpdatePlantation", connection);
                 command.CommandType = CommandType.StoredProcedure;
@@ -110,6 +130,8 @@ namespace DAL
             catch (Exception ex)
             {
                 if (transaction != null) await transaction.RollbackAsync();
+                if (urlImage.Length > 0) await CloudinaryClient.Instance.DeleteImage(plantation);
+
                 throw new Exception(ex.Message);
             }
             finally
@@ -138,6 +160,7 @@ namespace DAL
 
                 await command.ExecuteNonQueryAsync();
 
+                await CloudinaryClient.Instance.DeleteImage(plantation);
 
                 string topic = "device/" + plantation.Device.Id + "/plantation";
                 await MqttClient.Instance.PublishMessage(topic, new { plantation = (Plantation)null });

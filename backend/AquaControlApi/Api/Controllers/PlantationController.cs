@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Api.Controllers
@@ -52,12 +53,12 @@ namespace Api.Controllers
         {
             try
             {
+      
 
                 int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
 
                 if (idDevice != plantation.Device.Id)
                     return StatusCode(403, new { message = "No tiene acceso al dispositivo de riego donde desea actualizar el registro de esta planta" });
-
 
                 await new Lplantation().Update(plantation);
 
@@ -100,7 +101,7 @@ namespace Api.Controllers
         {
             try
             {
-       
+
                 int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
 
                 List<Plantation> plants = await new Lplantation().GetAllPlantationsByDevice(idDevice);

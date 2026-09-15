@@ -74,7 +74,7 @@ namespace Entities
             get { return indoor; }
         }
 
-        [Required(ErrorMessage = "Planta debe pertenecer a un dispositivo de riego")]
+        [Required(ErrorMessage = "Plantacion debe pertenecer a un dispositivo de riego")]
         public Device Device
         {
             set { device = value; }
