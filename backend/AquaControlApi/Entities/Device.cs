@@ -11,13 +11,15 @@ namespace Entities
 {
     public class Device
     {
-        int id;
+        string id;
         string placeName;
         string location;
-        List<User>? users;
+        bool linked = false;
+        List<UserOfDevice> usersOfDevice;
         DateTime? created;
 
-        public int Id
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Debe indicar -identificador del dispositivo de riego")]
+        public string Id
         {
             set { id = value; }
             get { return id; }
@@ -40,11 +42,18 @@ namespace Entities
             get { return location; }
         }
 
-        [MinLength(1, ErrorMessage = "Debe asociar al menos un usuario al dispositivo")]
-        public List<User>? Users
+        [Required(ErrorMessage = "Debe indicar si el dispositivo se ha configurado o no")]
+        public bool Linked
         {
-            set { users = value; }
-            get { return users; }
+            set { linked = value; }
+            get { return linked; }
+        }
+
+        [MinLength(1, ErrorMessage = "Debe asociar al menos un usuario al dispositivo")]
+        public List<UserOfDevice> UsersOfDevice
+        {
+            set { usersOfDevice = value; }
+            get { return usersOfDevice; }
         }
 
         public DateTime? Created
@@ -55,13 +64,14 @@ namespace Entities
 
         public Device() { }
 
-        public Device(int id, string placeName, string location, List<User> users, DateTime created)
+        public Device(string id, string placeName, string location,bool linked, List<UserOfDevice> usersOfDevice, DateTime created)
         {
 
             Id = id;
             PlaceName = placeName?.Trim();
             Location = location?.Trim();
-            Users = users;
+            Linked = linked;
+            UsersOfDevice = usersOfDevice;
             Created = created;
 
         }

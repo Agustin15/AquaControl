@@ -1,0 +1,54 @@
+.containUsers {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 1rem;
+}
+
+
+.optionAddUser {
+    width: 95%;
+    height: auto;
+}
+
+.optionAddUser button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    width: 11rem;
+    padding: 0.3rem;
+    height: 2.2rem;
+    background: rgba(5, 60, 115, 0.245);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 12px;
+}
+
+.optionAddUser button img {
+
+    width: 21px;
+    height: 21px;
+}
+
+
+.noUsers {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    color: white;
+    font-weight: bold;
+    width: 99%;
+    margin-top: 1rem;
+    font-size: 13px;
+}
+
+.noUsers img {
+    width: 60px;
+    height: 60px;
+}

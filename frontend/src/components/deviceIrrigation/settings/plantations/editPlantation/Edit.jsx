@@ -12,7 +12,7 @@ import {
 export const Edit = () => {
   const { setEditPlantation, editPlantation, getPlantations } = usePlantation();
 
-  const { fetchPostOrPut, valuesForm, setErrorsForm, handleClose } =
+  const { fetchPostOrPut, valuesForm, setErrorsForm, clean } =
     useFormPlantation();
 
   const handleSubmit = async (event) => {
@@ -40,9 +40,11 @@ export const Edit = () => {
 
       await getPlantations();
     } catch (error) {
+      const errorMessage =
+        error?.message || "No se pudo actualizar los datos de la plantación";
       alertError(
         "Ups algo salio mal al actualizar datos de la plantacion",
-        error,
+        errorMessage,
       );
     }
     return;
@@ -55,7 +57,7 @@ export const Edit = () => {
         <h3>Editar plantacion N° {editPlantation.id}</h3>
         <button
           onClick={() => {
-            handleClose();
+            clean();
             setEditPlantation(null);
           }}
         >

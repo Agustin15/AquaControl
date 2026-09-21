@@ -6,19 +6,22 @@ import {
   alertSuccess,
   alertError,
 } from "../../../../alertSwal/alertSwal.js";
-import { getTokenSaved } from "../../../../../securityStorage.js";
+import { getAuthTokenSaved } from "../../../../../securityStorage.js";
 import { useEffect } from "react";
 import { useAuth } from "../../../../../contexts/AuthContext.jsx";
 import { usePlantation } from "../../../../../contexts/plantationContext/PlantationContext.jsx";
 
 export const Delete = ({}) => {
   const { updateAccessToken } = useAuth();
-  const { setDeletePlantation, deletePlantation, getPlantations } = usePlantation();
+  const { setDeletePlantation, deletePlantation, getPlantations } =
+    usePlantation();
 
   useEffect(() => {
     const handleDelete = async () => {
       const result = await alertConfirmDelete(
-        "¿Desea eliminar el registro de la plantacion N° " + deletePlantation.id + "?",
+        "¿Desea eliminar el registro de la plantacion N° " +
+          deletePlantation.id +
+          "?",
       );
 
       if (result.isConfirmed == true) {
@@ -40,7 +43,7 @@ export const Delete = ({}) => {
     });
 
     try {
-      const accessToken = await getTokenSaved("accessToken");
+      const accessToken = await getAuthTokenSaved("accessToken");
 
       const response = await fetch(localhostBackend + "/api/plantation", {
         method: "DELETE",
@@ -52,7 +55,7 @@ export const Delete = ({}) => {
         body: JSON.stringify(deletePlantation),
       });
 
-      if (response.status === 401 && retry == true) {
+      if (response.status === 401 && retry === true) {
         await updateAccessToken();
         return fetchDelete(false);
       }
@@ -60,16 +63,16 @@ export const Delete = ({}) => {
 
       if (!response.ok) throw new Error(result.message);
 
-      alertSuccess(
-        `¡Plantationa N° ${deletePlantation.id} eliminada exitosamente!`,
-      );
-
-      await getPlantations();
+      if (result) {
+        alertSuccess(
+          `¡Plantationa N° ${deletePlantation.id} eliminada exitosamente!`,
+        );
+        await getPlantations();
+      }
     } catch (error) {
-      alertError(
-        `Ups algo salio mal al eliminar la plantationa N° ${deletePlantation.id}`,
-        error,
-      );
+      const errorMessage =
+        error?.message || "No se pudo eliminar la plantación seleccionada";
+      alertError(`Ups algo salio mal`, errorMessage);
     }
   };
 };

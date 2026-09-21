@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { getTokenSaved } from "../../securityStorage.js";
+import { getAuthTokenSaved } from "../../securityStorage.js";
 import { useAuth } from "../AuthContext";
 import { useMqtt } from "../MqttContext.jsx";
 import { useDevice } from "../DeviceContext.jsx";
@@ -36,12 +36,11 @@ export const TankProvider = ({ children }) => {
   }, [mqttClient.connected, tankSelected]);
 
   const fetchGet = async (url, retry) => {
-    let result;
     setErrorTanks();
     setLoadingTanks(true);
 
     try {
-      const accessToken = await getTokenSaved("accessToken");
+      const accessToken = await getAuthTokenSaved("accessToken");
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -49,18 +48,22 @@ export const TankProvider = ({ children }) => {
           Authorization: `Bearer ${accessToken}`,
         },
       });
-      result = await response.json();
+      
+      const result = await response.json();
 
-      if (response.status === 401 && retry == true) {
-        await updateAccessToken();
-        return fetchGet(url, false);
+      if (!response.ok) {
+        if (response.status === 401 && retry === true) {
+          await updateAccessToken();
+          return fetchGet(url, false);
+        }
+        throw new Error(result.message);
       }
-
-      if (!response.ok) throw new Error(result.message);
 
       return result;
     } catch (error) {
-      setErrorTanks(error.message);
+      const errorMessage =
+        error?.message || "No se pudieron cargar los tanques";
+      setErrorTanks(errorMessage);
     } finally {
       setLoadingTanks(false);
     }
@@ -68,7 +71,10 @@ export const TankProvider = ({ children }) => {
 
   const getTanks = async () => {
     setTanks([]);
-    const tanks = await fetchGet(localhostBackend + "/api/tank", true);
+    const tanks = await fetchGet(
+      `${localhostBackend}/api/tank/device/${deviceSelected.id}`,
+      true,
+    );
     if (tanks) setTanks(tanks);
     return tanks;
   };

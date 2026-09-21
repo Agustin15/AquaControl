@@ -11,7 +11,8 @@ namespace Api.Controllers
     [ApiController]
     public class RefreshTokenController : ControllerBase
     {
-        [Authorize(AuthenticationSchemes = "RefreshBearer")]
+        [Authorize(AuthenticationSchemes = "RefreshBearer", Policy = "HasUser")]
+        [Authorize(Policy = "HasRole")]
         [Route("api/refreshToken")]
         [HttpPost]
         public async Task<ActionResult> RefreshToken()
@@ -19,21 +20,24 @@ namespace Api.Controllers
 
             try
             {
-                if (!User.Identity.IsAuthenticated || User.FindFirst(ClaimTypes.NameIdentifier) is null || User.FindFirst("IdDevice") is null)
-                    return Unauthorized();
 
                 int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-                int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
+                string idDevice = "", roleInDevice = "";
+
+
+                if (User.FindFirst("IdDevice") != null)
+                    idDevice = User.FindFirst("IdDevice").Value;
+
+                if (User.FindAll(ClaimTypes.Role).Count() > 1)
+                    roleInDevice = User.FindAll(ClaimTypes.Role).ElementAt(1).Value;
 
                 Authentication authentication = new Authentication();
 
-                List<User> users = await new Luser().GetAllUsers();
-
-                User userFound = users.Find(u => u.Id == idUser);
+                User userFound = await new Luser().GetUserById(idUser);
 
                 if (userFound is null) throw new Exception("Usuario no encontrado");
 
-                var jwtAccessToken = authentication.GenerateAccessJWTtoken(userFound, idDevice);
+                var jwtAccessToken = authentication.GenerateAccessJWTtoken(userFound, idDevice, roleInDevice);
 
                 return Ok(new { accessToken = jwtAccessToken });
             }

@@ -12,7 +12,7 @@ namespace Api.Controllers
     [ApiController]
     public class UserDeviceTokenController : ControllerBase
     {
-        [Authorize(AuthenticationSchemes = "Bearer", Policy = "HasUser")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "Cliente,Operador,Lector", Policy = "HasUser")]
         [ValidateModelFilter]
         [HttpPost]
         [Route("api/userDeviceToken")]

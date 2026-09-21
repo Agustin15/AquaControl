@@ -36,7 +36,9 @@ export const Add = () => {
 
       await getTanks();
     } catch (error) {
-      alertError("Ups algo salio mal al agregar un nuevo tanque", error);
+      const errorMessage =
+        error?.message || "No se pudo agregar el nuevo tanque";
+      alertError("Ups algo salio mal al agregar un nuevo tanque", errorMessage);
     }
 
     return;

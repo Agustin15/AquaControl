@@ -137,7 +137,7 @@ namespace DAL
         }
 
 
-        public async Task<List<Tank>> GetAllTanksByDevice(int idDevice)
+        public async Task<List<Tank>> GetAllTanksByDevice(string idDevice)
         {
 
             List<Tank> tanks = new List<Tank>();

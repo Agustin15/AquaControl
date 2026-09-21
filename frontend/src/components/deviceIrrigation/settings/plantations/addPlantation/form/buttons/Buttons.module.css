@@ -1,0 +1,29 @@
+.options {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.options button {
+    margin-top: 1rem;
+    width: 12rem;
+    padding: 0.4rem 0 0.4rem 0;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.btnAdd {
+    background: rgb(55, 195, 16);
+}
+
+.btnUpdate {
+    background: rgb(16, 132, 195);
+}
+
+
+.btnClean {
+    background: rgb(205, 72, 72);
+}

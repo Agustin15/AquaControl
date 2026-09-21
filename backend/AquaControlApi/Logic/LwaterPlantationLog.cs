@@ -28,7 +28,7 @@ namespace Logic
         }
 
 
-        public async Task<WaterPlantationLog> GetLastWaterPlantationLog(int idPlantation, int idTank, int idDevice)
+        public async Task<WaterPlantationLog> GetLastWaterPlantationLog(int idPlantation, int idTank, string idDevice)
         {
 
             WaterPlantationLog waterPlantationLog = await new PwaterPlantationLog().GetLastWaterPlantationLog(idPlantation, idTank, idDevice);
@@ -37,14 +37,14 @@ namespace Logic
         }
 
 
-        public async Task<int> GetAmountWaterPlantationLogs(int idTank, int idPlantation, int idDevice)
+        public async Task<int> GetAmountWaterPlantationLogs(int idTank, int idPlantation, string idDevice)
         {
             int amounts = await new PwaterPlantationLog().GetAmountWaterPlantationLogs(idTank, idPlantation, idDevice);
 
             return amounts;
         }
 
-        public async Task<List<WaterPlantationLog>> GetWaterPlantationLogsOffset(int idTank, int idPlantation, int idDevice, int offset)
+        public async Task<List<WaterPlantationLog>> GetWaterPlantationLogsOffset(int idTank, int idPlantation, string idDevice, int offset)
         {
 
             List<WaterPlantationLog> waterPlantationLogs = new List<WaterPlantationLog>();

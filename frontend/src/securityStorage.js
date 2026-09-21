@@ -1,15 +1,9 @@
 import { SecureStoragePlugin } from "capacitor-secure-storage-plugin";
 
-export const saveTokens = async (accessToken, refreshToken) => {
-  await SecureStoragePlugin.set({ key: "accessToken", value: accessToken });
-  await SecureStoragePlugin.set({ key: "refreshToken", value: refreshToken });
+export const saveAuthToken = async (key, value) => {
+  await SecureStoragePlugin.set({ key: key, value: value });
 };
-
-export const saveAccessToken = async (accessToken) => {
-  await SecureStoragePlugin.set({ key: "accessToken", value: accessToken });
-};
-
-export const getTokenSaved = async (key) => {
+export const getAuthTokenSaved = async (key) => {
   const { value } = await SecureStoragePlugin.get({ key: key });
   return value;
 };

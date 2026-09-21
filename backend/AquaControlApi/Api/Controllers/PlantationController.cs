@@ -16,7 +16,7 @@ namespace Api.Controllers
     public class PlantationController : ControllerBase
     {
 
-        [Authorize(AuthenticationSchemes = "Bearer", Policy = "HasIdDevice")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "Administrador,Operador", Policy = "HasDevice")]
         [ValidateModelFilter]
         [HttpPost]
         [Route("api/plantation")]
@@ -25,7 +25,7 @@ namespace Api.Controllers
             try
             {
 
-                int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
+                string idDevice = User.FindFirst("IdDevice").Value;
 
                 if (idDevice != plantation.Device.Id)
                     return StatusCode(403, new { message = "No tiene acceso al dispositivo de riego donde desea agregar registro de esta planta" });
@@ -45,7 +45,7 @@ namespace Api.Controllers
             }
         }
 
-        [Authorize(AuthenticationSchemes = "Bearer", Policy = "HasIdDevice")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "Administrador,Operador", Policy = "HasDevice")]
         [ValidateModelFilter]
         [HttpPut]
         [Route("api/plantation")]
@@ -53,9 +53,9 @@ namespace Api.Controllers
         {
             try
             {
-      
 
-                int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
+
+                string idDevice = User.FindFirst("IdDevice").Value;
 
                 if (idDevice != plantation.Device.Id)
                     return StatusCode(403, new { message = "No tiene acceso al dispositivo de riego donde desea actualizar el registro de esta planta" });
@@ -70,7 +70,7 @@ namespace Api.Controllers
             }
         }
 
-        [Authorize(AuthenticationSchemes = "Bearer", Policy = "HasIdDevice")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "Administrador,Operador", Policy = "HasDevice")]
         [ValidateModelFilter]
         [HttpDelete]
         [Route("api/plantation")]
@@ -79,7 +79,7 @@ namespace Api.Controllers
             try
             {
 
-                int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
+                string idDevice = User.FindFirst("IdDevice").Value;
 
                 if (idDevice != plantation.Device.Id)
                     return StatusCode(403, new { message = "No tiene acceso al dispositivo de riego donde desea eliminar el registro de esta planta" });
@@ -94,15 +94,18 @@ namespace Api.Controllers
             }
         }
 
-        [Authorize(AuthenticationSchemes = "Bearer", Policy = "HasIdDevice")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "Administrador,Operador,Lector", Policy = "HasDevice")]
         [HttpGet]
-        [Route("api/plantation")]
-        public async Task<ActionResult> GetAllPlantsByDevice()
+        [Route("api/plantation/device/{idDevice}")]
+        public async Task<ActionResult> GetAllPlantsByDevice(string idDevice)
         {
             try
             {
 
-                int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
+                string idDeviceToken = User.FindFirst("IdDevice").Value;
+
+                if (idDeviceToken != idDevice)
+                    return StatusCode(403, new { message = "No tiene acceso al dispositivo de riego" });
 
                 List<Plantation> plants = await new Lplantation().GetAllPlantationsByDevice(idDevice);
 

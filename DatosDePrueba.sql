@@ -7,7 +7,7 @@ EXEC AddCropType 'Patata','https://res.cloudinary.com/prw3eivq/image/upload/v178
 
 EXEC AddCropType 'Trigo','https://res.cloudinary.com/prw3eivq/image/upload/v1789077618/wheat.png',35,65;
 
-EXEC AddCropType 'Sandia','https://res.cloudinary.com/prw3eivq/image/upload/v1789077626/watermelon.png',45,70;
+EXEC AddCropType 'Sandia','https://res.cloudinary.com/prw3eivq/image/upload/v1789940922/watermelon.png',45,70;
 
 EXEC AddCropType 'Tomate','https://res.cloudinary.com/prw3eivq/image/upload/v1789077623/tomato.png',50,70;
 
@@ -23,7 +23,7 @@ EXEC AddCropType 'Pepino','https://res.cloudinary.com/prw3eivq/image/upload/v178
 
 EXEC AddCropType 'Berenjena','https://res.cloudinary.com/prw3eivq/image/upload/v1789077619/eggplant.png',50,70;
 
-EXEC AddCropType 'Ajo','https://res.cloudinary.com/prw3eivq/image/upload/v1789077627/garlic.png',40,65;
+EXEC AddCropType 'Ajo','https://res.cloudinary.com/prw3eivq/image/upload/v1789940853/garlic.png',40,65;
 
 EXEC AddCropType 'Jengibre','https://res.cloudinary.com/prw3eivq/image/upload/v1789077617/ginger.png',60,80;
 
@@ -31,7 +31,7 @@ EXEC AddCropType 'Puerro','https://res.cloudinary.com/prw3eivq/image/upload/v178
 
 EXEC AddCropType 'Lechuga','https://res.cloudinary.com/prw3eivq/image/upload/v1789077626/lettuce.png',55,75;
 
-EXEC AddCropType 'Cebolla','https://res.cloudinary.com/prw3eivq/image/upload/v1789077622/onion.png',40,65;
+EXEC AddCropType 'Cebolla','https://res.cloudinary.com/prw3eivq/image/upload/v1789940856/onion.png',40,65;
 
 EXEC AddCropType 'Pimiento','https://res.cloudinary.com/prw3eivq/image/upload/v1789077620/pepper.png',50,70;
 
@@ -52,6 +52,12 @@ EXEC AddCropType 'Caña de azúcar','https://res.cloudinary.com/prw3eivq/image/upl
 EXEC AddCropType 'Girasol','https://res.cloudinary.com/prw3eivq/image/upload/v1789077618/sunflower.png',40,65;
 
 EXEC AddCropType 'Tulipán','https://res.cloudinary.com/prw3eivq/image/upload/v1789077616/tulip.png',40,60;
+
+--------------------------------------------------Devices---------------------------------------------------------- 
+
+EXEC AddDevice 'ESP32-00001','Hogar' ,'Montevideo,Uruguay' 
+
+EXEC AddUserDevice 1,'ESP32-00001','Operador'
 
 --------------------------------------------------Tanks---------------------------------------------------------- 
 EXEC AddTank 1,1,30

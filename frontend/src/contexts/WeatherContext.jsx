@@ -19,11 +19,12 @@ export const WeatherProvider = ({ children }) => {
         if (!error) getCurrentWeather();
       },
     );
-  }, [mqttClient, deviceSelected]);
+  }, [mqttClient.connected, deviceSelected]);
 
   const getCurrentWeather = () => {
     mqttClient.on("message", (topic, message) => {
       if (topic != `device/${deviceSelected.id}/weather`) return;
+
       const weather = JSON.parse(message.toString());
       setCurrentWeather(weather);
     });

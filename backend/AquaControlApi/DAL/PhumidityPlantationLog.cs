@@ -42,7 +42,7 @@ namespace DAL
             }
         }
 
-        public async Task<List<HumidityPlantationLog>> GetHumidityPlantationLogsLastWeek(int idPlantation, int idDevice)
+        public async Task<List<HumidityPlantationLog>> GetHumidityPlantationLogsLastWeek(int idPlantation, string idDevice)
         {
 
             WeatherData weatherData = null;
@@ -60,7 +60,7 @@ namespace DAL
 
                 SqlDataReader reader = await command.ExecuteReaderAsync();
 
-                List<Plantation> plantations = await new Pplantation().GetAllPlantationsByDevice(idPlantation);
+                List<Plantation> plantations = await new Pplantation().GetAllPlantationsByDevice(idDevice);
 
                 Plantation plantationFound = plantations.Find(plant => plant.Id == idPlantation);
 

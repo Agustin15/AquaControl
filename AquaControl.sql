@@ -6,28 +6,33 @@ CREATE TABLE Users(
 idUser INT IDENTITY(1,1) PRIMARY KEY,
 username VARCHAR(15) NOT NULL UNIQUE,
 email VARCHAR(30) NOT NULL UNIQUE CHECK(email LIKE '%@%.%'), 
-role VARCHAR(13) DEFAULT 'Usuario' CHECK(role IN ('Administrador','Usuario')),
 password VARCHAR(60) NOT NULL,
+role VARCHAR(13) NOT NULL CHECK(role IN ('Cliente','Administrador')),
 joined DATETIME NOT NULL DEFAULT GETDATE()
 )
 
 
 CREATE TABLE Devices(
-idDevice INT IDENTITY(1,1) PRIMARY KEY,
+idDevice VARCHAR(25) PRIMARY KEY,
 placeName VARCHAR(15) NOT NULL,
 location VARCHAR(25) CHECK(location NOT LIKE '%[^A-Z,]%' and location LIKE '%,%'),
+linked BIT NOT NULL,
 created DATETIME NOT NULL DEFAULT GETDATE(),
 )
 
+
 CREATE TABLE Users_Devices(
-idDevice INT FOREIGN KEY REFERENCES Devices(idDevice) ON DELETE CASCADE,
+idDevice VARCHAR(25) FOREIGN KEY REFERENCES Devices(idDevice) ON DELETE CASCADE,
 idUser INT FOREIGN KEY REFERENCES Users(idUser) ON DELETE CASCADE,
+role VARCHAR(13) NOT NULL CHECK(role IN ('Lector','Operador')),
+joined DATETIME NOT NULL DEFAULT GETDATE(),
 PRIMARY KEY(idDevice,idUser)
 )
 
+
 CREATE TABLE Tanks(
 id INT CHECK(id>0),
-idDevice INT FOREIGN KEY REFERENCES Devices(idDevice) ON DELETE CASCADE,
+idDevice VARCHAR(25) FOREIGN KEY REFERENCES Devices(idDevice) ON DELETE CASCADE,
 height DECIMAL(4,1) NOT NULL CHECK(height>=15 and height<=800)
 PRIMARY KEY(id,idDevice)
 )
@@ -42,7 +47,7 @@ humidityMax INT NOT NULL CHECK(humidityMax >=0 and humidityMax <=100)
 
 CREATE TABLE Plantations(
 id INT CHECK(id>0),
-idDevice INT NOT NULL FOREIGN KEY REFERENCES Devices(idDevice) ON DELETE CASCADE,
+idDevice VARCHAR(25) FOREIGN KEY REFERENCES Devices(idDevice) ON DELETE CASCADE,
 type VARCHAR(30) NOT NULL FOREIGN KEY REFERENCES CropsTypes(name) ON DELETE CASCADE,
 humidityMin INT NOT NULL CHECK(humidityMin>=0 and humidityMin  <=100),
 humidityMax INT NOT NULL CHECK(humidityMax >=0 and humidityMax <=100),
@@ -59,7 +64,7 @@ id INT IDENTITY(1,1) PRIMARY KEY,
 percentege DECIMAL(4,1) NOT NULL CHECK(percentege>=0 and percentege<=100),
 datetimeLog DATETIME NOT NULL DEFAULT GETDATE(),
 idTank INT NOT NULL,
-idDevice INT NOT NULL,
+idDevice VARCHAR(25) NOT NULL,
 FOREIGN KEY (idTank,idDevice) REFERENCES Tanks(id,idDevice) ON DELETE CASCADE,
 ) 
 
@@ -70,7 +75,7 @@ percentege INT NOT NULL CHECK(percentege>=0 and percentege<=100),
 datetimeLog  DATETIME NOT NULL DEFAULT GETDATE(),
 weatherData NVARCHAR(300) NOT NULL,
 idPlantation INT NOT NULL,
-idDevice INT NOT NULL,
+idDevice VARCHAR(25) NOT NULL,
 FOREIGN KEY (idPlantation,idDevice) REFERENCES Plantations(id,idDevice) ON DELETE CASCADE,
 )
 
@@ -86,7 +91,7 @@ humidityBefore INT NOT NULL CHECK(humidityBefore>=0 and humidityBefore<=100),
 humidityAfter INT CHECK(humidityAfter>=0 and humidityAfter<=100),
 idTank INT NOT NULL,
 idPlantation INT NOT NULL,
-idDevice INT NOT NULL,
+idDevice VARCHAR(25) NOT NULL,
 FOREIGN KEY (idTank,idDevice) REFERENCES Tanks(id,idDevice) ON DELETE CASCADE,
 FOREIGN KEY (idPlantation,idDevice) REFERENCES Plantations(id,idDevice)
 )
@@ -110,7 +115,7 @@ title VARCHAR(50) NOT NULL,
 message VARCHAR(60) NOT NULL,
 type VARCHAR(11) NOT NULL CHECK(type IN('Advertencia','Exito')),
 datetimeAlert DATETIME NOT NULL DEFAULT GETDATE(),
-idDevice INT NOT NULL FOREIGN KEY (idDevice) REFERENCES Devices(idDevice)
+idDevice VARCHAR(25) NOT NULL FOREIGN KEY (idDevice) REFERENCES Devices(idDevice)
 )
 
 
@@ -124,17 +129,17 @@ PRIMARY KEY(idAlert,idUser)
 GO
 
 CREATE OR ALTER  VIEW Entities AS
-select idUser as code,username as entity,email as correspondence,role as responsability,password as entityKey,joined as created from Users;
+select idUser as code,username as entity,email as correspondence,password as entityKey,role as responsability,joined as created from Users;
 
 GO
 
 CREATE OR ALTER  VIEW Plaques AS
-select idDevice as codePlaque, placeName as place,location as geography,created as inserted from Devices;
+select idDevice as codePlaque, placeName as place,location as geography,linked as configured,created as inserted from Devices;
 
 GO
 
 CREATE OR ALTER VIEW Entities_Plaques AS
-select idUser as codeEntity ,idDevice as codePlaque from Users_Devices
+select idUser as codeEntity,idDevice as codePlaque,role as responsability,joined as inserted from Users_Devices
 
 GO
 
@@ -184,12 +189,12 @@ GO
 
 ------------------------------------------------------------Users--------------------------------------------------------------
 
-CREATE OR ALTER PROCEDURE AddUser @username VARCHAR(15),@email VARCHAR(30),@role VARCHAR(13)='Usuario',@password VARCHAR(60) AS
+CREATE OR ALTER PROCEDURE AddUser @username VARCHAR(15),@email VARCHAR(30),@password VARCHAR(60),@role VARCHAR(13)='Cliente' AS
 BEGIN
 
 BEGIN TRY
 
-INSERT INTO Users (username,email,role,password) VALUES(@username,@email,@role,@password)
+INSERT INTO Users (username,email,password,role) VALUES(@username,@email,@password,@role)
 
 RETURN IDENT_CURRENT('Users')
 
@@ -204,12 +209,12 @@ END
 
 GO
 
-CREATE OR ALTER PROCEDURE UpdateUser @idUser INT,@username VARCHAR(15),@email VARCHAR(30),@role VARCHAR(13)='Usuario',@password VARCHAR(60) AS
+CREATE OR ALTER PROCEDURE UpdateUser @idUser INT,@username VARCHAR(15),@email VARCHAR(30),@password VARCHAR(60),@role VARCHAR(13)='Cliente' AS
 BEGIN
 
 BEGIN TRY
 
-Update Users set username=@username,email=@email,role=@role,password=@password where idUser=@idUser
+Update Users set username=@username,email=@email,password=@password,role=@role where idUser=@idUser
 
 END TRY
 
@@ -247,22 +252,22 @@ END
 
 GO
 
-CREATE OR ALTER PROCEDURE AllUsers AS
+CREATE OR ALTER PROCEDURE UsersByText @text VARCHAR(30) AS
 BEGIN
 
-select code,entity,correspondence,responsability,created from Entities;
-
+select code,entity,correspondence,responsability,created from Entities where entity LIKE '%'+@text+'%'  	
 END 
-
 
 GO
 
+
+  
 ------------------------------------------------------------Devices--------------------------------------------------------------
-CREATE OR ALTER PROCEDURE AddDevice @placeName VARCHAR(15),@location VARCHAR(35) AS
+CREATE OR ALTER PROCEDURE AddDevice @idDevice VARCHAR(25), @placeName VARCHAR(15),@location VARCHAR(35) AS
 BEGIN
 
 BEGIN TRY 
-INSERT INTO Devices(placeName,location) Values(@placeName,@location)
+INSERT INTO Devices(idDevice,placeName,location) Values(@idDevice,@placeName,@location)
 
 RETURN IDENT_CURRENT('Devices')
 
@@ -278,7 +283,7 @@ END
 
 GO
 
-CREATE OR ALTER PROCEDURE DeleteDevice @idDevice INT AS
+CREATE OR ALTER PROCEDURE DeleteDevice @idDevice VARCHAR(25) AS
 BEGIN
 
 IF NOT EXISTS (select * from Devices where idDevice=@idDevice )
@@ -299,12 +304,12 @@ END
 
 GO
 
-CREATE OR ALTER PROCEDURE UpdateDevice @placeName VARCHAR(15),@location VARCHAR(35),@idDevice INT AS
+CREATE OR ALTER PROCEDURE UpdateDevice @placeName VARCHAR(15),@location VARCHAR(35),@idDevice VARCHAR(25),@linked BIT AS
 BEGIN
 
 BEGIN TRY
 
-UPDATE Devices set placeName=@placeName,location=@location where idDevice=@idDevice 
+UPDATE Devices set placeName=@placeName,location=@location,linked=@linked where idDevice=@idDevice 
 END TRY
 
 BEGIN CATCH
@@ -317,7 +322,7 @@ END
 GO
 
 
-CREATE OR ALTER PROCEDURE DeviceById @code INT AS
+CREATE OR ALTER PROCEDURE DeviceById @code VARCHAR(25) AS
 BEGIN
 
 select * from Plaques where codePlaque=@code
@@ -327,11 +332,11 @@ END
 GO
 ------------------------------------------------------------Users_Devices--------------------------------------------------------------
 
-CREATE OR ALTER PROCEDURE AddUserDevice @idUser INT,@idDevice INT AS
+CREATE OR ALTER PROCEDURE AddUserDevice @idUser INT,@idDevice VARCHAR(25),@role VARCHAR(13) AS
 BEGIN
 
 BEGIN TRY 
-INSERT INTO Users_Devices(idUser,idDevice) Values(@idUser,@idDevice)
+INSERT INTO Users_Devices(idUser,idDevice,role) Values(@idUser,@idDevice,@role)
 END TRY
 
 BEGIN CATCH
@@ -344,7 +349,24 @@ END
 
 GO
 
-CREATE OR ALTER PROCEDURE DeleteUserDevice @idUser INT,@idDevice INT AS
+CREATE OR ALTER PROCEDURE UpdateUserDevice @idUser INT,@idDevice VARCHAR(25),@role VARCHAR(13) AS
+BEGIN
+
+BEGIN TRY 
+UPDATE Users_Devices SET role=@role where idDevice=@idDevice and idUser=@idUser
+END TRY
+
+BEGIN CATCH
+DECLARE @error NVARCHAR(500)=ERROR_MESSAGE()
+RAISERROR(@error,16,1)
+RETURN
+END CATCH
+
+END 
+
+GO
+
+CREATE OR ALTER PROCEDURE DeleteUserDevice @idUser INT,@idDevice VARCHAR(25) AS
 BEGIN
 
 IF NOT EXISTS(select * from Users_Devices where idUser=@idUser and idDevice=@idDevice)
@@ -367,20 +389,20 @@ END
 GO
 
 
-CREATE OR ALTER PROCEDURE DevicesOfUser @codeEntity INT AS
+CREATE OR ALTER PROCEDURE DevicesOfUser @codeEntity VARCHAR(25) AS
 
 select * from Entities_Plaques where codeEntity=@codeEntity
 
 GO
 
-CREATE OR ALTER PROCEDURE UsersByIdDevice @codePlaque INT AS
+CREATE OR ALTER PROCEDURE UsersByIdDevice @codePlaque VARCHAR(25) AS
 
 select * from Entities_Plaques where codePlaque=@codePlaque
 
 GO
 
 ------------------------------------------------------------Tanks--------------------------------------------------------------
-CREATE OR ALTER PROCEDURE AddTank @id INT,@idDevice INT,@height DECIMAL(4,1) AS
+CREATE OR ALTER PROCEDURE AddTank @id INT,@idDevice VARCHAR(25),@height DECIMAL(4,1) AS
 BEGIN
 
 BEGIN TRY
@@ -397,7 +419,7 @@ END
 GO
 
 
-CREATE OR ALTER PROCEDURE DeleteTank @id INT, @idDevice INT AS
+CREATE OR ALTER PROCEDURE DeleteTank @id INT, @idDevice VARCHAR(25) AS
 BEGIN
 
 IF NOT EXISTS(select * from Tanks where id=@id)
@@ -418,7 +440,7 @@ END
 
 GO
 
-CREATE OR ALTER PROCEDURE UpdateTank @id INT,@idDevice INT, @height DECIMAL(4,1) AS
+CREATE OR ALTER PROCEDURE UpdateTank @id INT,@idDevice VARCHAR(25), @height DECIMAL(4,1) AS
 BEGIN
 
 BEGIN TRY
@@ -434,7 +456,7 @@ END
 
 GO
 
-CREATE OR ALTER PROCEDURE AllTanksByDevice @codePlaque INT AS 
+CREATE OR ALTER PROCEDURE AllTanksByDevice @codePlaque VARCHAR(25) AS 
 BEGIN
 
 select * from Bowls where idPlaque=@codePlaque;
@@ -444,7 +466,7 @@ END
 GO
 
 
-CREATE OR ALTER PROCEDURE TankByIdAndDevice @code INT,@codePlaque INT AS 
+CREATE OR ALTER PROCEDURE TankByIdAndDevice @code INT,@codePlaque VARCHAR(25) AS 
 BEGIN
 select * from Bowls where codeBowl=@code and idPlaque=@codePlaque;
 END
@@ -526,7 +548,7 @@ END
 GO
 ------------------------------------------------------------Plants--------------------------------------------------------------
 
-CREATE OR ALTER PROCEDURE AddPlantation @id INT, @idDevice INT,@type VARCHAR(30),@humidityMin INT,@humidityMax INT,@indoor BIT,
+CREATE OR ALTER PROCEDURE AddPlantation @id INT, @idDevice VARCHAR(25),@type VARCHAR(30),@humidityMin INT,@humidityMax INT,@indoor BIT,
 @amountPlants INT,@image VARCHAR(100)=null AS
 BEGIN
 
@@ -544,7 +566,7 @@ END
 
 GO
 
-CREATE OR ALTER PROCEDURE UpdatePlantation @id INT,@idDevice INT,@type VARCHAR(30),@humidityMin INT,@humidityMax INT,@amountPlants INT,@indoor BIT,
+CREATE OR ALTER PROCEDURE UpdatePlantation @id INT,@idDevice VARCHAR(25),@type VARCHAR(30),@humidityMin INT,@humidityMax INT,@amountPlants INT,@indoor BIT,
 @image VARCHAR(100)=null AS
 BEGIN
 
@@ -563,7 +585,7 @@ END
 
 GO
 
-CREATE OR ALTER PROCEDURE DeletePlantation @id INT,@idDevice INT AS
+CREATE OR ALTER PROCEDURE DeletePlantation @id INT,@idDevice VARCHAR(25) AS
 BEGIN
 
 IF NOT EXISTS(select * from Plantations where id=@id and idDevice=@idDevice)
@@ -584,7 +606,7 @@ END
 
 GO
 
-CREATE OR ALTER PROCEDURE AllPlantationsByDevice @codePlaque INT AS 
+CREATE OR ALTER PROCEDURE AllPlantationsByDevice @codePlaque VARCHAR(25) AS 
 BEGIN
 select * from Lands where idPlaque=@codePlaque;
 END
@@ -593,7 +615,7 @@ GO
 
 ------------------------------------------------------------WaterTankLogs----------------------------------------------------------
 
-CREATE OR ALTER PROCEDURE AddWaterTankLog @percentege DECIMAL(4,1),@idTank INT,@idDevice INT AS
+CREATE OR ALTER PROCEDURE AddWaterTankLog @percentege DECIMAL(4,1),@idTank INT,@idDevice VARCHAR(25) AS
 BEGIN
 
 BEGIN TRY
@@ -609,7 +631,7 @@ END
 
 GO
 
-CREATE OR ALTER PROCEDURE WaterTankLogsLastWeek @idBowl INT,@codePlaque INT AS
+CREATE OR ALTER PROCEDURE WaterTankLogsLastWeek @idBowl INT,@codePlaque VARCHAR(25) AS
 BEGIN
 
 DECLARE @dateStartWeek DATETIME 
@@ -626,7 +648,7 @@ GO
 
 ------------------------------------------------------------HumidityPlantLogs-------------------------------------------------------
 
-CREATE OR ALTER PROCEDURE AddHumidityPlantLog @percentege INT,@weatherData NVARCHAR(300),@idPlantation INT,@idDevice INT AS
+CREATE OR ALTER PROCEDURE AddHumidityPlantLog @percentege INT,@weatherData NVARCHAR(300),@idPlantation INT,@idDevice VARCHAR(25) AS
 BEGIN
 
 BEGIN TRY
@@ -658,7 +680,7 @@ GO
 
 --------------------------------------------------------------WaterPlants-------------------------------------------------------------------
 
-CREATE OR ALTER PROCEDURE AddWaterPlantationLog @type VARCHAR(10),@levelTankBefore INT,@humidityBefore INT,@idTank INT,@idPlantation INT,@idDevice INT AS
+CREATE OR ALTER PROCEDURE AddWaterPlantationLog @type VARCHAR(10),@levelTankBefore INT,@humidityBefore INT,@idTank INT,@idPlantation INT,@idDevice VARCHAR(25) AS
 BEGIN
 
 BEGIN TRY
@@ -696,7 +718,7 @@ END
 
 GO
 
-CREATE OR ALTER PROCEDURE LastWaterPlantationLog @idBowl INT,@idLand INT,@codePlaque INT AS
+CREATE OR ALTER PROCEDURE LastWaterPlantationLog @idBowl INT,@idLand INT,@codePlaque VARCHAR(25) AS
 BEGIN
 
 select TOP 1 * from PlantationWateringRecords where momentEnd is not null and idBowl=@idBowl and idLand=@idLand and idPlaque=@codePlaque 
@@ -706,7 +728,7 @@ END
 
 GO
 
-CREATE OR ALTER PROCEDURE AmountLogsWaterPlantation @idBowl INT,@idLand INT,@codePlaque INT AS
+CREATE OR ALTER PROCEDURE AmountLogsWaterPlantation @idBowl INT,@idLand INT,@codePlaque VARCHAR(25) AS
 BEGIN
 
 select COUNT(*) as amount from PlantationWateringRecords where momentEnd is not null and idBowl=@idBowl and idLand=@idLand and idPlaque=@codePlaque 
@@ -724,7 +746,7 @@ END
 
 GO
 
-CREATE OR ALTER PROCEDURE WaterPlantationMostNearlyToWaterTank @codePlaque INT,@idBowl INT,@measureBowl DECIMAL(4,1) ,@momentWaterTank DATETIME AS
+CREATE OR ALTER PROCEDURE WaterPlantationMostNearlyToWaterTank @codePlaque VARCHAR(25),@idBowl INT,@measureBowl DECIMAL(4,1) ,@momentWaterTank DATETIME AS
 BEGIN
 
 select TOP 1 * from PlantationWateringRecords where idBowl=@idBowl and idPlaque=@codePlaque and postMeasureBowl=@measureBowl
@@ -736,7 +758,7 @@ GO
 
 --------------------------------------------------------------Alerts-------------------------------------------------------------------
 
-CREATE OR ALTER PROCEDURE AddAlert @title VARCHAR(50), @message VARCHAR(60),@type VARCHAR(11),@idDevice INT AS 
+CREATE OR ALTER PROCEDURE AddAlert @title VARCHAR(50), @message VARCHAR(60),@type VARCHAR(11),@idDevice VARCHAR(25) AS 
 BEGIN
 
 BEGIN TRY
@@ -812,7 +834,7 @@ END
 
 GO
 
-CREATE OR ALTER PROCEDURE AmountAlertsByUserAndDevice @codePlaque INT ,@codeEntity INT AS 
+CREATE OR ALTER PROCEDURE AmountAlertsByUserAndDevice @codePlaque VARCHAR(25) ,@codeEntity INT AS 
 BEGIN
 
 select COUNT(*) as amount from Notifications_Entities NE INNER JOIN Notifications N ON N.code=NE.codeNotification 
@@ -822,7 +844,7 @@ END
 
 GO
 
-CREATE OR ALTER PROCEDURE AlertsByUserAndDeviceOffset @offset INT,@codePlaque INT,@codeEntity INT AS 
+CREATE OR ALTER PROCEDURE AlertsByUserAndDeviceOffset @offset INT,@codePlaque VARCHAR(25),@codeEntity INT AS 
 BEGIN
 
 select N.* from Notifications_Entities NE INNER JOIN Notifications N ON N.code=NE.codeNotification 
@@ -903,11 +925,12 @@ RAISERROR('Formato de correo incorrecto',16,1)
 RETURN
 END 
 
-IF EXISTS (select * from inserted where role NOT IN ('Administrador','Usuario'))
+IF(select role from inserted) NOT IN ('Administrador','Cliente')
 BEGIN
 RAISERROR('Rol no valido',16,1)
 RETURN
 END 
+
 
 IF EXISTS(select * from Users where email=(select email from inserted))
 BEGIN
@@ -915,7 +938,7 @@ RAISERROR('Correo ya en uso',16,1)
 RETURN
 END 
 
-INSERT INTO Users(username,email,role,password) (select username,email,role,password from inserted)
+INSERT INTO Users(username,email,password,role) (select username,email,password,role from inserted)
 
 END
 
@@ -927,10 +950,10 @@ BEGIN
 DECLARE @idUser INT 
 DECLARE @usernameInserted VARCHAR(15)
 DECLARE @emailInserted VARCHAR(30)
-DECLARE @roleInserted VARCHAR(13)
 DECLARE @passwordInserted VARCHAR(60)
+DECLARE @roleInserted VARCHAR(13)
 
-select @emailInserted=email,@usernameInserted=username,@roleInserted=role,@passwordInserted=password from inserted
+select @emailInserted=email,@usernameInserted=username,@passwordInserted=password,@roleInserted=role from inserted
 select @idUser=idUser from deleted
 
 IF (@emailInserted NOT LIKE '%@%.%')
@@ -939,11 +962,12 @@ RAISERROR('Formato de correo incorrecto',16,1)
 RETURN
 END 
 
-IF(@roleInserted) NOT IN ('Administrador','Usuario')
+IF(@roleInserted) NOT IN ('Administrador','Cliente')
 BEGIN
 RAISERROR('Rol no valido',16,1)
 RETURN
 END 
+
 
 IF NOT EXISTS(select * from Users where idUser=@idUser)
 BEGIN
@@ -963,7 +987,7 @@ RAISERROR('Correo ya en uso',16,1)
 RETURN
 END 
 
-UPDATE Users set username=@usernameInserted,email=@emailInserted,role=@roleInserted,password=@passwordInserted
+UPDATE Users set username=@usernameInserted,email=@emailInserted,password=@passwordInserted
 
 END
 
@@ -980,7 +1004,13 @@ RAISERROR('Formato de ubicacion incorrecto',16,1)
 RETURN
 END 
 
-INSERT INTO Devices(placeName,location) select placeName,location from inserted
+IF EXISTS(select * from Devices where idDevice=(select idDevice from inserted))
+BEGIN
+RAISERROR('Dispositivo de riego con este ID ya existente',16,1)
+RETURN
+END 
+
+INSERT INTO Devices(idDevice,placeName,location,linked) select idDevice,placeName,location,linked from inserted
 
 END
 
@@ -995,7 +1025,8 @@ RAISERROR('Formato de ubicacion incorrecto',16,1)
 RETURN
 END 
 
-UPDATE Devices SET placeName=(select placeName from inserted),location=(select location from inserted) select placeName,location from inserted
+UPDATE Devices SET placeName=(select placeName from inserted),location=(select location from inserted),linked=(select linked from inserted)
+where idDevice=(select idDevice from inserted)
 
 END
 
@@ -1005,6 +1036,13 @@ GO
 
 CREATE OR ALTER TRIGGER ValidAddUserDevice ON Users_Devices INSTEAD OF INSERT AS
 BEGIN
+
+IF(select role from inserted) NOT IN ('Operador','Lector')
+BEGIN
+RAISERROR('Rol no valido',16,1)
+RETURN
+END 
+
 
 IF NOT EXISTS(select * From Devices where idDevice=(select idDevice from inserted))
 BEGIN
@@ -1020,11 +1058,34 @@ END
 
 IF EXISTS(select * From Users_Devices where idDevice=(select idDevice from inserted) and idUser=(select idUser from inserted))
 BEGIN
-RAISERROR('Este dispositivo de riego ya esta vinculado al usuario indicado',16,1)
+RAISERROR('Usuario ya ha sido vinculado a este dispositivo de riego',16,1)
 RETURN
 END 
 
-INSERT INTO Users_Devices(idDevice,idUser) select idDevice,idUser from inserted
+INSERT INTO Users_Devices(idDevice,idUser,role) select idDevice,idUser,role from inserted
+
+END
+
+GO
+
+CREATE OR ALTER TRIGGER ValidUpdateUserDevice ON Users_Devices INSTEAD OF UPDATE AS
+BEGIN
+
+IF(select role from inserted) NOT IN ('Operador','Lector')
+BEGIN
+RAISERROR('Rol no valido',16,1)
+RETURN
+END 
+
+
+IF NOT EXISTS(select * From Users_Devices where idDevice=(select idDevice from inserted) and idUser=(select idUser from inserted))
+BEGIN
+RAISERROR('No se encontro el asociado a este dispositivo',16,1)
+RETURN
+END 
+
+
+UPDATE Users_Devices SET role=(select role from inserted) where idDevice=(select idDevice from deleted) and idUser=(select idUser from deleted)
 
 END
 

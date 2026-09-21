@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import { alertError } from "../components/alertSwal/alertSwal.js";
-import { saveInfo, saveTokens } from "../securityStorage.js";
+import { saveAuthToken, saveInfo} from "../securityStorage.js";
 import { useAuth } from "./AuthContext.jsx";
 const localhostBackend = import.meta.env.VITE_BACKEND_LOCALHOST;
 
@@ -53,13 +53,17 @@ export const LoginProvider = ({ children }) => {
       if (!response.ok) throw new Error(result.message);
 
       if (result) {
-        await saveTokens(result.accessToken, result.refreshToken);
+        await saveAuthToken("accessToken", result.accessToken);
+        await saveAuthToken("refreshToken", result.refreshToken);
+
         await saveInfo("userLogued", result.user);
         setUserAuth(result.user);
         navigate("/devices");
       }
     } catch (error) {
-      alertError("Ups, algo salio mal al iniciar sesion", error);
+      const errorMessage =
+        error?.message || "No se pudo iniciar sesión en este momento";
+      alertError("Ups, algo salio mal al iniciar sesion", errorMessage);
     } finally {
       setLoading(false);
     }

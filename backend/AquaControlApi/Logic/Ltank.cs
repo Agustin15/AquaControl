@@ -35,7 +35,7 @@ namespace Logic
 
         }
 
-        public async Task<List<Tank>> GetAllTanksByDevice(int idDevice)
+        public async Task<List<Tank>> GetAllTanksByDevice(string idDevice)
         {
 
             List<Tank> listTanks = new List<Tank>();

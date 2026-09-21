@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { useTank } from "../../../contexts/tankContext/TankContext";
 import { LogsWeekday } from "./logsWeekday/LogsWeekday";
 import { useWeekdayLogs } from "../../../contexts/LogsWeekdayContext";
+import { useDevice } from "../../../contexts/DeviceContext";
 
 export const WaterTankLogs = () => {
   const {
@@ -15,8 +16,9 @@ export const WaterTankLogs = () => {
     tankSelected,
     setTankSelected,
   } = useTank();
-  
+
   const { getWeekdayLogs } = useWeekdayLogs();
+  const { deviceSelected } = useDevice();
 
   useEffect(() => {
     loadTanks();
@@ -32,7 +34,7 @@ export const WaterTankLogs = () => {
 
   const loadWaterLogsOfTank = async (idTank) => {
     getWeekdayLogs(
-      `/api/waterTankLog/tank/${idTank}/lastWeek`,
+      `/api/waterTankLog/tank/${idTank}/device/${deviceSelected.id}/lastWeek`,
     );
   };
 

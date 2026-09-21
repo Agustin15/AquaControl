@@ -31,12 +31,6 @@ namespace Logic
 
         }
 
-        public async Task DeleteUserOfDevice(Device device, User user)
-        {
-            await new Pdevice().DeleteUserDevice(device, user);
-
-        }
-
         public async Task<List<Device>> GetDevicesByIdUser(int idUser)
         {
             List<Device> devices = new List<Device>();
@@ -47,7 +41,7 @@ namespace Logic
 
         }
 
-        public async Task<Device> GetDeviceById(int idDevice)
+        public async Task<Device> GetDeviceById(string idDevice)
         {
             return await new Pdevice().GetDeviceById(idDevice);
         }

@@ -76,7 +76,7 @@ namespace DAL
             }
         }
 
-        public async Task<WaterPlantationLog> GetLastWaterPlantationLog(int idPlantation, int idTank, int idDevice)
+        public async Task<WaterPlantationLog> GetLastWaterPlantationLog(int idPlantation, int idTank, string idDevice)
         {
 
             WaterPlantationLog waterPlantationLog = null;
@@ -131,7 +131,7 @@ namespace DAL
 
 
         internal async Task<WaterPlantationLog> GetWaterPlantationLogMostNearylToWaterTank(int idTank,
-            int idDevice, DateTime waterTankLogDatetime, double levelTank)
+            string idDevice, DateTime waterTankLogDatetime, double levelTank)
         {
 
             WaterPlantationLog waterPlantationLog = null;
@@ -186,7 +186,7 @@ namespace DAL
         }
 
 
-        public async Task<int> GetAmountWaterPlantationLogs(int idTank, int idPlantation, int idDevice)
+        public async Task<int> GetAmountWaterPlantationLogs(int idTank, int idPlantation, string idDevice)
         {
 
             int amount = 0;
@@ -228,7 +228,7 @@ namespace DAL
 
 
         }
-        public async Task<List<WaterPlantationLog>> GetWaterPlantationLogsOffset(int idTank, int idPlant, int idDevice, int offset)
+        public async Task<List<WaterPlantationLog>> GetWaterPlantationLogsOffset(int idTank, int idPlant, string idDevice, int offset)
         {
 
             List<WaterPlantationLog> waterPlantLogs = new List<WaterPlantationLog>();

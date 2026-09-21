@@ -13,8 +13,8 @@ export const Info = () => {
         <button onClick={() => setInfoPlantation(false)}>Cerrar</button>
       </div>
 
-      <div className={styles.info}>
-        <div className={styles.containImage}>
+      <ul className={styles.info}>
+        <li className={styles.containImage}>
           {infoPlantation.image ? (
             <div className={styles.image}>
               <img src={infoPlantation.image}></img>
@@ -25,33 +25,35 @@ export const Info = () => {
               <span>Sin imagen </span>
             </div>
           )}
-        </div>
+        </li>
 
-        <div className={styles.rowDetail}>
-          <b>Tipo de cultivo:</b>
-          <span>{infoPlantation.cropType.name}s</span>
-        </div>
+        <div className={styles.columnTwo}>
+          <li className={styles.rowDetail}>
+            <b>Tipo de cultivo:</b>
+            <span>{infoPlantation.cropType.name}s</span>
+          </li>
 
-        <div className={styles.rowDetail}>
-          <b>Humedad minima de tierra:</b>
-          <span>{infoPlantation.humidityMin}%</span>
-        </div>
+          <li className={styles.rowDetail}>
+            <b>Humedad minima de tierra:</b>
+            <span>{infoPlantation.humidityMin}%</span>
+          </li>
 
-        <div className={styles.rowDetail}>
-          <b>Humedad maxima de tierra:</b>
-          <span>{infoPlantation.humidityMax}%</span>
-        </div>
+          <li className={styles.rowDetail}>
+            <b>Humedad maxima de tierra:</b>
+            <span>{infoPlantation.humidityMax}%</span>
+          </li>
 
-        <div className={styles.rowDetail}>
-          <b>Cantidad sembrada:</b>
-          <span>{infoPlantation.amountPlants}</span>
-        </div>
+          <li className={styles.rowDetail}>
+            <b>Cantidad sembrada:</b>
+            <span>{infoPlantation.amountPlants}</span>
+          </li>
 
-        <div className={styles.rowDetail}>
-          <b>Indoor:</b>
-          <span>{infoPlantation.indoor ? "Si" : "No"}</span>
+          <li className={styles.rowDetail}>
+            <b>Indoor:</b>
+            <span>{infoPlantation.indoor ? "Si" : "No"}</span>
+          </li>
         </div>
-      </div>
+      </ul>
     </div>
   );
 };

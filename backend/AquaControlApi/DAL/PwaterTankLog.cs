@@ -40,7 +40,7 @@ namespace DAL
         }
 
 
-        public async Task<List<WaterTankLog>> GetWaterTankLogsLastWeek(int idTank, int idDevice)
+        public async Task<List<WaterTankLog>> GetWaterTankLogsLastWeek(int idTank, string idDevice)
         {
 
             WaterTankLog waterTankLog = null;

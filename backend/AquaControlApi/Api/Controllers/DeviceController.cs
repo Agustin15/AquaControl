@@ -1,5 +1,6 @@
 ﻿using Api.Filters;
 using Api.Model;
+using CloudinaryDotNet.Actions;
 using DAL;
 using Entities;
 using Logic;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Data;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -17,7 +19,7 @@ namespace Api.Controllers
     public class DeviceController : ControllerBase
     {
 
-        [Authorize(AuthenticationSchemes = "Bearer", Roles = "Administrador", Policy = "HasUser")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "Administrador")]
         [ValidateModelFilter]
         [Route("api/device")]
         [HttpPost]
@@ -25,12 +27,6 @@ namespace Api.Controllers
         {
             try
             {
-
-                int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-
-                if (device.Users.Count == 0 || device.Users.First().Id != idUser)
-                    return StatusCode(400, new { message = "El usuario asociado al dispositivo de riego es distinto al usuario logueado" });
-
                 await new Ldevice().Add(device);
 
                 return StatusCode(201, true);
@@ -42,7 +38,8 @@ namespace Api.Controllers
             }
         }
 
-        [Authorize(AuthenticationSchemes = "Bearer", Roles = "Administrador", Policy = "HasUser")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "Administrador,Operador", Policy = ("HasUser"))]
+        [Authorize(Policy = "HasRole")]
         [ValidateModelFilter]
         [HttpPut]
         [Route("api/device")]
@@ -53,10 +50,11 @@ namespace Api.Controllers
 
                 int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
-                List<Device> devicesUser = await new Ldevice().GetDevicesByIdUser(idUser);
+                bool isOperator = User.FindAll(ClaimTypes.Role).ToList().Exists(claimRole => claimRole.Value == "Operador");
 
-                if (devicesUser.Count == 0 || !devicesUser.Exists(d => d.Id == device.Id))
+                if (isOperator && !device.UsersOfDevice.Exists(ud => ud.User.Id == idUser))
                     return StatusCode(403, new { message = "No tiene accesso a este dipositivo de riego" });
+
 
                 await new Ldevice().Update(device);
 
@@ -69,7 +67,7 @@ namespace Api.Controllers
             }
         }
 
-        [Authorize(AuthenticationSchemes = "Bearer", Roles = "Administrador", Policy = "HasUser")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "Administrador")]
         [ValidateModelFilter]
         [HttpDelete]
         [Route("api/device")]
@@ -77,16 +75,7 @@ namespace Api.Controllers
         {
             try
             {
-
-                int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-
-                List<Device> devicesUser = await new Ldevice().GetDevicesByIdUser(idUser);
-
-                if (devicesUser.Count == 0 || !devicesUser.Exists(d => d.Id == device.Id))
-                    return StatusCode(403, new { message = "No tiene accesso a este dipositivo de riego" });
-
                 await new Ldevice().Delete(device);
-
                 return Ok(device);
             }
             catch (Exception ex)
@@ -96,44 +85,21 @@ namespace Api.Controllers
             }
         }
 
-        [Authorize(AuthenticationSchemes = "Bearer", Roles = "Administrador", Policy = "HasIdDeviceAndUser")]
-        [ValidateModelFilter]
-        [HttpDelete]
-        [Route("api/device/userDevice")]
-        public async Task<IActionResult> DeleteUserOfDevice([FromBody] User user)
-        {
-            try
-            {
 
-                int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-                int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
-
-                Device device = await new Ldevice().GetDeviceById(idDevice);
-
-                if (device is null) return StatusCode(404, new { message = "Dispositivo no encontrado" });
-
-                if (device.Users.Find(user => user.Id == idUser) == null) return StatusCode(403, new { message = "No tiene accesso a este dispositivo" });
-
-                await new Ldevice().DeleteUserOfDevice(device, user);
-
-                return Ok(device);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = ex.Message });
-
-            }
-        }
-
-        [Authorize(AuthenticationSchemes = "Bearer", Policy = "HasUser")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "Administrador,Cliente", Policy = "HasUser")]
+        [Authorize(Policy = "HasRole")]
         [HttpGet]
-        [Route("api/device/allUserDevices")]
-        public async Task<ActionResult> GetDevicesByIdUser()
+        [Route("api/device/allUserDevices/user/{idUser}")]
+        public async Task<ActionResult> GetDevicesByIdUser(int idUser)
         {
             try
             {
 
-                int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+                int idUserToken = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+                bool isClient = User.FindAll(ClaimTypes.Role).ToList().Exists(claimRole => claimRole.Value == "Cliente");
+
+                if (isClient && idUser != idUserToken) return StatusCode(403, new { message = "No tiene accesso a este usuario" });
 
                 List<Device> devices = await new Ldevice().GetDevicesByIdUser(idUser);
 
@@ -149,7 +115,7 @@ namespace Api.Controllers
             }
         }
 
-        [Authorize(AuthenticationSchemes = "Bearer", Policy = "HasUser")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "Cliente,Operador,Lector", Policy = "HasUser")]
         [ValidateModelFilter]
         [Route("api/device/deviceSelected")]
         [HttpPost]
@@ -160,19 +126,15 @@ namespace Api.Controllers
 
                 int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
-                List<Device> devicesUser = await new Ldevice().GetDevicesByIdUser(idUser);
-
-                if (devicesUser.Count == 0 || !devicesUser.Exists(d => d.Id == device.Id))
+                if (!device.UsersOfDevice.Exists(ud => ud.User.Id == idUser))
                     return StatusCode(403, new { message = "No tiene accesso a este dipositivo de riego" });
 
-
-                Device deviceFound = devicesUser.Find(d => d.Id == device.Id);
-                User userFound = deviceFound.Users.Find(u => u.Id == idUser);
+                UserOfDevice userOfDeviceFound = device.UsersOfDevice.Find(ud => ud.User.Id == idUser);
 
                 Authentication authentication = new Authentication();
 
-                string jwtAccessTokenSerialized = authentication.GenerateAccessJWTtoken(userFound, device.Id);
-                string jwtRefreshTokenSerialized = authentication.GenerateRefreshJWTtoken(userFound, device.Id);
+                string jwtAccessTokenSerialized = authentication.GenerateAccessJWTtoken(userOfDeviceFound.User, device.Id, userOfDeviceFound.Role);
+                string jwtRefreshTokenSerialized = authentication.GenerateRefreshJWTtoken(userOfDeviceFound.User, device.Id, userOfDeviceFound.Role);
 
                 return Ok(new
                 {
@@ -186,5 +148,6 @@ namespace Api.Controllers
 
             }
         }
+
     }
 }

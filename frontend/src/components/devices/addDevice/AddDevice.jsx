@@ -1,40 +1,69 @@
 import styles from "./AddDevice.module.css";
-import iconAdd from "../../../assets/img/add.png";
+import iconLink from "../../../assets/img/config.png";
 import { useDevice } from "../../../contexts/DeviceContext";
 import { useState } from "react";
 import { InfoToBind } from "./infoToBind/InfoToBind";
 import { Form } from "./form/Form";
-import { alertWarning } from "../../alertSwal/alertSwal.js";
-import { useCrudDevice } from "../../../contexts/CrudDeviceContext.jsx";
+import { validation, fetchUpdateDevice } from "./function.js";
+import { useAuth } from "../../../contexts/AuthContext.jsx";
+import { alertSuccess } from "../../alertSwal/alertSwal.js";
 
-export const AddDevice = () => {
+export const AddDevice = ({ deviceToLink, setDeviceToLink }) => {
   const { getUserDevices } = useDevice();
-  const {
-    loadingForm,
-    valuesForm,
-    handleClose,
-    fetchPostOrPut,
-  } = useCrudDevice();
-
-
+  const { updateAccessToken } = useAuth();
   const [optionSelected, setOptionSelected] = useState("Form");
+  const [loadingForm, setLoadingForm] = useState(false);
+  const [valuesForm, setValuesForm] = useState({
+    wifi: "",
+    wifiPassword: "",
+    location: "",
+  });
+  const [errorsForm, setErrorsForm] = useState({
+    wifi: "",
+    wifiPassword: "",
+    location: "",
+  });
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (Object.values(valuesForm).some((value) => value.length == 0))
-      return alertWarning("Debe completar los campos correctamente");
+    setErrorsForm({
+      wifi: "",
+      wifiPassword: "",
+      location: "",
+    });
 
-    const result = await fetchPostOrPut("POST", true);
-    if (result) getUserDevices();
+    const errorsForm = validation(valuesForm);
+
+    if (Object.values(errorsForm).find((error) => error.length > 0)) {
+      setErrorsForm(errorsForm);
+      return;
+    }
+
+    setLoadingForm(true);
+    const result = await fetchUpdateDevice(
+      deviceToLink,
+      valuesForm,
+      updateAccessToken,
+      true,
+    );
+
+    setLoadingForm(false);
+    if (result) {
+      alertSuccess("Dispositivo vinculado");
+      return getUserDevices();
+    }
   };
 
   return (
     <div className={styles.addDevice}>
       <div className={styles.header}>
-        <img src={iconAdd}></img>
-        <h3>Agregar nuevo dispositivo</h3>
-        <button disabled={loadingForm} onClick={() => handleClose()}>
+        <img src={iconLink}></img>
+        <h3>
+          {deviceToLink.linked ? "Editar vinculacion del" : "Vincular"}{" "}
+          dispositivo
+        </h3>
+        <button disabled={loadingForm} onClick={() => setDeviceToLink(null)}>
           Cerrar
         </button>
       </div>
@@ -46,15 +75,21 @@ export const AddDevice = () => {
           }
         >
           {optionSelected == "Form"
-            ? "Ver informacion para agregar un nuevo dispositivo"
-            : "Regresar a agregar"}
+            ? "Ver informacion para vincular el dispositivo"
+            : "Regresar a vincular"}
         </button>
       </div>
 
       {optionSelected == "InfoBind" ? (
         <InfoToBind />
       ) : (
-        <Form handleSubmit={handleSubmit} />
+        <Form
+          handleSubmit={handleSubmit}
+          valuesForm={valuesForm}
+          setValuesForm={setValuesForm}
+          errorsForm={errorsForm}
+          loadingForm={loadingForm}
+        />
       )}
     </div>
   );

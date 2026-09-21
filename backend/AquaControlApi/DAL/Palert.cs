@@ -115,7 +115,7 @@ namespace DAL
                     if (await reader.ReadAsync())
                     {
 
-                        Device deviceFound = await new Pdevice().GetDeviceById(Convert.ToInt32(reader["idPlaque"]));
+                        Device deviceFound = await new Pdevice().GetDeviceById(Convert.ToString(reader["idPlaque"]));
 
                         List<UserOfAlert> usersOfAlert = await new PuserOfAlert().GetUsersOfAlert(idAlert);
 
@@ -139,7 +139,7 @@ namespace DAL
 
             return alertFound;
         }
-        public async Task<int> GetAmountAlertsByDeviceAndUser(int idDevice, int idUser)
+        public async Task<int> GetAmountAlertsByDeviceAndUser(string idDevice, int idUser)
         {
 
             int amount = 0;
@@ -179,7 +179,7 @@ namespace DAL
 
             return amount;
         }
-        public async Task<List<Alert>> GetAlertsByDeviceAndUserOffset(int offset, int idDevice, int idUser)
+        public async Task<List<Alert>> GetAlertsByDeviceAndUserOffset(int offset, string idDevice, int idUser)
         {
 
             List<Alert> alertsOffset = new List<Alert>();

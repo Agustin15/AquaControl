@@ -34,7 +34,7 @@ namespace Logic
 
         }
 
-        public async Task<List<Plantation>> GetAllPlantationsByDevice(int idDevice)
+        public async Task<List<Plantation>> GetAllPlantationsByDevice(string idDevice)
         {
             return await new Pplantation().GetAllPlantationsByDevice(idDevice);
 

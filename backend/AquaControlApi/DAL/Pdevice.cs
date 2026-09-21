@@ -23,6 +23,7 @@ namespace DAL
                 SqlCommand command = new SqlCommand("AddDevice", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@placeName", device.PlaceName);
+                command.Parameters.AddWithValue("@linked", device.Linked);
                 command.Parameters.AddWithValue("@location", device.Location);
 
                 SqlParameter parameterIdGenerated = new SqlParameter();
@@ -36,12 +37,9 @@ namespace DAL
 
                 await command.ExecuteNonQueryAsync();
 
-                int idGenerated = (int)parameterIdGenerated.Value;
-                device.Id = idGenerated;
-
-                foreach (User user in device.Users)
+                foreach (UserOfDevice userOfDevice in device.UsersOfDevice)
                 {
-                    await AddUserDevice(device, user, transaction);
+                    await new PuserOfDevice().AddUserDeviceWithTransaction(device, userOfDevice, transaction);
                 }
 
                 await transaction.CommitAsync();
@@ -72,6 +70,7 @@ namespace DAL
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@placeName", device.PlaceName);
                 command.Parameters.AddWithValue("@location", device.Location);
+                command.Parameters.AddWithValue("@linked", device.Linked);
                 command.Parameters.AddWithValue("@idDevice", device.Id);
 
                 await connection.OpenAsync();
@@ -121,7 +120,7 @@ namespace DAL
         }
 
 
-        public async Task<Device> GetDeviceById(int idDevice)
+        public async Task<Device> GetDeviceById(string idDevice)
         {
 
             Device device = null;
@@ -142,13 +141,13 @@ namespace DAL
 
                 if (reader.HasRows)
                 {
-                    List<User> users = await UsersOfDevice(idDevice);
+                    List<UserOfDevice> usersOfDevice = await new PuserOfDevice().UsersOfDevice(idDevice);
 
                     await reader.ReadAsync();
 
-                    device = new Device(Convert.ToInt32(reader["codePlaque"]), Convert.ToString(reader["place"]),
+                    device = new Device(Convert.ToString(reader["codePlaque"]), Convert.ToString(reader["place"]),
                            reader["geography"] is DBNull ? null : Convert.ToString(reader["geography"]),
-                           users, Convert.ToDateTime(reader["inserted"]));
+                           (bool)reader["configured"], usersOfDevice, Convert.ToDateTime(reader["inserted"]));
 
                 }
                 await reader.CloseAsync();
@@ -166,97 +165,6 @@ namespace DAL
 
             return device;
         }
-
-        public async Task AddUserDevice(Device device, User user, SqlTransaction transaction)
-        {
-            try
-            {
-
-                SqlCommand command = new SqlCommand("AddUserDevice", transaction.Connection, transaction);
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@idDevice", device.Id);
-                command.Parameters.AddWithValue("@idUser", user.Id);
-
-                await command.ExecuteNonQueryAsync();
-
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
-        }
-
-        public async Task DeleteUserDevice(Device device, User user)
-        {
-            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
-            try
-            {
-
-                SqlCommand command = new SqlCommand("DeleteUserDevice", connection);
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@idDevice", device.Id);
-                command.Parameters.AddWithValue("@idUser", user.Id);
-
-                await connection.OpenAsync();
-
-                await command.ExecuteNonQueryAsync();
-
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-            finally
-            {
-                await connection.CloseAsync();
-            }
-
-        }
-
-        internal async Task<List<User>> UsersOfDevice(int idDevice)
-        {
-
-            List<User> users = new List<User>();
-
-            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
-            try
-            {
-
-                SqlCommand command = new SqlCommand("UsersByIdDevice", connection);
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@codePlaque", idDevice);
-
-                await connection.OpenAsync();
-                SqlDataReader reader = await command.ExecuteReaderAsync();
-
-                if (reader.HasRows)
-                {
-
-
-                    while (await reader.ReadAsync())
-                    {
-
-                        User userFound = await new Puser().GetUserById(Convert.ToInt32(reader["codeEntity"]));
-                        users.Add(userFound);
-                    }
-                }
-                await reader.CloseAsync();
-
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-            finally
-            {
-                await connection.CloseAsync();
-            }
-
-            return users;
-
-        }
-
         public async Task<List<Device>> GetDevicesByIdUser(int idUser)
         {
 
@@ -280,7 +188,7 @@ namespace DAL
 
                     while (await reader.ReadAsync())
                     {
-                        Device deviceFound = await new Pdevice().GetDeviceById(Convert.ToInt32(reader["codePlaque"]));
+                        Device deviceFound = await new Pdevice().GetDeviceById(Convert.ToString(reader["codePlaque"]));
                         devices.Add(deviceFound);
                     }
                 }

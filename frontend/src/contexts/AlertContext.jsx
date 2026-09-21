@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import { getTokenSaved } from "../securityStorage.js";
+import { getAuthTokenSaved } from "../securityStorage.js";
 import { useAuth } from "./AuthContext";
 const localhostBackend = import.meta.env.VITE_BACKEND_LOCALHOST;
 
@@ -12,7 +12,7 @@ export const AlertProvider = ({ children }) => {
 
   const updateAlertStateToSeen = async (idAlert, retry) => {
     try {
-      const accessToken = await getTokenSaved("accessToken");
+      const accessToken = await getAuthTokenSaved("accessToken");
 
       const response = await fetch(
         localhostBackend + "/api/userOfAlert/" + idAlert,
@@ -32,14 +32,16 @@ export const AlertProvider = ({ children }) => {
       const result = await response.json();
 
       if (!response.ok) {
-        if (response.status === 401 && retry) {
+        if (response.status === 401 && retry === true) {
           await updateAccessToken();
           await updateAlertStateToSeen(idAlert, false);
         }
         throw new Error(result.message);
       }
     } catch (error) {
-      console.log(error);
+      const errorMessage =
+        error?.message || "No se pudo actualizar el estado de la alerta";
+      console.log(errorMessage);
     }
   };
 

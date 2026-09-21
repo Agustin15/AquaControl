@@ -1,10 +1,10 @@
 import iconGarden from "../../../../../assets/img/garden.png";
 
 export const HumidityPlantation = ({ plantationSelected }) => {
-  let xPair = 189;
-  let yPair = 42;
-  let xImpair = 212;
-  let yImpair = 55;
+  let xPair = 190;
+  let yPair = 39;
+  let xImpair = 211;
+  let yImpair = 52;
 
   const coordinatesCornsInGarden = [
     { x: xPair, y: yPair },
@@ -16,12 +16,12 @@ export const HumidityPlantation = ({ plantationSelected }) => {
 
   for (let i = 3; i <= limitDrawingSown; i++) {
     if (i % 2 == 0) {
-      xPair -= 24;
-      yPair += 11;
+      xPair -= 16;
+      yPair += 6;
       coordinatesCornsInGarden.push({ x: xPair, y: yPair });
     } else if (i % 2 != 0) {
-      xImpair -= 24;
-      yImpair += 11;
+      xImpair -= 16;
+      yImpair += 7;
       coordinatesCornsInGarden.push({ x: xImpair, y: yImpair });
     }
   }
@@ -36,8 +36,8 @@ export const HumidityPlantation = ({ plantationSelected }) => {
           href={plantationSelected.cropType.image}
           x={coordinate.x}
           y={coordinate.y}
-          width={23}
-          height={23}
+          width={29}
+          height={29}
         ></image>
       ))}
     </>

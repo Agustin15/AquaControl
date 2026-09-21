@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import { getTokenSaved } from "../../securityStorage.js";
+import { getAuthTokenSaved } from "../../securityStorage.js";
 import { useAuth } from "../AuthContext";
 import { useDevice } from "../DeviceContext.jsx";
 const localhostBackend = import.meta.env.VITE_BACKEND_LOCALHOST;
@@ -25,7 +25,7 @@ export const FormTankProvider = ({ children }) => {
     setLoadingForm(true);
 
     try {
-      const accessToken = await getTokenSaved("accessToken");
+      const accessToken = await getAuthTokenSaved("accessToken");
 
       const response = await fetch(localhostBackend + "/api/tank", {
         method: method,
@@ -36,13 +36,15 @@ export const FormTankProvider = ({ children }) => {
         body: JSON.stringify({ ...valuesForm, ["device"]: deviceSelected }),
       });
 
-      if (response.status === 401 && retry == true) {
-        await updateAccessToken();
-        return fetchPostOrPut(method, false);
-      }
       const result = await response.json();
 
-      if (!response.ok) throw new Error(result.message);
+      if (!response.ok) {
+        if (response.status === 401 && retry === true) {
+          await updateAccessToken();
+          return fetchPostOrPut(method, false);
+        }
+        throw new Error(result.message);
+      }
 
       return result;
     } catch (error) {

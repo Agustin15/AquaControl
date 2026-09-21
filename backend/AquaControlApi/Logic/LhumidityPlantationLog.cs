@@ -17,7 +17,7 @@ namespace Logic
 
         }
 
-        public async Task<List<HumidityPlantationLog>> GetHumidityPlantationLogsLastWeek(int idPlantation, int idDevice)
+        public async Task<List<HumidityPlantationLog>> GetHumidityPlantationLogsLastWeek(int idPlantation, string idDevice)
         {
 
             List<HumidityPlantationLog> humidityPlantationLogs = new List<HumidityPlantationLog>();

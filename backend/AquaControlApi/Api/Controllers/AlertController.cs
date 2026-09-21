@@ -30,7 +30,7 @@ namespace Api.Controllers
             _httpClientFactory = httpClientFactory;
         }
 
-        [Authorize(AuthenticationSchemes = "Esp32Bearer", Policy = "HasIdDevice")]
+        [Authorize(AuthenticationSchemes = "Esp32Bearer", Policy = "HasDevice")]
         [ValidateModelFilter]
         [HttpPost]
         [Route("api/alert")]
@@ -40,7 +40,7 @@ namespace Api.Controllers
             try
             {
 
-                int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
+                string idDevice = User.FindFirst("IdDevice").Value;
 
                 if (idDevice != alert.Device.Id)
                     return StatusCode(403, new { message = "No tiene acceso al dispositivo de riego de donde desea enviar la alerta" });
@@ -115,15 +115,20 @@ namespace Api.Controllers
         }
 
 
-        [Authorize(AuthenticationSchemes = "Bearer", Policy = "HasIdDeviceAndUser")]
-        [HttpGet("api/alert/pagination/{offset}")]
-        public async Task<ActionResult> GetAlertsOffset(int offset)
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "Administrador,Cliente,Operador,Lector", Policy = ("HasDevice"))]
+        [Authorize(Policy = "HasUser")]
+        [HttpGet("api/alert/device/{idDevice}/user/{idUser}/pagination/{offset}")]
+        public async Task<ActionResult> GetAlertsOffset(string idDevice, int idUser, int offset)
         {
             try
             {
 
-                int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
-                int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+                string idDeviceToken = User.FindFirst("IdDevice").Value;
+                int idUserToken = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+                if (idDevice != idDeviceToken || idUser != idUserToken)
+                    return StatusCode(403, new { message = "No posee accesso a estas alertas" });
 
                 int amount = await new Lalert().GetAmountAlertsByDeviceAndUser(idDevice, idUser);
 

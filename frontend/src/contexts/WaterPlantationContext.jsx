@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { getTokenSaved } from "../securityStorage.js";
+import { getAuthTokenSaved } from "../securityStorage.js";
 import { useAuth } from "./AuthContext.jsx";
 import { useDevice } from "./DeviceContext.jsx";
 import { useTank } from "./tankContext/TankContext.jsx";
@@ -46,10 +46,10 @@ export const WaterPlantationProvider = ({ children }) => {
 
     let url =
       localhostBackend +
-      `/api/waterPlantationLog/tank/${idTank}/plantation/${idPlantation}/pagination/${offset}`;
+      `/api/waterPlantationLog/tank/${idTank}/plantation/${idPlantation}/device/${deviceSelected.id}/pagination/${offset}`;
 
     try {
-      const accessToken = await getTokenSaved("accessToken");
+      const accessToken = await getAuthTokenSaved("accessToken");
 
       const response = await fetch(url, {
         method: "GET",
@@ -60,20 +60,24 @@ export const WaterPlantationProvider = ({ children }) => {
         },
       });
 
-      if (response.status === 401 && retry == true) {
-        await updateAccessToken();
-        return fetchGetLogs(idTank, idPlantation, offset, false);
-      }
       const result = await response.json();
 
-      if (!response.ok) throw new Error(result.message);
+      if (!response.ok) {
+        if (response.status === 401 && retry === true) {
+          await updateAccessToken();
+          return fetchGetLogs(idTank, idPlantation, offset, false);
+        }
+        throw new Error(result.message);
+      }
 
       if (result) {
         setWaterPlantationLogs(result.waterPlantationLogs);
         setPages(result.pages);
       }
     } catch (error) {
-      setErrorWaterPlantation(error.message);
+      const errorMessage =
+        error?.message || "No se pudieron cargar los registros de riego";
+      setErrorWaterPlantation(errorMessage);
     } finally {
       setLoadingLogs(false);
     }
@@ -82,10 +86,11 @@ export const WaterPlantationProvider = ({ children }) => {
   const fetchGetLastWaterPlantation = async (retry) => {
     let url =
       localhostBackend +
-      `/api/waterPlantationLog/tank/${tankSelected.id}/plantation/${plantationSelected.id}/lastWaterPlantationLog`;
+      `/api/waterPlantationLog/tank/${tankSelected.id}/plantation/${plantationSelected.id}` +
+      `/device/${deviceSelected.id}/lastWaterPlantationLog`;
 
     try {
-      const accessToken = await getTokenSaved("accessToken");
+      const accessToken = await getAuthTokenSaved("accessToken");
 
       const response = await fetch(url, {
         method: "GET",
@@ -96,18 +101,21 @@ export const WaterPlantationProvider = ({ children }) => {
       });
       const result = await response.json();
 
-      if (response.status == 401 && retry == true) {
-        await updateAccessToken();
-        return fetchGetLastWaterPlantation(true);
+      if (!response.ok) {
+        if (response.status === 401 && retry === true) {
+          await updateAccessToken();
+          return fetchGetLastWaterPlantation(false);
+        }
+        throw new Error(result.message);
       }
-
-      if (!response.ok) throw new Error(result.message);
 
       if (result) {
         setLastWaterPlantation(result);
       }
     } catch (error) {
-      console.log(error);
+      const errorMessage =
+        error?.message || "No se pudo obtener el estado de la última irrigación";
+      setErrorWaterPlantation(errorMessage);
     }
   };
 

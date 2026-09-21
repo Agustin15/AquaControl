@@ -14,7 +14,7 @@ namespace Api.Controllers
     [ApiController]
     public class HumidityPlantationLogController : ControllerBase
     {
-        [Authorize(AuthenticationSchemes = "Esp32Bearer", Policy = "HasIdDevice")]
+        [Authorize(AuthenticationSchemes = "Esp32Bearer", Policy = "HasDevice")]
         [ValidateModelFilter]
         [HttpPost]
         [Route("api/humidityPlantationLog")]
@@ -22,8 +22,8 @@ namespace Api.Controllers
         {
             try
             {
-    
-                int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
+
+                string idDevice = User.FindFirst("IdDevice").Value;
 
                 if (idDevice != humidityPlantationLog.Plantation.Device.Id)
                     return StatusCode(403, new { message = "No tiene acceso al dispositivo de riego donde desea agregar el monitoreo de humedad" });
@@ -38,15 +38,18 @@ namespace Api.Controllers
             }
         }
 
-        [Authorize(AuthenticationSchemes = "Bearer", Policy = "HasIdDevice")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "Administrador,Operador,Lector", Policy = "HasDevice")]
         [HttpGet]
-        [Route("api/humidityPlantationLog/plantation/{idPlantation}/lastWeek")]
-        public async Task<ActionResult> GetHumidityPlantationLogsLastWeek(int idPlantation)
+        [Route("api/humidityPlantationLog/plantation/{idPlantation}/device/{idDevice}/lastWeek")]
+        public async Task<ActionResult> GetHumidityPlantationLogsLastWeek(int idPlantation, string idDevice)
         {
             try
             {
 
-                int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
+                string idDeviceToken = User.FindFirst("IdDevice").Value;
+
+                if (idDevice != idDeviceToken)
+                    return StatusCode(403, new { message = "No tiene acceso al dispositivo de riego" });
 
                 List<HumidityPlantationLog> humidityPlantationLogs = await new LhumidityPlantationLog().GetHumidityPlantationLogsLastWeek(idPlantation, idDevice);
 

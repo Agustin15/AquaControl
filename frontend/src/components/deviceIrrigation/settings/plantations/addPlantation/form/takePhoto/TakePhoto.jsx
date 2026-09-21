@@ -31,7 +31,13 @@ export const TakePhoto = () => {
     <div className={styles.takePhoto}>
       <label>Imagen (opcional)</label>
       {valuesForm.image && (
-        <img src={"data:image/jpg;base64," + valuesForm.image}></img>
+        <img
+          src={
+            valuesForm.image.indexOf("http") == -1
+              ? "data:image/jpg;base64," + valuesForm.image
+              : valuesForm.image
+          }
+        ></img>
       )}
 
       <div className={styles.row}>

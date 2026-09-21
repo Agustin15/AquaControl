@@ -1,5 +1,6 @@
 ﻿using Api.Filters;
 using Api.Model;
+using CloudinaryDotNet.Actions;
 using DAL;
 using Entities;
 using Logic;
@@ -19,7 +20,7 @@ namespace Api.Controllers
     public class WaterPlantationLogController : ControllerBase
     {
 
-        [Authorize(AuthenticationSchemes = "Esp32Bearer", Policy = "HasIdDevice")]
+        [Authorize(AuthenticationSchemes = "Esp32Bearer", Policy = "HasDevice")]
         [ValidateModelFilter]
         [HttpPost]
         [Route("api/waterPlantationLog")]
@@ -28,7 +29,7 @@ namespace Api.Controllers
             try
             {
 
-                int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
+                string idDevice = User.FindFirst("IdDevice").Value;
 
                 if (idDevice != waterPlantationLog.Plantation.Device.Id || idDevice != waterPlantationLog.Tank.Device.Id)
                     return StatusCode(403, new { message = "No tiene acceso al dispositivo de riego donde desea agregar el registro de riego" });
@@ -44,15 +45,15 @@ namespace Api.Controllers
             }
         }
 
-        [Authorize(AuthenticationSchemes = "Esp32Bearer", Policy = "HasIdDevice")]
+        [Authorize(AuthenticationSchemes = "Esp32Bearer", Policy = "HasDevice")]
         [ValidateModelFilter]
         [HttpPut("api/waterPlantationLog")]
         public async Task<ActionResult> UpdateStateWaterPlantationLog([FromBody] WaterPlantationLog waterPlantationLog)
         {
             try
             {
- 
-                int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
+
+                string idDevice = User.FindFirst("IdDevice").Value;
 
                 if (idDevice != waterPlantationLog.Plantation.Device.Id || idDevice != waterPlantationLog.Tank.Device.Id)
                     return StatusCode(403, new { message = "No tiene acceso al dispositivo de riego donde desea actualizar el registro de riego" });
@@ -68,15 +69,18 @@ namespace Api.Controllers
             }
         }
 
-        [Authorize(AuthenticationSchemes = "Bearer", Policy = "HasIdDevice")]
-        [HttpGet("api/waterPlantationLog/tank/{idTank}/plantation/{idPlantation}/lastWaterPlantationLog")]
-        public async Task<ActionResult> GetLastWaterPlantLog(int idTank, int idPlantation)
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "Administrador,Operador,Lector", Policy = "HasDevice")]
+        [HttpGet("api/waterPlantationLog/tank/{idTank}/plantation/{idPlantation}/device/{idDevice}/lastWaterPlantationLog")]
+        public async Task<ActionResult> GetLastWaterPlantLog(int idTank, int idPlantation, string idDevice)
         {
 
             try
             {
 
-                int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
+                string idDeviceToken = User.FindFirst("IdDevice").Value;
+
+                if (idDevice != idDeviceToken)
+                    return StatusCode(403, new { message = "No tiene acceso al dispositivo de riego" });
 
                 WaterPlantationLog waterPlantationLog = await new LwaterPlantationLog().GetLastWaterPlantationLog(idPlantation, idTank, idDevice);
 
@@ -92,15 +96,18 @@ namespace Api.Controllers
             }
         }
 
-        [Authorize(AuthenticationSchemes = "Bearer", Policy = "HasIdDevice")]
-        [HttpGet("api/waterPlantationLog/tank/{idTank}/plantation/{idPlantation}/pagination/{offset}")]
-        public async Task<ActionResult> GetAllWaterPlantLogs(int idTank, int idPlantation, int offset)
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "Administrador,Operador,Lector", Policy = "HasDevice")]
+        [HttpGet("api/waterPlantationLog/tank/{idTank}/plantation/{idPlantation}/device/{idDevice}/pagination/{offset}")]
+        public async Task<ActionResult> GetAllWaterPlantLogs(int idTank, int idPlantation, string idDevice, int offset)
         {
 
             try
             {
-       
-                int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
+
+                string idDeviceToken = User.FindFirst("IdDevice").Value;
+
+                if (idDevice != idDeviceToken)
+                    return StatusCode(403, new { message = "No tiene acceso al dispositivo de riego" });
 
                 int amount = await new LwaterPlantationLog().GetAmountWaterPlantationLogs(idTank, idPlantation, idDevice);
 

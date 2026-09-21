@@ -11,7 +11,7 @@ namespace Api.Controllers
     public class CropTypeController : ControllerBase
     {
 
-        [Authorize(AuthenticationSchemes = "Bearer")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "Administrador,Operador")]
         [Route("api/cropType")]
         [HttpGet]
         public async Task<ActionResult> GetCropsTypes()

@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import { getTokenSaved } from "../../securityStorage.js";
+import { getAuthTokenSaved } from "../../securityStorage.js";
 import { useDevice } from "../DeviceContext.jsx";
 import { useAuth } from "../AuthContext.jsx";
 const localhostBackend = import.meta.env.VITE_BACKEND_LOCALHOST;
@@ -15,6 +15,7 @@ export const FormPlantationProvider = ({ children }) => {
     image: null,
     humidityMin: 0,
     humidityMax: 0,
+    indoor: false,
     cropType: null,
     amountPlants: 0,
   });
@@ -30,7 +31,7 @@ export const FormPlantationProvider = ({ children }) => {
   const fetchPostOrPut = async (method, retry) => {
     setLoadingForm(true);
     try {
-      const accessToken = await getTokenSaved("accessToken");
+      const accessToken = await getAuthTokenSaved("accessToken");
 
       const response = await fetch(localhostBackend + "/api/plantation", {
         method: method,
@@ -41,13 +42,15 @@ export const FormPlantationProvider = ({ children }) => {
         body: JSON.stringify({ ...valuesForm, ["device"]: deviceSelected }),
       });
 
-      if (response.status === 401 && retry == true) {
-        await updateAccessToken();
-        return fetchPostOrPut(method, false);
-      }
       const result = await response.json();
 
-      if (!response.ok) throw new Error(result.message);
+      if (!response.ok) {
+        if (response.status === 401 && retry === true) {
+          await updateAccessToken();
+          return fetchPostOrPut(method, false);
+        }
+        throw new Error(result.message);
+      }
 
       return result;
     } catch (error) {
@@ -57,13 +60,14 @@ export const FormPlantationProvider = ({ children }) => {
     }
   };
 
-  const handleClose = () => {
+  const clean = () => {
     setValuesForm({
       id: 0,
       image: null,
       humidityMin: 0,
       humidityMax: 0,
       cropType: null,
+      indoor: false,
       amountPlants: 0,
     });
 
@@ -97,7 +101,7 @@ export const FormPlantationProvider = ({ children }) => {
         break;
       case "amountPlants":
         if (value.length == 0 || value <= 0)
-          messageError = "Debe indicar al menos una planta para sembrada";
+          messageError = "Debe indicar al menos una planta sembrada";
         break;
     }
 
@@ -116,7 +120,7 @@ export const FormPlantationProvider = ({ children }) => {
         errorsForm,
         setErrorsForm,
         loadingForm,
-        handleClose,
+        clean,
         handleChange,
       }}
     >

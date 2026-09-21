@@ -6,7 +6,7 @@ import {
   alertSuccess,
   alertError,
 } from "../../../../alertSwal/alertSwal.js";
-import { getTokenSaved } from "../../../../../securityStorage.js";
+import { getAuthTokenSaved } from "../../../../../securityStorage.js";
 import { useEffect } from "react";
 import { useAuth } from "../../../../../contexts/AuthContext.jsx";
 import { useTank } from "../../../../../contexts/tankContext/TankContext.jsx";
@@ -40,7 +40,7 @@ export const Delete = ({}) => {
     });
 
     try {
-      const accessToken = await getTokenSaved("accessToken");
+      const accessToken = await getAuthTokenSaved("accessToken");
 
       const response = await fetch(localhostBackend + "/api/tank", {
         method: "DELETE",
@@ -52,22 +52,26 @@ export const Delete = ({}) => {
         body: JSON.stringify(deleteTank),
       });
 
-      if (response.status === 401 && retry == true) {
-        await updateAccessToken();
-        return fetchDelete(false);
-      }
       const result = await response.json();
 
-      if (!response.ok) throw new Error(result.message);
+      if (!response.ok) {
+        if (response.status === 401 && retry === true) {
+          await updateAccessToken();
+          return fetchDelete(false);
+        }
 
-      alertSuccess(`¡Tanque N° ${deleteTank.id} eliminado exitosamente!`);
+        throw new Error(result.message);
+      }
 
-      await getTanks();
+      if (result) {
+        alertSuccess(`¡Tanque N° ${deleteTank.id} eliminado exitosamente!`);
+
+        await getTanks();
+      }
     } catch (error) {
-      alertError(
-        `Ups algo salio mal al eliminar tanque N° ${deleteTank.id}`,
-        error,
-      );
+      const errorMessage =
+        error?.message || "No se pudo eliminar el tanque seleccionado";
+      alertError(`Ups algo salio mal`, errorMessage);
     } finally {
       return;
     }

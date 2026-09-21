@@ -1,7 +1,10 @@
 using dotenv.net;
+using Entities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using System.Security.Claims;
 using System.Text;
 
@@ -23,12 +26,32 @@ var accessTokenSecretKey = Environment.GetEnvironmentVariable("ACCESS_TOKEN_SECR
 var refreshTokenSecretKey = Environment.GetEnvironmentVariable("REFRESH_TOKEN_SECRET_KEY");
 var deviceTokenSecretKey = Environment.GetEnvironmentVariable("DEVICE_TOKEN_SECRET_KEY");
 
+var jwtEvents = new JwtBearerEvents
+{
+    OnChallenge = async context =>
+    {
+        context.HandleResponse();
+        var res = context.Response;
+        res.StatusCode = StatusCodes.Status401Unauthorized;
+        res.ContentType = "application/json; charset=utf-8";
+        var payload = System.Text.Json.JsonSerializer.Serialize(new { message = "Autenticacion fallida" });
+        await res.WriteAsync(payload);
+    },
+    OnForbidden = async context =>
+    {
+        var res = context.Response;
+        res.StatusCode = StatusCodes.Status403Forbidden;
+        res.ContentType = "application/json; charset=utf-8";
+        var payload = System.Text.Json.JsonSerializer.Serialize(new { message = "No posee permisos suficientes" });
+        await res.WriteAsync(payload);
+    },
+};
+
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
     options.SuppressModelStateInvalidFilter = true;
 
 });
-
 
 builder.Services.AddCors(options =>
 {
@@ -44,10 +67,10 @@ builder.Services.AddCors(options =>
                       });
 });
 
+
 builder.Services.AddAuthentication()
     .AddJwtBearer("Bearer", options =>
     {
-
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
@@ -58,6 +81,8 @@ builder.Services.AddAuthentication()
             ValidAudience = localhostBackend,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(accessTokenSecretKey))
         };
+
+        options.Events = jwtEvents;
 
     }).AddJwtBearer("RefreshBearer", options =>
     {
@@ -71,6 +96,9 @@ builder.Services.AddAuthentication()
             ValidAudience = localhostBackend,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(refreshTokenSecretKey))
         };
+
+        options.Events = jwtEvents;
+
     }).AddJwtBearer("Esp32Bearer", options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
@@ -83,13 +111,15 @@ builder.Services.AddAuthentication()
             ValidAudience = localhostBackend,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(deviceTokenSecretKey))
         };
+        options.Events = jwtEvents;
     });
+
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("HasIdDeviceAndUser", policy => policy.RequireClaim("IdDevice").RequireClaim(ClaimTypes.NameIdentifier));
-    options.AddPolicy("HasIdDevice", policy => policy.RequireClaim("IdDevice"));
     options.AddPolicy("HasUser", policy => policy.RequireClaim(ClaimTypes.NameIdentifier));
+    options.AddPolicy("HasRole", policy => policy.RequireClaim(ClaimTypes.Role));
+    options.AddPolicy("HasDevice", policy => policy.RequireClaim("IdDevice"));
 });
 
 var app = builder.Build();

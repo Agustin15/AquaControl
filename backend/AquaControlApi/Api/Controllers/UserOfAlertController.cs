@@ -11,7 +11,8 @@ namespace Api.Controllers
     [ApiController]
     public class UserOfAlertController : ControllerBase
     {
-        [Authorize(AuthenticationSchemes = "Bearer", Policy = "HasIdDeviceUser")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "Operador,Lector", Policy = "HasDevice")]
+        [Authorize(Policy = "HasUser")]
         [ValidateModelFilter]
         [HttpPut("api/userOfAlert/{idAlert}")]
         public async Task<ActionResult> UpdateAlertStateToSeen([FromBody] UserOfAlert userOfAlert, int idAlert)
@@ -19,7 +20,7 @@ namespace Api.Controllers
             try
             {
 
-                int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
+                string idDevice = User.FindFirst("IdDevice").Value;
                 int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
                 Alert alertFound = await new Lalert().GetAlertById(idAlert);

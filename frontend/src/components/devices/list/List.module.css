@@ -29,6 +29,7 @@
     height: 49px;
 }
 
+
 .moreOptions {
     position: absolute;
     top: 0.6rem;
@@ -49,7 +50,7 @@
 
 .options {
     position: absolute;
-    top: 7vh;
+    top: 4vh;
     left: 15vw;
     background: rgb(38, 38, 38);
     border-top-right-radius: 4px;

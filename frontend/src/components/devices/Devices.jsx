@@ -2,19 +2,14 @@ import styles from "./Devices.module.css";
 import iconLogo from "../../assets/img/logo.png";
 import iconAvatar from "../../assets/img/avatar.png";
 import iconNoDevices from "../../assets/img/noDevices.png";
-import iconAdd from "../../assets/img/add.png";
 import { useDevice } from "../../contexts/DeviceContext";
 import { useAuth } from "../../contexts/AuthContext";
-import { useCrudDevice } from "../../contexts/CrudDeviceContext.jsx";
 import { useEffect, useState } from "react";
-import { List } from "./list/List.jsx";
-import { Modal } from "../modal/Modal.jsx";
-import { AddDevice } from "./addDevice/AddDevice.jsx";
+import { List } from "./list/List.jsx";;
 import { SubMenuProfile } from "./subMenuProfile/SubMenuProfile.jsx";
 
 export const Devices = () => {
   const { devices, loadingDevices, errorDevices, getUserDevices } = useDevice();
-  const { setShowFormAdd, showFormAdd } = useCrudDevice();
   const { userAuth } = useAuth();
   const [showMenu, setShowMenu] = useState(false);
 
@@ -44,15 +39,6 @@ export const Devices = () => {
         {showMenu && <SubMenuProfile />}
       </nav>
 
-      {useAuth && userAuth.role == "Administrador" && (
-        <div className={styles.addDevice}>
-          <button onClick={() => setShowFormAdd(true)}>
-            Nuevo Dispositivo
-            <img src={iconAdd}></img>
-          </button>
-        </div>
-      )}
-
       <div className={styles.devices}>
         {loadingDevices && (
           <div className={styles.loadingDevices}>
@@ -70,12 +56,6 @@ export const Devices = () => {
 
         {!loadingDevices && devices.length > 0 && <List />}
       </div>
-
-      {showFormAdd && (
-        <Modal>
-          <AddDevice />
-        </Modal>
-      )}
     </div>
   );
 };

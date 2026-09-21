@@ -4,6 +4,7 @@ import iconNoPlantations from "../../../assets/img/noPlantations.png";
 import { useEffect } from "react";
 import { useWeekdayLogs } from "../../../contexts/LogsWeekdayContext";
 import { usePlantation } from "../../../contexts/plantationContext/PlantationContext";
+import { useDevice } from "../../../contexts/DeviceContext";
 import { LogsWeekday } from "./logsWeekday/LogsWeekday";
 
 export const HumidityPlantationLogs = () => {
@@ -16,6 +17,7 @@ export const HumidityPlantationLogs = () => {
     plantationSelected,
   } = usePlantation();
   const { getWeekdayLogs } = useWeekdayLogs();
+  const { deviceSelected } = useDevice();
 
   useEffect(() => {
     loadPlantations();
@@ -32,7 +34,7 @@ export const HumidityPlantationLogs = () => {
 
   const loadHumidityPlantationLogs = async (idPlantation) => {
     getWeekdayLogs(
-      `/api/humidityPlantationLog/plantation/${idPlantation}/lastWeek`,
+      `/api/humidityPlantationLog/plantation/${idPlantation}/device/${deviceSelected.id}/lastWeek`,
     );
   };
 

@@ -41,6 +41,7 @@ namespace DAL
                 {
                     File = new FileDescription("data:image/jpeg;base64," + plantation.Image),
                     PublicId = publicId,
+                    AssetFolder= "imagesPlantations",
                     Overwrite = true,
                     UniqueFilename = true
                 };
@@ -65,18 +66,16 @@ namespace DAL
         {
             try
             {
+                int initIndex = plantation.Image.LastIndexOf("/") + 1;
+                int length = (plantation.Image.Length - 4) - initIndex;
 
-                int initIndex = plantation.Image.LastIndexOf("/");
-                string publicId = plantation.Image.Substring(initIndex, 10);
+                string publicId = plantation.Image.Substring(initIndex, length);
 
-                var delResParams = new DelResParams()
-                {
-                    PublicIds = new List<string> { publicId }
-                };
+                var delParams = new DeletionParams(publicId) { Invalidate = true };
 
-                var deleteResult = await cloudinary.DeleteResourcesAsync(delResParams);
+                var deleteResult = await cloudinary.DestroyAsync(delParams);
 
-                if (deleteResult.StatusCode != System.Net.HttpStatusCode.OK) throw new Exception("No se pudo eliminar la imagen");
+                if (deleteResult.Result.ToLower() != "ok") throw new Exception("No se pudo eliminar la imagen");
 
             }
             catch (Exception ex)

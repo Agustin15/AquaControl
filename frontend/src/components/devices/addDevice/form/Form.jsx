@@ -1,62 +1,21 @@
 import styles from "./Form.module.css";
-import { useCrudDevice } from "../../../../contexts/CrudDeviceContext";
 
-export const Form = ({ handleSubmit }) => {
-  const { errorsForm, setErrorsForm, setValuesForm, valuesForm, loadingForm } =
-    useCrudDevice();
-
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setValuesForm({ ...valuesForm, [name]: value });
-
-    let inputError = "";
-
-    if (value.length == 0) {
-      inputError =
-        name == "wifi"
-          ? "Red Wifi no puede estar vacia"
-          : name == "wifiPassword"
-            ? "Contraseña de red no puede estar vacia"
-            : name == "placeName"
-              ? "Nombre del lugar no puede estar vacio"
-              : "";
-    }
-    
-    if (
-      name == "location" &&
-      /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+,\s*[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(value) ==
-        false
-    )
-      inputError = "Formato de ubicacion debe ser Ciudad,Pais";
-
-    setErrorsForm({
-      ...errorsForm,
-      [name]: inputError,
-    });
-  };
-
+export const Form = ({
+  handleSubmit,
+  valuesForm,
+  setValuesForm,
+  errorsForm,
+  loadingForm,
+}) => {
   return (
-    <form onSubmit={() => handleSubmit(event, true)} className={styles.formAdd}>
-      <div className={styles.columnInput}>
-        <label>Lugar del dispositivo</label>
-        <input
-          onChange={(event) => handleChange(event)}
-          value={valuesForm.placeName}
-          name="placeName"
-          placeholder="Ingrese lugar del dispositivo"
-          type="text"
-          className={errorsForm.placeName.length > 0 ? styles.inputError : ""}
-        ></input>
-
-        {errorsForm.placeName.length > 0 && <p>{errorsForm.placeName}</p>}
-      </div>
-
+    <form onSubmit={(event) => handleSubmit(event)} className={styles.formAdd}>
       <div className={styles.columnInput}>
         <label>Red Wifi</label>
         <input
-          onChange={(event) => handleChange(event)}
+          onChange={(event) =>
+            setValuesForm({ ...valuesForm, wifi: event.target.value })
+          }
           value={valuesForm.wifi}
-          name="wifi"
           placeholder="Ingrese red Wifi"
           type="text"
           className={errorsForm.wifi.length > 0 ? styles.inputError : ""}
@@ -68,9 +27,10 @@ export const Form = ({ handleSubmit }) => {
       <div className={styles.columnInput}>
         <label>Contraseña de la red</label>
         <input
-          onChange={(event) => handleChange(event)}
+          onChange={(event) =>
+            setValuesForm({ ...valuesForm, wifiPassword: event.target.value })
+          }
           value={valuesForm.wifiPassword}
-          name="wifiPassword"
           placeholder="Ingrese contraseña"
           type="text"
           className={
@@ -86,9 +46,10 @@ export const Form = ({ handleSubmit }) => {
       <div className={styles.columnInput}>
         <label>Ubicacion geografica del equipo</label>
         <input
-          onChange={(event) => handleChange(event)}
+          onChange={(event) =>
+            setValuesForm({ ...valuesForm, location: event.target.value })
+          }
           value={valuesForm.location}
-          name="location"
           placeholder="Ingrese ubicacion:Ciudad,Pais"
           type="text"
           className={errorsForm.location.length > 0 ? styles.inputError : ""}
@@ -98,7 +59,7 @@ export const Form = ({ handleSubmit }) => {
       </div>
 
       <button disabled={loadingForm}>
-        {loadingForm ? "Agregando..." : "Agregar"}
+        {loadingForm ? "Vinculando..." : "Vincular"}
       </button>
     </form>
   );

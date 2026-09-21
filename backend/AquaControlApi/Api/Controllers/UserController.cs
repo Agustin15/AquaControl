@@ -31,6 +31,7 @@ namespace Api.Controllers
 
             try
             {
+                user.Role = "Cliente";
                 user.ValidationPassword();
 
                 var result = await new Luser().Signup(user);
@@ -65,6 +66,24 @@ namespace Api.Controllers
             catch (Exception ex)
             {
                 return StatusCode(401, new { message = ex.Message });
+            }
+        }
+
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = ("Administrador,Operador"), Policy = "HasUser")]
+        [HttpGet]
+        [Route("api/user/usersMatchByText/{text}")]
+        public async Task<ActionResult> GetUsersMatchByText(string text)
+        {
+            try
+
+            {
+                List<User> usersMatch = await new Luser().GetUsersMatchByText(text);
+
+                return Ok(usersMatch);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(404, new { message = ex.Message });
             }
         }
 

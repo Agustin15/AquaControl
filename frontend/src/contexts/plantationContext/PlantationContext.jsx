@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useDevice } from "../DeviceContext.jsx";
 import { useAuth } from "../AuthContext.jsx";
 import { useMqtt } from "../MqttContext.jsx";
-import { getTokenSaved } from "../../securityStorage.js";
+import { getAuthTokenSaved } from "../../securityStorage.js";
 const localhostBackend = import.meta.env.VITE_BACKEND_LOCALHOST;
 
 const PlantationContext = createContext();
@@ -44,7 +44,7 @@ export const PlantationProvider = ({ children }) => {
     setLoadingPlantations(true);
 
     try {
-      const accessToken = await getTokenSaved("accessToken");
+      const accessToken = await getAuthTokenSaved("accessToken");
 
       const response = await fetch(url, {
         method: "GET",
@@ -54,17 +54,19 @@ export const PlantationProvider = ({ children }) => {
         },
       });
 
-      if (response.status === 401 && retry == true) {
+      if (response.status === 401 && retry === true) {
         await updateAccessToken();
         return fetchGet(url, false);
       }
-      const result = await response.json();
 
+      const result = await response.json();
       if (!response.ok) throw new Error(result.message);
 
       return result;
     } catch (error) {
-      setErrorPlantations(error.message);
+      const errorMessage =
+        error?.message || "No se pudieron cargar las plantaciones";
+      setErrorPlantations(errorMessage);
     } finally {
       setLoadingPlantations(false);
     }
@@ -73,7 +75,7 @@ export const PlantationProvider = ({ children }) => {
   const getPlantations = async () => {
     setPlantations([]);
     const plantations = await fetchGet(
-      localhostBackend + "/api/plantation",
+      `${localhostBackend}/api/plantation/device/${deviceSelected.id}/`,
       true,
     );
     if (plantations) setPlantations(plantations);
@@ -96,7 +98,7 @@ export const PlantationProvider = ({ children }) => {
 
   const loadCropsTypes = async (retry) => {
     try {
-      const accessToken = await getTokenSaved("accessToken");
+      const accessToken = await getAuthTokenSaved("accessToken");
 
       const response = await fetch(localhostBackend + "/api/cropType", {
         method: "GET",
@@ -109,7 +111,7 @@ export const PlantationProvider = ({ children }) => {
       const result = await response.json();
 
       if (!response.ok) {
-        if (response.status === 401 && retry) {
+        if (response.status === 401 && retry === true) {
           await updateAccessToken();
           await loadCropsTypes(false);
         }
@@ -118,7 +120,9 @@ export const PlantationProvider = ({ children }) => {
 
       if (result) setCropsTypes(result);
     } catch (error) {
-      setErrorLoadCrops(error.message);
+      const errorMessage =
+        error?.message || "No se pudieron cargar los tipos de cultivo";
+      setErrorLoadCrops(errorMessage);
     }
   };
 

@@ -14,7 +14,7 @@ namespace Logic
 {
     public class Authentication
     {
-        public string GenerateAccessJWTtoken(User user, int idDevice)
+        public string GenerateAccessJWTtoken(User user, string idDevice = "", string roleInDevice = "")
         {
             var localhostBackend = Environment.GetEnvironmentVariable("LOCALHOST_BACKEND");
             var tokenSecretKey = Environment.GetEnvironmentVariable("ACCESS_TOKEN_SECRET_KEY");
@@ -27,11 +27,16 @@ namespace Logic
             //creacion del payload contenido del token a traves de claims
             List<Claim> claims = new List<Claim>();
             claims.Add(new Claim(ClaimTypes.NameIdentifier, Convert.ToString(user.Id)));
-            claims.Add(new Claim(ClaimTypes.Role, Convert.ToString(user.Role)));
-            claims.Add(new Claim("IdDevice", Convert.ToString(idDevice)));
+            claims.Add(new Claim(ClaimTypes.Role, user.Role));
+
+            if (idDevice.Length > 0)
+                claims.Add(new Claim("IdDevice", idDevice));
+
+            if (roleInDevice.Length > 0)
+                claims.Add(new Claim(ClaimTypes.Role, roleInDevice));
 
             //creacion de la claves secretas simetricas de la firma, que se usara para crear la firmas de los token
-            
+
             var tokenSecretKeySymetric = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenSecretKey));
 
             var jwtToken = new JwtSecurityToken(issuer: localhostBackend, audience: localhostBackend,
@@ -42,7 +47,7 @@ namespace Logic
 
         }
 
-        public string GenerateRefreshJWTtoken(User user, int idDevice = 0)
+        public string GenerateRefreshJWTtoken(User user, string idDevice = "", string roleInDevice = "")
         {
             var localhostBackend = Environment.GetEnvironmentVariable("LOCALHOST_BACKEND");
             var tokenSecretKey = Environment.GetEnvironmentVariable("REFRESH_TOKEN_SECRET_KEY");
@@ -54,8 +59,13 @@ namespace Logic
 
             List<Claim> claims = new List<Claim>();
             claims.Add(new Claim(ClaimTypes.NameIdentifier, Convert.ToString(user.Id)));
-            claims.Add(new Claim(ClaimTypes.Role, Convert.ToString(user.Role)));
-            claims.Add(new Claim("IdDevice", Convert.ToString(idDevice)));
+            claims.Add(new Claim(ClaimTypes.Role, user.Role));
+
+            if (idDevice.Length > 0)
+            {
+                claims.Add(new Claim("IdDevice", idDevice));
+                claims.Add(new Claim(ClaimTypes.Role, roleInDevice));
+            }
 
             var tokenSecretKeySymetric = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenSecretKey));
 

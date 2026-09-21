@@ -3,8 +3,8 @@ import { createContext, useContext, useEffect, useState } from "react";
 import {
   cleanInfo,
   getInfoSaved,
-  getTokenSaved,
-  saveAccessToken,
+  getAuthTokenSaved,
+  saveAuthToken,
 } from "../securityStorage.js";
 
 const AuthContext = createContext();
@@ -23,8 +23,8 @@ export const AuthProvider = ({ children }) => {
     try {
       setLoadingAuth(true);
       const user = await getInfoSaved("userLogued");
-      const refreshToken = await getTokenSaved("refreshToken");
-      const accessToken = await getTokenSaved("accessToken");
+      const refreshToken = await getAuthTokenSaved("refreshToken");
+      const accessToken = await getAuthTokenSaved("accessToken");
 
       if (user && refreshToken && accessToken) {
         setUserAuth(user);
@@ -38,7 +38,7 @@ export const AuthProvider = ({ children }) => {
 
   const updateAccessToken = async () => {
     try {
-      const refreshToken = await getTokenSaved("refreshToken");
+      const refreshToken = await getAuthTokenSaved("refreshToken");
 
       const response = await fetch(localhostBackend + "/api/refreshToken", {
         method: "POST",
@@ -48,14 +48,20 @@ export const AuthProvider = ({ children }) => {
         },
       });
 
-      if (response.status === 401) return (location.href = "/login");
       const result = await response.json();
 
-      if (!response.ok) throw new Error(result.message);
+      if (!response.ok) {
+        if (response.status === 401) return (location.href = "/login");
 
-      await saveAccessToken(result.accessToken);
+        throw new Error(result.message);
+      }
+
+      await saveAuthToken("accessToken", result.accessToken);
       return true;
     } catch (error) {
+      const errorMessage =
+        error?.message || "No se pudo actualizar el token de acceso";
+      console.log(errorMessage);
       logout();
     }
   };

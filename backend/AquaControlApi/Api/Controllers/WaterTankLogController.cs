@@ -12,7 +12,7 @@ namespace Api.Controllers
     [ApiController]
     public class WaterTankLogController : ControllerBase
     {
-        [Authorize(AuthenticationSchemes = "Esp32Bearer", Policy = "HasIdDevice")]
+        [Authorize(AuthenticationSchemes = "Esp32Bearer", Policy = "HasDevice")]
         [ValidateModelFilter]
         [HttpPost]
         [Route("api/waterTankLog/")]
@@ -21,7 +21,7 @@ namespace Api.Controllers
             try
             {
 
-                int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
+                string idDevice = User.FindFirst("IdDevice").Value;
 
                 if (idDevice != waterTankLog.Tank.Device.Id)
                     return StatusCode(403, new { message = "No tiene acceso al dispositivo de riego donde desea agregar el monitoreo de nivel de agua del tanque" });
@@ -37,15 +37,18 @@ namespace Api.Controllers
         }
 
 
-        [Authorize(AuthenticationSchemes = "Bearer", Policy = "HasIdDevice")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "Administrador,Operador,Lector", Policy = "HasDevice")]
         [HttpGet]
-        [Route("api/waterTankLog/tank/{idTank}/lastWeek")]
-        public async Task<ActionResult> GetHumidityPlantLogsLastWeek(int idTank)
+        [Route("api/waterTankLog/tank/{idTank}/device/{idDevice}/lastWeek")]
+        public async Task<ActionResult> GetHumidityPlantLogsLastWeek(int idTank, string idDevice)
         {
             try
             {
 
-                int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
+                string idDeviceToken = User.FindFirst("IdDevice").Value;
+
+                if (idDevice != idDeviceToken)
+                    return StatusCode(403, new { message = "No tiene acceso al dispositivo de riego" });
 
                 List<WaterTankLog> waterTankLogs = await new LwaterTankLog().GetWaterTankLogsLastWeek(idTank, idDevice);
 

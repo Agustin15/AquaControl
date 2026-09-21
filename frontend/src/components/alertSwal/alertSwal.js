@@ -1,10 +1,31 @@
 import Swal from "sweetalert2";
 import "./alertSwal.css";
 
+export const getErrorMessage = (
+  error,
+  fallbackMessage = "Ocurrió un error inesperado",
+) => {
+  if (typeof error === "string" && error.trim()) return error;
+  if (error && typeof error.message === "string" && error.message.trim()) {
+    return error.message;
+  }
+  if (
+    error &&
+    error.response &&
+    typeof error.response.data?.message === "string" &&
+    error.response.data.message.trim()
+  ) {
+    return error.response.data.message;
+  }
+  return fallbackMessage;
+};
+
 export const alertError = (title, error) => {
+  const message = getErrorMessage(error);
+
   Swal.fire({
     title: title,
-    html: `<p>${error}</p>`,
+    html: `<p>${message}</p>`,
     icon: "error",
     customClass: {
       popup:"popupAlertError",

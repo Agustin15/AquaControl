@@ -1,10 +1,7 @@
 import styles from "./Info.module.css";
 import iconInfo from "../../../assets/img/info.png";
-import { useCrudDevice } from "../../../contexts/CrudDeviceContext";
 
-export const Info = () => {
-  const { setInfoDevice, infoDevice } = useCrudDevice();
-
+export const Info = ({ infoDevice, setInfoDevice }) => {
   const formatDate = (date) => {
     const hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
     const minutes =

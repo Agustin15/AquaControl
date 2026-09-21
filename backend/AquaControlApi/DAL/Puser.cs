@@ -24,8 +24,8 @@ namespace DAL
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@username", user.Username);
                 command.Parameters.AddWithValue("@email", user.Email);
-                command.Parameters.AddWithValue("@role", user.Role);
                 command.Parameters.AddWithValue("@password", user.Password);
+                command.Parameters.AddWithValue("@role", user.Role);
 
                 SqlParameter returnValue = new SqlParameter();
                 returnValue.Direction = ParameterDirection.ReturnValue;
@@ -62,8 +62,8 @@ namespace DAL
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@username", user.Username);
                 command.Parameters.AddWithValue("@email", user.Email);
-                command.Parameters.AddWithValue("@role", user.Role);
                 command.Parameters.AddWithValue("@password", user.Password);
+                command.Parameters.AddWithValue("@role", user.Role);
 
                 SqlParameter idGenerated = new SqlParameter();
                 idGenerated.Direction = ParameterDirection.ReturnValue;
@@ -92,8 +92,8 @@ namespace DAL
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@username", user.Username);
                 command.Parameters.AddWithValue("@email", user.Email);
-                command.Parameters.AddWithValue("@role", user.Role);
                 command.Parameters.AddWithValue("@password", user.Password);
+                command.Parameters.AddWithValue("@role", user.Role);
 
                 await connection.OpenAsync();
                 await command.ExecuteNonQueryAsync();
@@ -132,7 +132,7 @@ namespace DAL
                     while (await reader.ReadAsync())
                     {
                         User user = new User(Convert.ToInt32(reader["code"]), Convert.ToString(reader["entity"]),
-                         Convert.ToString(reader["correspondence"]), Convert.ToString(reader["responsability"]), "", Convert.ToDateTime(reader["created"]));
+                         Convert.ToString(reader["correspondence"]), "", Convert.ToString(reader["responsability"]), Convert.ToDateTime(reader["created"]));
 
                         users.Add(user);
                     }
@@ -177,8 +177,8 @@ namespace DAL
                     await reader.ReadAsync();
 
                     user = new User(Convert.ToInt32(reader["code"]), Convert.ToString(reader["entity"]),
-                         Convert.ToString(reader["correspondence"]), Convert.ToString(reader["responsability"]), Convert.ToString(reader["entityKey"]),
-                         Convert.ToDateTime(reader["created"]));
+                         Convert.ToString(reader["correspondence"]), Convert.ToString(reader["entityKey"]),
+                         Convert.ToString(reader["responsability"]), Convert.ToDateTime(reader["created"]));
                 }
                 await reader.CloseAsync();
 
@@ -195,6 +195,7 @@ namespace DAL
 
             return user;
         }
+
 
         public async Task<User> GetUserByEmail(string email)
         {
@@ -219,7 +220,8 @@ namespace DAL
                     await reader.ReadAsync();
 
                     user = new User(Convert.ToInt32(reader["code"]), Convert.ToString(reader["entity"]),
-                              Convert.ToString(reader["correspondence"]), Convert.ToString(reader["responsability"]), "", Convert.ToDateTime(reader["created"]));
+                              Convert.ToString(reader["correspondence"]), "", Convert.ToString(reader["responsability"]),
+                              Convert.ToDateTime(reader["created"]));
                 }
                 await reader.CloseAsync();
 
@@ -237,7 +239,7 @@ namespace DAL
             return user;
         }
 
-        internal async Task<User> GetUserById(int idUser)
+        public async Task<User> GetUserById(int idUser)
         {
 
             User user = null;
@@ -260,7 +262,8 @@ namespace DAL
                     await reader.ReadAsync();
 
                     user = new User(Convert.ToInt32(reader["code"]), Convert.ToString(reader["entity"]),
-                         Convert.ToString(reader["correspondence"]), Convert.ToString(reader["responsability"]), "", Convert.ToDateTime(reader["created"]));
+                         Convert.ToString(reader["correspondence"]), "", Convert.ToString(reader["responsability"]),
+                         Convert.ToDateTime(reader["created"]));
                 }
                 await reader.CloseAsync();
 
@@ -276,6 +279,51 @@ namespace DAL
             }
 
             return user;
+        }
+
+        public async Task<List<User>> GetUsersMatchByText(string text)
+        {
+
+            List<User> users = new List<User>();
+            User user = null;
+
+            SqlConnection connection = new SqlConnection(DBConnection.Cnn);
+
+            try
+            {
+
+                SqlCommand command = new SqlCommand("UsersByText", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@text", text);
+
+                await connection.OpenAsync();
+
+                SqlDataReader reader = await command.ExecuteReaderAsync();
+
+                if (reader.HasRows)
+                {
+                    await reader.ReadAsync();
+
+                    user = new User(Convert.ToInt32(reader["code"]), Convert.ToString(reader["entity"]),
+                         Convert.ToString(reader["correspondence"]), "", Convert.ToString(reader["responsability"]),
+                         Convert.ToDateTime(reader["created"]));
+
+                    users.Add(user);
+                }
+                await reader.CloseAsync();
+
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+            return users;
         }
 
     }

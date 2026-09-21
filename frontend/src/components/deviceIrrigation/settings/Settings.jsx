@@ -5,9 +5,10 @@ import { PlantationProvider } from "../../../contexts/plantationContext/Plantati
 import { FormPlantationProvider } from "../../../contexts/plantationContext/FormPlantationContext";
 import { TankProvider } from "../../../contexts/tankContext/TankContext";
 import { FormTankProvider } from "../../../contexts/tankContext/FormTankContext";
+import { UserDeviceProvider } from "../../../contexts/UsersDeviceContext";
 import { Tanks } from "./tank/Tanks";
 import { Plantations } from "./plantations/Plantations";
-
+import { Users } from "./users/Users";
 
 export const Settings = () => {
   const [option, setOption] = useState("plantations");
@@ -29,7 +30,13 @@ export const Settings = () => {
             className={option == "tank" ? styles.selected : ""}
             onClick={() => setOption("tank")}
           >
-            Tanque
+            Tanques
+          </li>
+          <li
+            className={option == "users" ? styles.selected : ""}
+            onClick={() => setOption("users")}
+          >
+            Usuarios
           </li>
         </ul>
 
@@ -39,6 +46,12 @@ export const Settings = () => {
               <Plantations />
             </FormPlantationProvider>
           </PlantationProvider>
+        )}
+
+        {option == "users" && (
+          <UserDeviceProvider>
+            <Users />
+          </UserDeviceProvider>
         )}
 
         {option == "tank" && (

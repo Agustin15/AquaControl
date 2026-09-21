@@ -19,14 +19,14 @@ namespace DAL
         public async Task Add(Plantation plantation)
         {
 
-            string urlImage = "";
+            string urlNewImage = "";
             SqlConnection connection = new SqlConnection(DBConnection.Cnn);
             SqlTransaction transaction = null;
 
             try
             {
                 if (plantation.Image != null)
-                    urlImage = await CloudinaryClient.Instance.AddImage(plantation);
+                    urlNewImage = await CloudinaryClient.Instance.AddImage(plantation);
 
                 SqlCommand command = new SqlCommand("AddPlantation", connection);
                 command.CommandType = CommandType.StoredProcedure;
@@ -63,7 +63,7 @@ namespace DAL
             catch (Exception ex)
             {
                 if (transaction != null) await transaction.RollbackAsync();
-                if (urlImage.Length != 0) await CloudinaryClient.Instance.DeleteImage(plantation);
+                if (urlNewImage.Length > 0) await CloudinaryClient.Instance.DeleteImage(plantation);
 
                 throw new Exception(ex.Message);
             }
@@ -75,7 +75,8 @@ namespace DAL
 
         public async Task Update(Plantation plantation)
         {
-            string urlImage = "";
+            Plantation plantationFound = null;
+            string urlNewImage = "";
             SqlConnection connection = new SqlConnection(DBConnection.Cnn);
             SqlTransaction transaction = null;
 
@@ -83,7 +84,7 @@ namespace DAL
             {
 
                 List<Plantation> plantations = await new Pplantation().GetAllPlantationsByDevice(plantation.Device.Id);
-                Plantation plantationFound = plantations.Find(p => p.Id == plantation.Id);
+                plantationFound = plantations.Find(p => p.Id == plantation.Id);
 
                 if (plantationFound == null) throw new Exception("Plantacion no encontrada");
 
@@ -92,7 +93,7 @@ namespace DAL
                     if (plantationFound.Image != null && String.IsNullOrEmpty(plantation.Image))
                         await CloudinaryClient.Instance.DeleteImage(plantationFound);
                     else
-                        urlImage = await CloudinaryClient.Instance.AddImage(plantation);
+                        urlNewImage = await CloudinaryClient.Instance.AddImage(plantation);
 
                 }
 
@@ -130,7 +131,7 @@ namespace DAL
             catch (Exception ex)
             {
                 if (transaction != null) await transaction.RollbackAsync();
-                if (urlImage.Length > 0) await CloudinaryClient.Instance.DeleteImage(plantation);
+                if (urlNewImage.Length > 0 && plantationFound.Image == null) await CloudinaryClient.Instance.DeleteImage(plantation);
 
                 throw new Exception(ex.Message);
             }
@@ -180,7 +181,7 @@ namespace DAL
         }
 
 
-        public async Task<List<Plantation>> GetAllPlantationsByDevice(int idDevice)
+        public async Task<List<Plantation>> GetAllPlantationsByDevice(string idDevice)
         {
 
             List<Plantation> plantations = new List<Plantation>();

@@ -22,8 +22,6 @@ namespace Logic
         public async Task<object> Signup(User user)
         {
 
-            user.Role = "Usuario";
-
             SqlConnection connection = new SqlConnection(DBConnection.Cnn);
             SqlTransaction transaction = null;
 
@@ -53,8 +51,8 @@ namespace Logic
                 user.Id = idGenerated;
 
                 //creacion del token de acceso y de actualizacion
-                var jwtAccessTokenSerialized = authentication.GenerateAccessJWTtoken(user, 0);
-                var jwtRefreshTokenSerialized = authentication.GenerateRefreshJWTtoken(user, 0);
+                var jwtAccessTokenSerialized = authentication.GenerateAccessJWTtoken(user);
+                var jwtRefreshTokenSerialized = authentication.GenerateRefreshJWTtoken(user);
 
                 await transaction.CommitAsync();
 
@@ -65,8 +63,8 @@ namespace Logic
                         id = idGenerated,
                         username = user.Username,
                         email = user.Email,
-                        role = user.Role,
                         password = "",
+                        role = user.Role,
                         joined = user.Joined,
                     },
                     accessToken = jwtAccessTokenSerialized,
@@ -89,22 +87,27 @@ namespace Logic
 
         public async Task<object> Login(User user)
         {
-            if (user is null) throw new Exception("Debe indicar credenciales");
+            if (user is null) throw new Exception("Usuario o contraseña incorrectas");
 
             Authentication authentication = new Authentication();
 
             User userFound = await new Puser().GetUserByUsername(user.Username);
 
-            if (userFound is null) throw new Exception("Usuario no encontrado");
+            if (userFound is null) throw new Exception("Usuario o contraseña incorrectas");
 
             bool match = BCrypt.Net.BCrypt.Verify(user.Password, userFound.Password);
 
             if (!match) throw new Exception("Usuario o contraseña incorrectas");
 
             //creacion del token de acceso y de actualizacion
+            List<Device> devices = await new Ldevice().GetDevicesByIdUser(userFound.Id);
+            string roleInDevice = "";
 
-            string jwtAccessTokenSerialized = authentication.GenerateAccessJWTtoken(userFound, 0);
-            string jwtRefreshTokenSerialized = authentication.GenerateRefreshJWTtoken(userFound, 0);
+            if (devices.Count > 0 && devices.Exists(device => device.UsersOfDevice.Exists(ud => ud.User.Id == userFound.Id && ud.Role == "Operador")))
+                roleInDevice = "Operador";
+
+            string jwtAccessTokenSerialized = authentication.GenerateAccessJWTtoken(userFound, roleInDevice: roleInDevice);
+            string jwtRefreshTokenSerialized = authentication.GenerateRefreshJWTtoken(userFound, roleInDevice: roleInDevice);
 
             return new
             {
@@ -113,8 +116,8 @@ namespace Logic
                     id = userFound.Id,
                     username = userFound.Username,
                     email = userFound.Email,
-                    role = userFound.Role,
                     password = "",
+                    role = userFound.Role,
                     joined = userFound.Joined,
                 },
                 accessToken = jwtAccessTokenSerialized,
@@ -131,28 +134,28 @@ namespace Logic
         }
 
 
-        public async Task<List<User>> GetAllUsers()
+        public async Task<User> GetUserById(int idUser)
         {
-            List<User> users = new List<User>();
 
-            users = await new Puser().GetAllUsers();
-
-            return users;
+            return await new Puser().GetUserById(idUser);
 
         }
 
         public async Task<User> GetUserByUsername(string username)
         {
-            User user = await new Puser().GetUserByUsername(username);
+            return await new Puser().GetUserByUsername(username);
 
-            return user;
 
         }
         public async Task<User> GetUserByEmail(string email)
         {
-            User user = await new Puser().GetUserByEmail(email);
+            return await new Puser().GetUserByEmail(email);
+        }
 
-            return user;
+        public async Task<List<User>> GetUsersMatchByText(string text)
+        {
+            return await new Puser().GetUsersMatchByText(text);
+
 
         }
 

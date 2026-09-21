@@ -58,10 +58,12 @@ export const ActionIrrigation = () => {
 
   return (
     <li className={styles.actionIrrigation}>
-      <div className={styles.column}>
+      <div className={styles.lastIrrigation}>
         Ultimo riego:
-        {lastWaterPlantation && (
+        {lastWaterPlantation ? (
           <LastWaterPlantation lastWaterPlantation={lastWaterPlantation} />
+        ) : (
+          <span>Sin riegos aun</span>
         )}
       </div>
 

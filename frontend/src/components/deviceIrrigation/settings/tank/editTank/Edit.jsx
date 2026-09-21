@@ -26,9 +26,11 @@ export const Edit = () => {
 
       await getTanks();
     } catch (error) {
+      const errorMessage =
+        error?.message || "No se pudo actualizar los datos del tanque";
       alertError(
         "Ups algo salio mal al actualizar los datos del tanque",
-        error,
+        errorMessage,
       );
     }
 

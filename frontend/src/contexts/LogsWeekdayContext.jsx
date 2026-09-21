@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import { useAuth } from "./AuthContext";
-import { getTokenSaved } from "../securityStorage.js";
+import { getAuthTokenSaved } from "../securityStorage.js";
 const localhostBackend = import.meta.env.VITE_BACKEND_LOCALHOST;
 
 const LogsWeekdayContext = createContext();
@@ -44,7 +44,7 @@ export const LogsWeekdayProvider = ({ children }) => {
     setLoadingLogs(true);
 
     try {
-      const accessToken = await getTokenSaved("accessToken");
+      const accessToken = await getAuthTokenSaved("accessToken");
 
       const response = await fetch(url, {
         method: "GET",
@@ -54,17 +54,20 @@ export const LogsWeekdayProvider = ({ children }) => {
         },
       });
 
-      if (response.status == 401 && retry == true) {
-        await updateAccessToken();
-        return fetchGet(url, false);
-      }
-
       const result = await response.json();
 
-      if (!response.ok) throw new Error(result.message);
+      if (!response.ok) {
+        if (response.status === 401 && retry === true) {
+          await updateAccessToken();
+          return fetchGet(url, false);
+        }
+        throw new Error(result.message);
+      }
       return result;
     } catch (error) {
-      setErrorWeekdayLogs(error.message);
+      const errorMessage =
+        error?.message || "No se pudieron cargar los registros de la semana";
+      setErrorWeekdayLogs(errorMessage);
     } finally {
       setLoadingLogs(false);
     }

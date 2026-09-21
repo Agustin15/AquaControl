@@ -2,9 +2,9 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useAuth } from "./AuthContext";
 import {
   getInfoSaved,
-  getTokenSaved,
   saveInfo,
-  saveTokens,
+  getAuthTokenSaved,
+  saveAuthToken,
 } from "../securityStorage.js";
 import { alertError } from "../components/alertSwal/alertSwal.js";
 const localhostBackend = import.meta.env.VITE_BACKEND_LOCALHOST;
@@ -17,7 +17,7 @@ export const DeviceProvider = ({ children }) => {
   const [devices, setDevices] = useState([]);
   const [loadingDevices, setLoadingDevices] = useState(false);
   const [errorDevices, setErrorDevices] = useState();
-  const { updateAccessToken } = useAuth();
+  const { updateAccessToken, userAuth } = useAuth();
 
   useEffect(() => {
     setTimeout(() => {
@@ -44,7 +44,7 @@ export const DeviceProvider = ({ children }) => {
     setLoadingDevices(true);
     setErrorDevices(null);
 
-    const accessToken = await getTokenSaved("accessToken");
+    const accessToken = await getAuthTokenSaved("accessToken");
 
     try {
       const response = await fetch(url, {
@@ -56,33 +56,29 @@ export const DeviceProvider = ({ children }) => {
         },
       });
 
-      if (response.status === 401 && retry == true) {
-        await updateAccessToken();
-        return fetchGet(url, false);
-      }
       const result = await response.json();
 
-      if (!response.ok) throw new Error(result.message);
+      if (!response.ok) {
+        if (response.status == 401 && retry == true) {
+          await updateAccessToken();
+          return fetchGet(url, method, false);
+        }
+        throw new Error(result.message);
+      }
 
       return result;
     } catch (error) {
-      setErrorDevices(error.message);
+      const errorMessage =
+        error?.message || "No se pudieron cargar los dispositivos";
+      setErrorDevices(errorMessage);
     } finally {
       setLoadingDevices(false);
     }
   };
 
-  const fetchSelectDevice = async (device, retry, navigate) => {
+  const fetchSelectDevice = async (device, retry) => {
     try {
-      const deviceSelected = await getInfoSaved("deviceSelected");
-
-      if (deviceSelected && deviceSelected.id == device.id) {
-        setDeviceSelected(deviceSelected);
-        navigate("/deviceIrrigate");
-        return;
-      }
-
-      const accessToken = await getTokenSaved("accessToken");
+      const accessToken = await getAuthTokenSaved("accessToken");
 
       const response = await fetch(
         localhostBackend + "/api/device/deviceSelected",
@@ -97,28 +93,35 @@ export const DeviceProvider = ({ children }) => {
         },
       );
 
-      if (response.status === 401 && retry == true) {
-        await updateAccessToken();
-        return fetchSelectDevice(false);
-      }
       const result = await response.json();
 
-      if (!response.ok) throw new Error(result.message);
+      if (!response.ok) {
+        if (response.status === 401 && retry === true) {
+          await updateAccessToken();
+          return fetchSelectDevice(device, false);
+        }
+        throw new Error(result.message);
+      }
 
-      await saveTokens(result.accessToken, result.refreshToken);
+      await saveAuthToken("accessToken", result.accessToken);
+      await saveAuthToken("refreshToken", result.refreshToken);
       await saveInfo("deviceSelected", device);
-      setDeviceSelected(device);
 
-      navigate("/deviceIrrigate");
+      setDeviceSelected(device);
     } catch (error) {
-      alertError(`Ups algo salio mal al seleccionar dispositivo `, error);
+      const errorMessage =
+        error?.message || "No se pudo seleccionar el dispositivo";
+      alertError(
+        `Ups algo salio mal al seleccionar dispositivo `,
+        errorMessage,
+      );
     }
   };
 
   const getUserDevices = async () => {
     setDevices([]);
     const devices = await fetchGet(
-      localhostBackend + `/api/device/allUserDevices`,
+      localhostBackend + `/api/device/allUserDevices/user/${userAuth.id}`,
       "GET",
       true,
     );

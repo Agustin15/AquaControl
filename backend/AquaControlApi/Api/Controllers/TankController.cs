@@ -17,7 +17,7 @@ namespace Api.Controllers
     public class TankController : ControllerBase
     {
 
-        [Authorize(AuthenticationSchemes = "Bearer", Policy = "HasIdDevice")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = ("Administrador,Operador"), Policy = "HasDevice")]
         [ValidateModelFilter]
         [HttpPost]
         [Route("api/tank")]
@@ -25,8 +25,7 @@ namespace Api.Controllers
         {
             try
             {
-
-                int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
+                string idDevice = User.FindFirst("IdDevice").Value;
 
                 if (idDevice != tank.Device.Id)
                     return StatusCode(403, new { message = "No tiene acceso al dispositivo de riego donde desea agregar un nuevo registro de este tanque" });
@@ -47,7 +46,7 @@ namespace Api.Controllers
             }
         }
 
-        [Authorize(AuthenticationSchemes = "Bearer", Policy = "HasIdDevice")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = ("Administrador,Operador"), Policy = "HasDevice")]
         [ValidateModelFilter]
         [HttpPut]
         [Route("api/tank")]
@@ -56,7 +55,7 @@ namespace Api.Controllers
             try
             {
 
-                int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
+                string idDevice = User.FindFirst("IdDevice").Value;
 
                 if (idDevice != tank.Device.Id)
                     return StatusCode(403, new { message = "No tiene acceso al dispositivo de riego donde desea actualizar el registro de este tanque" });
@@ -71,7 +70,7 @@ namespace Api.Controllers
             }
         }
 
-        [Authorize(AuthenticationSchemes = "Bearer", Policy = "HasIdDevice")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = ("Administrador,Operador"), Policy = "HasDevice")]
         [ValidateModelFilter]
         [HttpDelete]
         [Route("api/tank")]
@@ -80,7 +79,7 @@ namespace Api.Controllers
             try
             {
 
-                int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
+                string idDevice = User.FindFirst("IdDevice").Value;
 
                 if (idDevice != tank.Device.Id)
                     return StatusCode(403, new { message = "No tiene acceso al dispositivo de riego donde desea eliminar el registro de este tanque" });
@@ -95,18 +94,22 @@ namespace Api.Controllers
             }
         }
 
-        [Authorize(AuthenticationSchemes = "Bearer", Policy = "HasIdDevice")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "Administrador, Operador, Lector", Policy = "HasDevice")]
         [HttpGet]
-        [Route("api/tank")]
-        public async Task<ActionResult> GetAllTanksByDevice()
+        [Route("api/tank/device/{idDevice}")]
+        public async Task<ActionResult> GetAllTanksByDevice(string idDevice)
         {
             try
             {
-                if (!User.Identity.IsAuthenticated || User.FindFirst("IdDevice") is null)
-                    return Unauthorized();
 
-                int idDevice = Convert.ToInt32(User.FindFirst("IdDevice").Value);
+                string idDeviceToken = User.FindFirst("IdDevice").Value;
 
+
+                if (idDeviceToken != idDevice)
+                {
+                    return StatusCode(403, new { message = "No tiene acceso al dispositivo de riego" });
+
+                }
                 List<Tank> tanks = await new Ltank().GetAllTanksByDevice(idDevice);
 
                 if (tanks == null || tanks.Count == 0) throw new Exception("No hay registros de tanques en el dispositivo de riego");

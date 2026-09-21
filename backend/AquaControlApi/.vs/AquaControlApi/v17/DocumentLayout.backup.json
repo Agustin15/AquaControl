@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "C:\\develop\\AquaControl\\backend\\AquaControlApi\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{171D7675-23B1-490E-958E-EB371170F68F}|DAL\\DAL.csproj|c:\\develop\\aquacontrol\\backend\\aquacontrolapi\\dal\\pplantation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{171D7675-23B1-490E-958E-EB371170F68F}|DAL\\DAL.csproj|solutionrelative:dal\\pplantation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1ECA56E5-04A1-493C-AF8B-2C637F7CA81B}|Api\\Api.csproj|c:\\develop\\aquacontrol\\backend\\aquacontrolapi\\api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1ECA56E5-04A1-493C-AF8B-2C637F7CA81B}|Api\\Api.csproj|solutionrelative:api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1ECA56E5-04A1-493C-AF8B-2C637F7CA81B}|Api\\Api.csproj|c:\\develop\\aquacontrol\\backend\\aquacontrolapi\\api\\controllers\\plantationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1ECA56E5-04A1-493C-AF8B-2C637F7CA81B}|Api\\Api.csproj|solutionrelative:api\\controllers\\plantationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1ECA56E5-04A1-493C-AF8B-2C637F7CA81B}|Api\\Api.csproj|c:\\develop\\aquacontrol\\backend\\aquacontrolapi\\api\\controllers\\userofdevicecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1ECA56E5-04A1-493C-AF8B-2C637F7CA81B}|Api\\Api.csproj|solutionrelative:api\\controllers\\userofdevicecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -27,27 +27,27 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Pplantation.cs",
-              "DocumentMoniker": "C:\\develop\\AquaControl\\backend\\AquaControlApi\\DAL\\Pplantation.cs",
-              "RelativeDocumentMoniker": "DAL\\Pplantation.cs",
-              "ToolTip": "C:\\develop\\AquaControl\\backend\\AquaControlApi\\DAL\\Pplantation.cs",
-              "RelativeToolTip": "DAL\\Pplantation.cs",
-              "ViewState": "AgIAAEcAAAAAAAAAAAAnwFAAAAAPAAAAAAAAAA==",
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\develop\\AquaControl\\backend\\AquaControlApi\\Api\\Program.cs",
+              "RelativeDocumentMoniker": "Api\\Program.cs",
+              "ToolTip": "C:\\develop\\AquaControl\\backend\\AquaControlApi\\Api\\Program.cs",
+              "RelativeToolTip": "Api\\Program.cs",
+              "ViewState": "AgIAAEMAAAAAAAAAAAAAAFQAAAAjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-14T20:18:39.719Z",
+              "WhenOpened": "2026-09-21T18:53:34.797Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "PlantationController.cs",
-              "DocumentMoniker": "C:\\develop\\AquaControl\\backend\\AquaControlApi\\Api\\Controllers\\PlantationController.cs",
-              "RelativeDocumentMoniker": "Api\\Controllers\\PlantationController.cs",
-              "ToolTip": "C:\\develop\\AquaControl\\backend\\AquaControlApi\\Api\\Controllers\\PlantationController.cs",
-              "RelativeToolTip": "Api\\Controllers\\PlantationController.cs",
-              "ViewState": "AgIAABsAAAAAAAAAAAAWwCUAAAArAAAAAAAAAA==",
+              "Title": "UserOfDeviceController.cs",
+              "DocumentMoniker": "C:\\develop\\AquaControl\\backend\\AquaControlApi\\Api\\Controllers\\UserOfDeviceController.cs",
+              "RelativeDocumentMoniker": "Api\\Controllers\\UserOfDeviceController.cs",
+              "ToolTip": "C:\\develop\\AquaControl\\backend\\AquaControlApi\\Api\\Controllers\\UserOfDeviceController.cs",
+              "RelativeToolTip": "Api\\Controllers\\UserOfDeviceController.cs",
+              "ViewState": "AgIAADIAAAAAAAAAAAA9wEYAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-14T18:25:52.377Z",
+              "WhenOpened": "2026-09-21T17:10:27.949Z",
               "EditorCaption": ""
             }
           ]

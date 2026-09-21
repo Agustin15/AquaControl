@@ -1,6 +1,6 @@
 import { PushNotifications } from "@capacitor/push-notifications";
 import { Device } from "@capacitor/device";
-import { getTokenSaved } from "../securityStorage.js";
+import { getAuthTokenSaved } from "../securityStorage.js";
 import { useAuth } from "./AuthContext.jsx";
 import { useAlert } from "./AlertContext.jsx";
 import { createContext, useContext, useState } from "react";
@@ -60,7 +60,7 @@ export const UserDevicesTokensProvider = ({ children }) => {
     retry,
   ) => {
     try {
-      const accessToken = await getTokenSaved("accessToken");
+      const accessToken = await getAuthTokenSaved("accessToken");
 
       const response = await fetch(localhostBackend + "/api/userDeviceToken", {
         method: "POST",
@@ -85,10 +85,9 @@ export const UserDevicesTokensProvider = ({ children }) => {
         throw new Error(result.message);
       }
     } catch (error) {
-      throw new Error(
-        error.message ||
-          "Error al actualizar o agregar el token del dispositivo móvil",
-      );
+      const errorMessage =
+        error?.message || "Error al actualizar o agregar el token del dispositivo móvil";
+      throw new Error(errorMessage);
     }
   };
 

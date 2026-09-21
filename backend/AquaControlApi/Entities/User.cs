@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
@@ -15,8 +16,8 @@ namespace Entities
         int id;
         string username;
         string email;
-        string? role;
         string password;
+        string role;
         DateTime joined;
 
         public int Id
@@ -41,17 +42,19 @@ namespace Entities
             get { return email; }
         }
 
-        [AllowedValues([null, "Administrador", "Usuario"], ErrorMessage = "Rol solo acepta los valores:Administrador o Usuario")]
-        public string? Role
-        {
-            set { role = value; }
-            get { return role; }
-        }
 
         public string Password
         {
             set { password = value; }
             get { return password; }
+        }
+
+
+        [AllowedValues(["Administrador", "Cliente"], ErrorMessage = "Rol no valido")]
+        public string Role
+        {
+            set { role = value; }
+            get { return role; }
         }
 
         [Required(ErrorMessage = "Fecha de union es requerida")]
@@ -63,14 +66,14 @@ namespace Entities
 
         public User() { }
 
-        public User(int id, string username, string email, string role, string password, DateTime joined)
+        public User(int id, string username, string email, string password, string role, DateTime joined)
         {
 
             Id = id;
             Username = username?.Trim();
             Email = email?.Trim();
-            Role = role?.Trim();
             Password = password?.Trim();
+            Role = role?.Trim();
             Joined = joined;
 
         }

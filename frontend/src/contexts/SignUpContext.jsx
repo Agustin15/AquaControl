@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import { alertError } from "../components/alertSwal/alertSwal.js";
-import { saveInfo, saveTokens } from "../securityStorage.js";
+import { saveInfo, saveAuthToken } from "../securityStorage.js";
 import { useAuth } from "./AuthContext.jsx";
 const localhostBackend = import.meta.env.VITE_BACKEND_LOCALHOST;
 
@@ -90,7 +90,7 @@ export const SignUpProvider = ({ children }) => {
     try {
       const response = await fetch(localhostBackend + "/api/user/signup", {
         method: "POST",
-        body: JSON.stringify(values),
+        body: JSON.stringify({ ...values, role: "Cliente" }),
         headers: {
           "Content-type": "application/json",
         },
@@ -100,13 +100,16 @@ export const SignUpProvider = ({ children }) => {
       if (!response.ok) throw new Error(result.message);
 
       if (result) {
-        await saveTokens(result.accessToken, result.refreshToken);
+        await saveAuthToken("accessToken", result.accessToken);
+        await saveAuthToken("refreshToken", result.refreshToken);
         await saveInfo("userLogued", result.user);
         setUserAuth(result.user);
         navigate("/devices");
       }
     } catch (error) {
-      alertError("Ups, algo salio mal al registarse", error);
+      const errorMessage =
+        error?.message || "No se pudo completar el registro";
+      alertError("Ups, algo salio mal al registarse", errorMessage);
     } finally {
       setLoading(false);
     }

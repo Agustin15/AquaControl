@@ -3,45 +3,58 @@ import iconMore from "../../../assets/img/more.png";
 import iconDevice from "../../../assets/img/device.png";
 import { useState } from "react";
 import { useDevice } from "../../../contexts/DeviceContext";
-import { useCrudDevice } from "../../../contexts/CrudDeviceContext";
 import { useNavigate } from "react-router";
 import { Info } from "../info/Info";
 import { Modal } from "../../modal/Modal";
 import { createPortal } from "react-dom";
-import { EditDevice } from "../editDevice/EditDevice";
-import { DeleteDevice } from "../deleteDevice/DeleteDevice";
 import { Options } from "./Options";
+import { AddDevice } from "../addDevice/AddDevice";
+import { EditDevice } from "../editDevice/EditDevice";
 
 export const List = () => {
   const { devices, fetchSelectDevice } = useDevice();
   const [showOption, setShowOption] = useState(false);
+  const [deviceToLink, setDeviceToLink] = useState(null);
+  const [infoDevice, setInfoDevice] = useState(null);
+  const [editDevice, setEditDevice] = useState(null);
   let navigate = useNavigate();
 
-  const { infoDevice, editDevice, setDeleteDevice, deleteDevice } =
-    useCrudDevice();
+  const handleClickDevice = async (device) => {
+    await fetchSelectDevice(device, true);
+    if (device.linked) navigate("/deviceIrrigate");
+    else setDeviceToLink(device);
+  };
 
   return (
     <>
       <ul className={styles.listDevices}>
         {devices.map((device, index) => (
           <li key={index}>
-            <button
-              onClick={() => setShowOption(showOption ? false : true)}
-              className={styles.moreOptions}
-            >
-              <img src={iconMore}></img>
-            </button>
-
-            {showOption && <Options device={device} />}
+            {device.linked && (
+              <button
+                onClick={() => setShowOption(showOption ? false : true)}
+                className={styles.moreOptions}
+              >
+                <img src={iconMore}></img>
+              </button>
+            )}
+            {showOption && (
+              <Options
+                device={device}
+                setDeviceToLink={setDeviceToLink}
+                setEditDevice={setEditDevice}
+                setInfoDevice={setInfoDevice}
+              />
+            )}
 
             <img className={styles.iconDevice} src={iconDevice}></img>
             <span>{device.placeName}</span>
 
             <button
-              onClick={() => fetchSelectDevice(device, true, navigate)}
+              onClick={() => handleClickDevice(device)}
               className={styles.watch}
             >
-              Ver
+              {device.linked ? "Ver" : "Vincular"}
             </button>
           </li>
         ))}
@@ -50,7 +63,17 @@ export const List = () => {
       {infoDevice &&
         createPortal(
           <Modal>
-            <Info />
+            <Info infoDevice={infoDevice} setInfoDevice={setInfoDevice} />
+          </Modal>,
+          document.getElementById("containDevices"),
+        )}
+      {deviceToLink &&
+        createPortal(
+          <Modal>
+            <AddDevice
+              deviceToLink={deviceToLink}
+              setDeviceToLink={setDeviceToLink}
+            />
           </Modal>,
           document.getElementById("containDevices"),
         )}
@@ -58,17 +81,10 @@ export const List = () => {
       {editDevice &&
         createPortal(
           <Modal>
-            <EditDevice />
+            <EditDevice editDevice={editDevice} setEditDevice={setEditDevice} />
           </Modal>,
           document.getElementById("containDevices"),
         )}
-
-      {deleteDevice && (
-        <DeleteDevice
-          setDeleteDevice={setDeleteDevice}
-          deleteDevice={deleteDevice}
-        />
-      )}
     </>
   );
 };

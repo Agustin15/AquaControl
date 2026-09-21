@@ -32,14 +32,14 @@ namespace Logic
         }
 
 
-        public async Task<int> GetAmountAlertsByDeviceAndUser(int idDevice, int idUser)
+        public async Task<int> GetAmountAlertsByDeviceAndUser(string idDevice, int idUser)
         {
 
             int amount = await new Palert().GetAmountAlertsByDeviceAndUser(idDevice, idUser);
 
             return amount;
         }
-        public async Task<List<Alert>> GetAlertsOffsetByDevice(int offset, int idDevice, int idUser)
+        public async Task<List<Alert>> GetAlertsOffsetByDevice(int offset, string idDevice, int idUser)
         {
 
             List<Alert> alertsOffset = new List<Alert>();

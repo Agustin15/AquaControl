@@ -17,7 +17,7 @@ export const Add = () => {
     valuesForm,
     setValuesForm,
     setErrorsForm,
-    handleClose,
+    clean,
   } = useFormPlantation();
 
   const handleSubmit = async (event) => {
@@ -43,6 +43,7 @@ export const Add = () => {
         image: null,
         humidityMin: 0,
         humidityMax: 0,
+        indoor: false,
         cropType: null,
         amountPlants: 0,
       });
@@ -57,7 +58,9 @@ export const Add = () => {
 
       await getPlantations();
     } catch (error) {
-      alertError("Ups algo salio mal al agregar una nueva plantacion", error);
+      const errorMessage =
+        error?.message || "No se pudo agregar la nueva plantación";
+      alertError("Ups algo salio mal al agregar una nueva plantacion", errorMessage);
     }
 
     return;
@@ -70,7 +73,7 @@ export const Add = () => {
         <h3>Agregar plantacion</h3>
         <button
           onClick={() => {
-            handleClose();
+            clean();
             setShowFormAdd(null);
           }}
         >
