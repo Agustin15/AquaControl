@@ -15,7 +15,7 @@ namespace Api.Filters
                 return;
             }
 
-            string firstError=context.ModelState.Values.Where(v =>v.ValidationState==ModelValidationState.Invalid).First().Errors.First().ErrorMessage;
+            string firstError = context.ModelState.Values.SelectMany(x => x.Errors).ToList().First().ErrorMessage;
 
             context.Result = new BadRequestObjectResult(new { message = firstError });
         }

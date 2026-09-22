@@ -40,7 +40,7 @@ namespace DAL
             try
             {
 
-                SqlCommand command = new SqlCommand("AddUserDevice");
+                SqlCommand command = new SqlCommand("AddUserDevice", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@idDevice", device.Id);
                 command.Parameters.AddWithValue("@idUser", userOfDevice.User.Id);

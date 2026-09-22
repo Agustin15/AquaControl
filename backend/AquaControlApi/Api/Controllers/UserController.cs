@@ -79,6 +79,8 @@ namespace Api.Controllers
             {
                 List<User> usersMatch = await new Luser().GetUsersMatchByText(text);
 
+                if (usersMatch.Count() == 0) throw new Exception("No se encontraron coincidencias");
+
                 return Ok(usersMatch);
             }
             catch (Exception ex)
