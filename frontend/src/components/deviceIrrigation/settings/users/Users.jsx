@@ -1,5 +1,5 @@
 import styles from "./Users.module.css";
-import iconNoUsers from "../../../../assets/img/user.png";
+import iconNoUsers from "../../../../assets/img/noUsers.png";
 import iconAdd from "../../../../assets/img/add.png";
 import { useUserDevice } from "../../../../contexts/UsersDeviceContext";
 import { useDevice } from "../../../../contexts/DeviceContext";
@@ -26,19 +26,20 @@ export const Users = () => {
 
   return (
     <div className={styles.containUsers}>
-      {deviceSelected.usersOfDevice.length == 0 && (
-        <div className={styles.noUsers}>
-          <img src={iconNoUsers} />
-          <p>{errorUsers}</p>
-        </div>
-      )}
-
+      
       <div className={styles.optionAddUser}>
-        <button onClick={() => setShowFormAdd(true)}>
+        <button onClick={() => setShowAddUser(true)}>
           Agregar usuario
           <img src={iconAdd}></img>
         </button>
       </div>
+
+      {deviceSelected.usersOfDevice.length == 0 && (
+        <div className={styles.noUsers}>
+          <img src={iconNoUsers} />
+          <p>Dispositivo de riego no tiene usuarios vinculados aun</p>
+        </div>
+      )}
 
       <List />
       {showAddUser &&

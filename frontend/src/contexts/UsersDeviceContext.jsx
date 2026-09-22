@@ -87,12 +87,9 @@ export const UserDeviceProvider = ({ children }) => {
     const result = await fetchPostOrPutUserOfDevice(userOfDevice, true, "POST");
 
     if (result) {
-      const usersOfDeviceUpdated =
-        deviceSelected.usersOfDevice.push(userOfDevice);
-
       setDeviceSelected({
         ...deviceSelected,
-        usersOfDevice: usersOfDeviceUpdated,
+        usersOfDevice: [...deviceSelected.usersOfDevice, userOfDevice],
       });
 
       return alertSuccess("Usuario vinculado al dispositivo exitosamente");

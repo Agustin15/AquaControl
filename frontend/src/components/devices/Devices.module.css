@@ -101,6 +101,17 @@
     gap: 1.5rem;
 }
 
+.containDevices .btnRefresh {
+    background: none;
+    border: none;
+}
+
+
+.containDevices .btnRefresh img {
+    width: 33px;
+    height: 33px;
+}
+
 
 .loadingDevices {
     display: flex;

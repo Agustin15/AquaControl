@@ -2,10 +2,11 @@ import styles from "./Devices.module.css";
 import iconLogo from "../../assets/img/logo.png";
 import iconAvatar from "../../assets/img/avatar.png";
 import iconNoDevices from "../../assets/img/noDevices.png";
+import iconRefresh from "../../assets/img/refresh.png";
 import { useDevice } from "../../contexts/DeviceContext";
 import { useAuth } from "../../contexts/AuthContext";
 import { useEffect, useState } from "react";
-import { List } from "./list/List.jsx";;
+import { List } from "./list/List.jsx";
 import { SubMenuProfile } from "./subMenuProfile/SubMenuProfile.jsx";
 
 export const Devices = () => {
@@ -40,6 +41,15 @@ export const Devices = () => {
       </nav>
 
       <div className={styles.devices}>
+        {!loadingDevices && (
+          <button
+            onClick={() => getUserDevices()}
+            className={styles.btnRefresh}
+          >
+            <img src={iconRefresh}></img>
+          </button>
+        )}
+
         {loadingDevices && (
           <div className={styles.loadingDevices}>
             <span className={styles.loader}></span>

@@ -15,6 +15,8 @@ export const DeleteUser = ({ deleteUser, setDeleteUser }) => {
   const { deviceSelected, setDeviceSelected } = useDevice();
   const { updateAccessToken } = useAuth();
 
+  console.log(deviceSelected);
+
   useEffect(() => {
     const confirmDelete = async () => {
       let title =
@@ -73,7 +75,7 @@ export const DeleteUser = ({ deleteUser, setDeleteUser }) => {
         );
 
         const usersOfDeviceUpdated = deviceSelected.usersOfDevice.filter(
-          (ud) => ud.user.id != deleteUser.user.idUser,
+          (ud) => ud.user.id != deleteUser.user.id,
         );
 
         setDeviceSelected({
