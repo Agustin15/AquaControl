@@ -35,7 +35,7 @@ export const CurrentIrrigation = () => {
         <li>
           <DrawingLevelTank currentLevelTank={currentLevelTank} />
           <div className={styles.column}>
-            <span>Nivel de agua:{currentLevelTank}%</span>
+            <span>Nivel de agua tanque:{currentLevelTank}%</span>
             <b style={{ color: colorMessageTank }}>{messageTank}</b>
           </div>
         </li>

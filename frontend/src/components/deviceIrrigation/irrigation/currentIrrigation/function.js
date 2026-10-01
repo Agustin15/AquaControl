@@ -1,6 +1,5 @@
 export const getCustomsToTankAccordigMeasure = (currentLevelTank) => {
   let messageTank, colorMessageTank;
-
   switch (true) {
     case currentLevelTank > 100:
       messageTank = "Tanque demasiado lleno";
@@ -13,20 +12,20 @@ export const getCustomsToTankAccordigMeasure = (currentLevelTank) => {
     case currentLevelTank >= 70 && currentLevelTank < 100:
       messageTank = "Nivel optimo";
       colorMessageTank = "#55cde2";
-
+      break;
     case currentLevelTank >= 50 && currentLevelTank < 70:
       messageTank = "Nivel Medio";
       colorMessageTank = "#dde255";
-
+      break;
     case currentLevelTank >= 25 && currentLevelTank < 50:
       messageTank = "Nivel bajo";
       colorMessageTank = "#e27855";
-
+      break;
     case currentLevelTank < 25:
       messageTank = "¡Reponga el tanque!";
       colorMessageTank = "#e25555";
+      break;
   }
-
   return { messageTank: messageTank, colorMessageTank: colorMessageTank };
 };
 
