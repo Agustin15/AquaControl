@@ -3,12 +3,14 @@ using Microsoft.Data.SqlClient;
 using MQTTnet;
 using MQTTnet.Formatter;
 using MQTTnet.Protocol;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Transactions;
 
@@ -39,7 +41,8 @@ namespace DAL
                 await command.ExecuteNonQueryAsync();
 
                 string topic = "device/" + tank.Device.Id + "/tank";
-                await MqttClient.Instance.PublishMessage(topic, new { tank = tank });
+
+                await MqttClient.Instance.PublishMessage(topic, JsonConvert.SerializeObject(new { idTank = tank.Id, height = tank.Height, idDevice = tank.Device.Id, option = "Add" }));
 
                 await transaction.CommitAsync();
 
@@ -81,7 +84,8 @@ namespace DAL
                 await command.ExecuteNonQueryAsync();
 
                 string topic = "device/" + tank.Device.Id + "/tank";
-                await MqttClient.Instance.PublishMessage("topic", new { tank = tank });
+
+                await MqttClient.Instance.PublishMessage(topic, JsonConvert.SerializeObject(new { idTank = tank.Id, height = tank.Height, idDevice = tank.Device.Id, option = "Update" }));
 
                 await transaction.CommitAsync();
             }
@@ -119,7 +123,8 @@ namespace DAL
                 await command.ExecuteNonQueryAsync();
 
                 string topic = "device/" + tank.Device.Id + "/tank";
-                await MqttClient.Instance.PublishMessage(topic, new { tank = (Tank)tank });
+
+                await MqttClient.Instance.PublishMessage(topic, JsonConvert.SerializeObject(new { idTank = tank.Id, option = "Delete" }));
 
                 await transaction.CommitAsync();
             }

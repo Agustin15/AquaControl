@@ -132,7 +132,7 @@ namespace DAL
                     while (await reader.ReadAsync())
                     {
                         User user = new User(Convert.ToInt32(reader["code"]), Convert.ToString(reader["entity"]),
-                         Convert.ToString(reader["correspondence"]), "", Convert.ToString(reader["responsability"]), Convert.ToDateTime(reader["created"]));
+                         Convert.ToString(reader["correspondence"]), null, Convert.ToString(reader["responsability"]), Convert.ToDateTime(reader["created"]));
 
                         users.Add(user);
                     }
@@ -220,7 +220,7 @@ namespace DAL
                     await reader.ReadAsync();
 
                     user = new User(Convert.ToInt32(reader["code"]), Convert.ToString(reader["entity"]),
-                              Convert.ToString(reader["correspondence"]), "", Convert.ToString(reader["responsability"]),
+                              Convert.ToString(reader["correspondence"]), null, Convert.ToString(reader["responsability"]),
                               Convert.ToDateTime(reader["created"]));
                 }
                 await reader.CloseAsync();
@@ -262,7 +262,7 @@ namespace DAL
                     await reader.ReadAsync();
 
                     user = new User(Convert.ToInt32(reader["code"]), Convert.ToString(reader["entity"]),
-                         Convert.ToString(reader["correspondence"]), "", Convert.ToString(reader["responsability"]),
+                         Convert.ToString(reader["correspondence"]), null, Convert.ToString(reader["responsability"]),
                          Convert.ToDateTime(reader["created"]));
                 }
                 await reader.CloseAsync();
@@ -305,7 +305,7 @@ namespace DAL
                     await reader.ReadAsync();
 
                     user = new User(Convert.ToInt32(reader["code"]), Convert.ToString(reader["entity"]),
-                         Convert.ToString(reader["correspondence"]), "", Convert.ToString(reader["responsability"]),
+                         Convert.ToString(reader["correspondence"]), null, Convert.ToString(reader["responsability"]),
                          Convert.ToDateTime(reader["created"]));
 
                     users.Add(user);

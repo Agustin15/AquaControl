@@ -1,5 +1,6 @@
 ﻿using MQTTnet;
 using MQTTnet.Formatter;
+using MQTTnet.Packets;
 using MQTTnet.Protocol;
 using System;
 using System.Collections.Generic;
@@ -55,6 +56,24 @@ namespace DAL
             }
 
         }
+
+        public async Task SubscribeToTopic(string topic)
+        {
+            try
+            {
+                if (!mqttClient.IsConnected) await Connect();
+
+                var subscribeOptions = new MqttClientSubscribeOptionsBuilder().WithTopicFilter(topic).Build();
+
+                var resultSubscription = await mqttClient.SubscribeAsync(subscribeOptions, CancellationToken.None);
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public async Task<Boolean> PublishMessage(string topic, object payload)
         {
             try

@@ -1,5 +1,8 @@
-﻿using Entities;
+﻿using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
+using Entities;
 using Microsoft.Data.SqlClient;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -8,8 +11,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
-using CloudinaryDotNet;
-using CloudinaryDotNet.Actions;
 
 namespace DAL
 {
@@ -51,11 +52,16 @@ namespace DAL
                 string topic = "device/" + plantation.Device.Id + "/plantation";
 
                 await MqttClient.Instance.PublishMessage(topic,
-                    new
-                    {
-                        plantation = new Plantation(plantation.Id, plantation.CropType, plantation.HumidityMin, plantation.HumidityMin,
-                        plantation.AmountPlants, plantation.Indoor, plantation.Device)
-                    });
+                     JsonConvert.SerializeObject(new
+                     {
+                         idPlantation = plantation.Id,
+                         cropType = plantation.CropType.Name,
+                         amountPlants = plantation.AmountPlants,
+                         indoor = plantation.Indoor,
+                         humidityMax = plantation.HumidityMax,
+                         humidityMin = plantation.HumidityMin,
+                         idDevice = plantation.Device.Id
+                     }));
 
                 await transaction.CommitAsync();
 
@@ -120,11 +126,16 @@ namespace DAL
                 string topic = "device/" + plantation.Device.Id + "/plantation";
 
                 await MqttClient.Instance.PublishMessage(topic,
-                    new
-                    {
-                        plantation = new Plantation(plantation.Id, plantation.CropType, plantation.HumidityMin, plantation.HumidityMin,
-                        plantation.AmountPlants, plantation.Indoor, plantation.Device)
-                    });
+                   JsonConvert.SerializeObject(new
+                   {
+                       idPlantation = plantation.Id,
+                       cropType = plantation.CropType.Name,
+                       amountPlants = plantation.AmountPlants,
+                       indoor = plantation.Indoor,
+                       humidityMax = plantation.HumidityMax,
+                       humidityMin = plantation.HumidityMin,
+                       idDevice = plantation.Device.Id
+                   }));
 
                 await transaction.CommitAsync();
             }
@@ -164,7 +175,8 @@ namespace DAL
                 await CloudinaryClient.Instance.DeleteImage(plantation);
 
                 string topic = "device/" + plantation.Device.Id + "/plantation";
-                await MqttClient.Instance.PublishMessage(topic, new { plantation = (Plantation)null });
+      
+                await MqttClient.Instance.PublishMessage(topic, JsonConvert.SerializeObject(new { idPlantation = plantation.Id }));
 
                 await transaction.CommitAsync();
 

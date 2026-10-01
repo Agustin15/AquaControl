@@ -31,8 +31,11 @@ namespace Api.Controllers
 
             try
             {
+
                 user.Role = "Cliente";
-                user.ValidationPassword();
+                if (String.IsNullOrEmpty(user.Password)) throw new Exception("Debe indicar una contraseña");
+
+                if (!ModelState.IsValid) throw new Exception(ModelState.Values.SelectMany(x => x.Errors).ToList().First().ErrorMessage);
 
                 var result = await new Luser().Signup(user);
 
@@ -46,6 +49,7 @@ namespace Api.Controllers
 
 
         [AllowAnonymous]
+        [ValidateModelFilter]
         [HttpPost]
         [Route("api/user/login")]
         public async Task<ActionResult> Login([FromBody] LoginDto login)
@@ -53,7 +57,6 @@ namespace Api.Controllers
             try
 
             {
-                if (login is null) throw new Exception("Debe indicar credenciales");
 
                 User user = new User();
                 user.Username = login.Username;

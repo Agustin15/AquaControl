@@ -29,13 +29,13 @@ EXEC AddCropType 'Jengibre','https://res.cloudinary.com/prw3eivq/image/upload/v1
 
 EXEC AddCropType 'Puerro','https://res.cloudinary.com/prw3eivq/image/upload/v1789077625/leek.png',55,75;
 
-EXEC AddCropType 'Lechuga','https://res.cloudinary.com/prw3eivq/image/upload/v1789077626/lettuce.png',55,75;
+EXEC AddCropType 'Lechuga','https://res.cloudinary.com/prw3eivq/image/upload/v1790887532/lettuce.png',55,75;
 
 EXEC AddCropType 'Cebolla','https://res.cloudinary.com/prw3eivq/image/upload/v1789940856/onion.png',40,65;
 
 EXEC AddCropType 'Pimiento','https://res.cloudinary.com/prw3eivq/image/upload/v1789077620/pepper.png',50,70;
 
-EXEC AddCropType 'Calabaza','https://res.cloudinary.com/prw3eivq/image/upload/v1789077617/pumpkin.png',45,70;
+EXEC AddCropType 'Calabaza','https://res.cloudinary.com/prw3eivq/image/upload/v1790887924/pumpkin.png',45,70;
 
 EXEC AddCropType 'Arroz','https://res.cloudinary.com/prw3eivq/image/upload/v1789077615/rice.png',65,85;
 

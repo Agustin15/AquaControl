@@ -51,13 +51,11 @@ idDevice VARCHAR(25) FOREIGN KEY REFERENCES Devices(idDevice) ON DELETE CASCADE,
 type VARCHAR(30) NOT NULL FOREIGN KEY REFERENCES CropsTypes(name) ON DELETE CASCADE,
 humidityMin INT NOT NULL CHECK(humidityMin>=0 and humidityMin  <=100),
 humidityMax INT NOT NULL CHECK(humidityMax >=0 and humidityMax <=100),
-amountPlants INT NOT NULL CHECK(amountPlants >1),
+amountPlants INT NOT NULL CHECK(amountPlants>0),
 indoor BIT NOT NULL DEFAULT 0,
 image VARCHAR(100),
 PRIMARY KEY(id,idDevice)
 )
-
-
 
 CREATE TABLE WaterTankLogs(
 id INT IDENTITY(1,1) PRIMARY KEY, 
@@ -255,7 +253,7 @@ GO
 CREATE OR ALTER PROCEDURE UsersByText @text VARCHAR(30) AS
 BEGIN
 
-select code,entity,correspondence,responsability,created from Entities where entity LIKE '%'+@text+'%'  	
+select TOP 5 code,entity,correspondence,responsability,created from Entities where entity LIKE '%'+@text+'%' ORDER BY entity 	
 END 
 
 GO

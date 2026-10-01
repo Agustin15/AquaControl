@@ -16,7 +16,7 @@ namespace Entities
         int id;
         string username;
         string email;
-        string password;
+        string? password;
         string role;
         DateTime joined;
 
@@ -42,8 +42,8 @@ namespace Entities
             get { return email; }
         }
 
-
-        public string Password
+        [RegularExpression(@"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{13,}$", ErrorMessage = "Formato de contraseña incorrecto")]
+        public string? Password
         {
             set { password = value; }
             get { return password; }
@@ -57,7 +57,6 @@ namespace Entities
             get { return role; }
         }
 
-        [Required(ErrorMessage = "Fecha de union es requerida")]
         public DateTime Joined
         {
             set { joined = value; }
@@ -66,7 +65,7 @@ namespace Entities
 
         public User() { }
 
-        public User(int id, string username, string email, string password, string role, DateTime joined)
+        public User(int id, string username, string email, string? password, string role, DateTime joined)
         {
 
             Id = id;
@@ -77,11 +76,7 @@ namespace Entities
             Joined = joined;
 
         }
-        public void ValidationPassword()
-        {
-            if (!Regex.IsMatch(Password, @"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{13,}$"))
-                throw new Exception("Formato de contraseña incorrecto");
-        }
+
     }
 
 }

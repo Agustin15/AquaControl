@@ -19,7 +19,7 @@ namespace Api.Controllers
     public class DeviceController : ControllerBase
     {
 
-        [Authorize(AuthenticationSchemes = "Bearer", Roles = "Administrador")]
+        //[Authorize(AuthenticationSchemes = "Bearer", Roles = "Administrador")]
         [ValidateModelFilter]
         [Route("api/device")]
         [HttpPost]
