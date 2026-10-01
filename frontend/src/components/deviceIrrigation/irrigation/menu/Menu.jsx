@@ -12,8 +12,8 @@ export const Menu = ({ optionSelected, setOptionSelected }) => {
   return (
     <ul className={styles.menu}>
       <li
-        onClick={() => setOptionSelected("Irrigate")}
-        className={optionSelected == "Irrigate" ? styles.selected : ""}
+        onClick={() => setOptionSelected("Irrigation")}
+        className={optionSelected == "Irrigation" ? styles.selected : ""}
       >
         Ver Riego
       </li>

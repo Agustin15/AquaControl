@@ -19,7 +19,7 @@ import { Notification } from "./notification/Notification";
 import { AlertProvider } from "../../contexts/AlertContext";
 
 export const DeviceIrrigation = () => {
-  const [optionSelected, setOptionSelected] = useState("Irrigation");
+  const [optionSelected, setOptionSelected] = useState("Settings");
   const { deviceSelected } = useDevice();
   const { currentWeather } = useWeather();
 
