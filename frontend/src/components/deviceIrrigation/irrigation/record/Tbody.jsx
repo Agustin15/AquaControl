@@ -1,10 +1,11 @@
 import styles from "./Record.module.css";
 import iconInfo from "../../../../assets/img/info.png";
-import { formatDate, calculateDuration } from "./function.js";
+import { calculateDuration } from "./function.js";
 import { useWaterPlantation } from "../../../../contexts/WaterPlantationContext";
 
 export const Tbody = ({ info, setInfo }) => {
-  const { loadingLogs, errorWaterPlantation, waterPlantationLogs } = useWaterPlantation();
+  const { loadingLogs, errorWaterPlantation, waterPlantationLogs } =
+    useWaterPlantation();
 
   return (
     <tbody>
@@ -18,7 +19,7 @@ export const Tbody = ({ info, setInfo }) => {
       {loadingLogs && (
         <tr>
           <td colSpan={5} rowSpan={5}>
-            <span> Cargando...</span>
+            <span> Cargando historial de riegos...</span>
           </td>
         </tr>
       )}
@@ -28,7 +29,9 @@ export const Tbody = ({ info, setInfo }) => {
             <td>{waterPlantationLog.type}</td>
             <td>
               <div className={styles.date}>
-                {formatDate(new Date(waterPlantationLog.datetimeStart))}
+                {new Date(waterPlantationLog.datetimeStart).toLocaleString(
+                  "en-GB",
+                )}
               </div>
             </td>
             <td>
@@ -41,7 +44,10 @@ export const Tbody = ({ info, setInfo }) => {
             </td>
             <td>{waterPlantationLog.state}</td>
             <td>
-              <img onClick={() => setInfo(waterPlantationLog)} src={iconInfo}></img>
+              <img
+                onClick={() => setInfo(waterPlantationLog)}
+                src={iconInfo}
+              ></img>
             </td>
           </tr>
         ))}

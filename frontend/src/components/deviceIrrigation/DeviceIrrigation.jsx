@@ -7,6 +7,7 @@ import { useWeather } from "../../contexts/WeatherContext";
 import { LogsWeekdayProvider } from "../../contexts/LogsWeekdayContext";
 import { PlantationProvider } from "../../contexts/plantationContext/PlantationContext";
 import { TankProvider } from "../../contexts/tankContext/TankContext";
+import { AlertProvider } from "../../contexts/AlertContext";
 import { UserDevicesTokensProvider } from "../../contexts/UserDevicesTokenContext";
 import { HumidityPlantationLogs } from "./humidityPlantationLogs/HumidityPlantationLogs";
 import { Menu } from "./menu/Menu";
@@ -16,10 +17,10 @@ import { Irrigation } from "./irrigation/Irrigation";
 import { StateMqttConnection } from "./stateMqttConnection/StateMqttConnection";
 import { CurrentWeather } from "./currentWeather/CurrentWeather";
 import { Notification } from "./notification/Notification";
-import { AlertProvider } from "../../contexts/AlertContext";
+import { Alerts } from "./alerts/Alerts";
 
 export const DeviceIrrigation = () => {
-  const [optionSelected, setOptionSelected] = useState("Settings");
+  const [optionSelected, setOptionSelected] = useState("Alerts");
   const { deviceSelected } = useDevice();
   const { currentWeather } = useWeather();
 
@@ -77,6 +78,12 @@ export const DeviceIrrigation = () => {
           )}
 
           {optionSelected == "Settings" && <Settings />}
+
+          {optionSelected == "Alerts" && (
+            <AlertProvider>
+              <Alerts />
+            </AlertProvider>
+          )}
         </div>
       </div>
     </div>

@@ -1,0 +1,131 @@
+.alerts {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    gap: 1rem;
+    width: 100%;
+    height: 78vh;
+    color: white;
+}
+
+.alerts .title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2rem;
+    width: 95%;
+    padding-bottom: 0.2rem;
+    color: white;
+    font-size: 11px;
+}
+
+.alerts .title img {
+    width: 30px;
+    height: 30px;
+}
+
+.alerts .list {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+    width: 99%;
+    height: 100%;
+    list-style: none;
+    overflow-y: scroll;
+    border-bottom: 1px solid #1d5c7ec6;
+}
+
+
+.alerts .loading {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+}
+
+.alerts .errorAlerts {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 15px;
+}
+
+.alerts .errorAlerts img {
+    width: 45px;
+    height: 45px;
+}
+
+.alerts .list li {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    height: 4.5rem;
+    position: relative;
+}
+
+.alerts .list .seen {
+    background: rgba(5, 32, 95, 0.063);
+
+
+}
+
+.alerts .list .notSeen {
+    background: rgba(5, 32, 95, 0.193);
+}
+
+.alerts li img {
+    width: 45px;
+    height: 45px;
+    margin-left: 0.5rem;
+}
+
+.alerts li .datetimeAlert {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    font-size: 11px;
+}
+
+
+.alerts li .column {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 0.3rem;
+    width: 80%;
+}
+
+.alerts li .column img {
+    width: 23px;
+    height: 23px;
+    margin: 0;
+}
+
+.alerts li .column h3 {
+    font-size: 13px;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 0.3rem;
+    width: 75%;
+    overflow-x: hidden;
+    white-space: nowrap;
+}
+
+
+.alerts li .column p {
+    font-size: 12px;
+    Width: 100%;
+    overflow-x: scroll;
+    white-space: nowrap;
+}

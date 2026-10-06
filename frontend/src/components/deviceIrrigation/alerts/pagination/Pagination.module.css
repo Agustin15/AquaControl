@@ -1,0 +1,12 @@
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 12px;
+}
+
+.pagination input {
+    width: 1.8rem;
+    height: 1.4rem;
+}

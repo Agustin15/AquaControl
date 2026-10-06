@@ -36,7 +36,7 @@ export const getCustomsToHumidityAccordigMeasure = (
 
   switch (true) {
     case currentHumidityPlantation > 100:
-      messageHumidity = "Exceso de  agua";
+      messageHumidity = "Exceso de agua en el cultivo";
       colorMessageHumidity = "#e25555";
       break;
     case currentHumidityPlantation == 100:
