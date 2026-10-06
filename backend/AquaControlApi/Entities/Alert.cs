@@ -76,7 +76,7 @@ namespace Entities
 
         public Alert() { }
 
-        public Alert(int id, string title, string message, string type, List<UserOfAlert> usersOfAlert, Device device, DateTime dateTimeAlert)
+        public Alert(int id, string title, string message, string type, List<UserOfAlert> usersOfAlert, Device device, DateTime? dateTimeAlert)
         {
             Id = id;
             Title = title?.Trim();

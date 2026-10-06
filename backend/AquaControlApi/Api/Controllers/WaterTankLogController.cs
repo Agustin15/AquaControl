@@ -13,7 +13,6 @@ namespace Api.Controllers
     public class WaterTankLogController : ControllerBase
     {
         [Authorize(AuthenticationSchemes = "Esp32Bearer", Policy = "HasDevice")]
-        [ValidateModelFilter]
         [HttpPost]
         [Route("api/waterTankLog/")]
         public async Task<ActionResult> Add([FromBody] WaterTankLog waterTankLog)
@@ -25,6 +24,14 @@ namespace Api.Controllers
 
                 if (idDevice != waterTankLog.Tank.Device.Id)
                     return StatusCode(403, new { message = "No tiene acceso al dispositivo de riego donde desea agregar el monitoreo de nivel de agua del tanque" });
+
+                Device device = await new Ldevice().GetDeviceById(waterTankLog.Tank.Device.Id);
+                waterTankLog.Tank.Device = device;
+
+                ModelState.Clear();
+
+                if (TryValidateModel(waterTankLog) == false)
+                    return StatusCode(400, new { message = ModelState.Values.SelectMany(x => x.Errors).ToList().First().ErrorMessage });
 
                 await new LwaterTankLog().Add(waterTankLog);
 

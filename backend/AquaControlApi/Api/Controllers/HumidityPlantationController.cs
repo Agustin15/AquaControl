@@ -15,7 +15,6 @@ namespace Api.Controllers
     public class HumidityPlantationLogController : ControllerBase
     {
         [Authorize(AuthenticationSchemes = "Esp32Bearer", Policy = "HasDevice")]
-        [ValidateModelFilter]
         [HttpPost]
         [Route("api/humidityPlantationLog")]
         public async Task<ActionResult> Add([FromBody] HumidityPlantationLog humidityPlantationLog)
@@ -27,6 +26,15 @@ namespace Api.Controllers
 
                 if (idDevice != humidityPlantationLog.Plantation.Device.Id)
                     return StatusCode(403, new { message = "No tiene acceso al dispositivo de riego donde desea agregar el monitoreo de humedad" });
+
+                Device device = await new Ldevice().GetDeviceById(humidityPlantationLog.Plantation.Device.Id);
+                humidityPlantationLog.Plantation.Device = device;
+
+                ModelState.Clear();
+
+                if (TryValidateModel(humidityPlantationLog) == false)
+                    return StatusCode(400, new { message = ModelState.Values.SelectMany(x => x.Errors).ToList().First().ErrorMessage });
+
 
                 await new LhumidityPlantationLog().Add(humidityPlantationLog);
                 return StatusCode(201, true);

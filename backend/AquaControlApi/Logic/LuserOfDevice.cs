@@ -31,6 +31,12 @@ namespace Logic
 
         }
 
+        public async Task<List<UserOfDevice>> UsersOfDevice(string idDevice)
+        {
+            return await new PuserOfDevice().UsersOfDevice(idDevice);
+
+        }
+
 
     }
 }

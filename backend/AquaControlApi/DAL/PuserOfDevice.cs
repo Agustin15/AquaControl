@@ -117,7 +117,7 @@ namespace DAL
 
         }
 
-        internal async Task<List<UserOfDevice>> UsersOfDevice(string idDevice)
+        public async Task<List<UserOfDevice>> UsersOfDevice(string idDevice)
         {
 
             List<UserOfDevice> usersOfDevice = new List<UserOfDevice>();

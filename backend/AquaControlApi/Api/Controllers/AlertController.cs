@@ -4,6 +4,7 @@ using Entities;
 using Logic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,8 +31,8 @@ namespace Api.Controllers
             _httpClientFactory = httpClientFactory;
         }
 
-        [Authorize(AuthenticationSchemes = "Esp32Bearer", Policy = "HasDevice")]
-        [ValidateModelFilter]
+
+        [Authorize(AuthenticationSchemes = "Esp32Bearer", Roles = "Administrador,Cliente,Operador,Lector", Policy = ("HasDevice"))]
         [HttpPost]
         [Route("api/alert")]
         public async Task<ActionResult> Add([FromBody] Alert alert)
@@ -45,28 +46,44 @@ namespace Api.Controllers
                 if (idDevice != alert.Device.Id)
                     return StatusCode(403, new { message = "No tiene acceso al dispositivo de riego de donde desea enviar la alerta" });
 
-                List<UserDeviceToken> usersDevicesTokens = new List<UserDeviceToken>();
+
+                alert.Device = await new Ldevice().GetDeviceById(alert.Device.Id);
+                alert.UsersOfAlert = new List<UserOfAlert>();
+
+                List<UserOfDevice> usersOfDevice = await new LuserOfDevice().UsersOfDevice(alert.Device.Id);
+
+                List<UserDeviceToken> usersAndHisMobileTokens = new List<UserDeviceToken>();
                 List<UserDeviceToken> userDevicesTokens = new List<UserDeviceToken>();
 
-                foreach (UserOfAlert userOfAlert in alert.UsersOfAlert)
+                foreach (UserOfDevice userOfDevice in usersOfDevice)
                 {
-                    userOfAlert.Seen = false;
-                    userDevicesTokens = await new LuserDeviceToken().GetUserDevicesTokensByIdUser(userOfAlert.User.Id);
+                    userDevicesTokens = await new LuserDeviceToken().GetUserDevicesTokensByIdUser(userOfDevice.User.Id);
 
-                    foreach (UserDeviceToken userDeviceToken in userDevicesTokens)
+                    if (userDevicesTokens.Count > 0)
                     {
-                        usersDevicesTokens.Add(userDeviceToken);
-                    }
+                        UserOfAlert userOfAlert = new UserOfAlert
+                        {
+                            User = userOfDevice.User,
+                            Seen = false,
+                        };
+                        alert.UsersOfAlert.Add(userOfAlert);
 
+                        userDevicesTokens.ForEach(userDeviceToken => usersAndHisMobileTokens.Add(userDeviceToken));
+                    }
                 }
 
+                ModelState.Clear();
 
-                if (usersDevicesTokens.Count == 0)
+                if (TryValidateModel(alert)==false)
+                    return StatusCode(400, new { message = ModelState.Values.SelectMany(x => x.Errors).ToList().First().ErrorMessage });
+
+
+                if (usersAndHisMobileTokens.Count == 0)
                     throw new Exception("No se encontraron tokens de dispositivos de usuarios para enviar notificaciones");
 
                 string fcmEnpointApi = Environment.GetEnvironmentVariable("FCM_ENDPOINT_API");
 
-                if (String.IsNullOrEmpty(fcmEnpointApi)) throw new Exception("FCM_ENDPOINT_API no declarado");
+                if (string.IsNullOrEmpty(fcmEnpointApi)) throw new Exception("FCM_ENDPOINT_API no declarado");
 
                 idAlertGenerated = await new Lalert().Add(alert);
 
@@ -74,13 +91,13 @@ namespace Api.Controllers
 
                 var client = _httpClientFactory.CreateClient();
 
-                foreach (UserDeviceToken userDeviceToken in usersDevicesTokens)
+                foreach (UserDeviceToken userAndHisMobileToken in usersAndHisMobileTokens)
                 {
                     var notification = new
                     {
                         message = new
                         {
-                            token = userDeviceToken.Token,
+                            token = userAndHisMobileToken.Token,
                             notification = new { title = alert.Title, body = alert.Message },
                             data = new { idAlert = idAlertGenerated.ToString(), alertType = alert.Type?.ToString() }
                         }
@@ -109,7 +126,10 @@ namespace Api.Controllers
                     await new Lalert().Delete(alert);
                 }
 
-                return StatusCode(500, new { message = ex.Message });
+                return StatusCode(500, new
+                {
+                    message = ex.Message
+                });
 
             }
         }
@@ -140,7 +160,7 @@ namespace Api.Controllers
                 List<Alert> alertsOffset = await new Lalert().GetAlertsOffsetByDevice(offset, idDevice, idUser);
 
                 if (alertsOffset.Count == 0)
-                    throw new Exception("No se encontraron alertas en este dispositivo de riego");
+                    throw new Exception("No se encontraron alertas");
 
                 var result = new { pages = pages, alerts = alertsOffset };
 

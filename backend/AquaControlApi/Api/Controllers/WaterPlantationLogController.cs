@@ -21,7 +21,6 @@ namespace Api.Controllers
     {
 
         [Authorize(AuthenticationSchemes = "Esp32Bearer", Policy = "HasDevice")]
-        [ValidateModelFilter]
         [HttpPost]
         [Route("api/waterPlantationLog")]
         public async Task<ActionResult> Add([FromBody] WaterPlantationLog waterPlantationLog)
@@ -33,6 +32,16 @@ namespace Api.Controllers
 
                 if (idDevice != waterPlantationLog.Plantation.Device.Id || idDevice != waterPlantationLog.Tank.Device.Id)
                     return StatusCode(403, new { message = "No tiene acceso al dispositivo de riego donde desea agregar el registro de riego" });
+
+                Device device = await new Ldevice().GetDeviceById(waterPlantationLog.Plantation.Device.Id);
+                waterPlantationLog.Plantation.Device = device;
+                waterPlantationLog.Tank.Device = device;
+
+                ModelState.Clear();
+
+                if (TryValidateModel(waterPlantationLog) == false)
+                    return StatusCode(400, new { message = ModelState.Values.SelectMany(x => x.Errors).ToList().First().ErrorMessage });
+
 
                 int idGenerated = await new LwaterPlantationLog().Add(waterPlantationLog);
 
@@ -46,7 +55,6 @@ namespace Api.Controllers
         }
 
         [Authorize(AuthenticationSchemes = "Esp32Bearer", Policy = "HasDevice")]
-        [ValidateModelFilter]
         [HttpPut("api/waterPlantationLog")]
         public async Task<ActionResult> UpdateStateWaterPlantationLog([FromBody] WaterPlantationLog waterPlantationLog)
         {
@@ -57,6 +65,16 @@ namespace Api.Controllers
 
                 if (idDevice != waterPlantationLog.Plantation.Device.Id || idDevice != waterPlantationLog.Tank.Device.Id)
                     return StatusCode(403, new { message = "No tiene acceso al dispositivo de riego donde desea actualizar el registro de riego" });
+
+                Device device = await new Ldevice().GetDeviceById(waterPlantationLog.Plantation.Device.Id);
+                waterPlantationLog.Plantation.Device = device;
+                waterPlantationLog.Tank.Device = device;
+
+
+                ModelState.Clear();
+
+                if (TryValidateModel(waterPlantationLog) == false)
+                    return StatusCode(400, new { message = ModelState.Values.SelectMany(x => x.Errors).ToList().First().ErrorMessage });
 
                 await new LwaterPlantationLog().UpdateWaterPlantationLogFinished(waterPlantationLog);
 
