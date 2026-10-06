@@ -126,6 +126,7 @@ PRIMARY KEY(idAlert,idUser)
 
 GO
 
+
 CREATE OR ALTER  VIEW Entities AS
 select idUser as code,username as entity,email as correspondence,password as entityKey,role as responsability,joined as created from Users;
 
@@ -846,7 +847,7 @@ CREATE OR ALTER PROCEDURE AlertsByUserAndDeviceOffset @offset INT,@codePlaque VA
 BEGIN
 
 select N.* from Notifications_Entities NE INNER JOIN Notifications N ON N.code=NE.codeNotification 
-where NE.codeEntity=@codeEntity and N.idPlaque=@codePlaque ORDER BY momentAlert DESC OFFSET @offset ROWS FETCH NEXT 10 ROWS ONLY;
+where NE.codeEntity=@codeEntity and N.idPlaque=@codePlaque ORDER BY momentAlert DESC OFFSET @offset ROWS FETCH NEXT 5 ROWS ONLY;
    
 END
 GO
