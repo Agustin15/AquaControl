@@ -24,7 +24,6 @@ namespace DAL
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@placeName", device.PlaceName);
                 command.Parameters.AddWithValue("@linked", device.Linked);
-                command.Parameters.AddWithValue("@location", device.Location);
 
                 SqlParameter parameterIdGenerated = new SqlParameter();
                 parameterIdGenerated.Direction = ParameterDirection.ReturnValue;
@@ -69,7 +68,6 @@ namespace DAL
                 SqlCommand command = new SqlCommand("UpdateDevice", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@placeName", device.PlaceName);
-                command.Parameters.AddWithValue("@location", device.Location);
                 command.Parameters.AddWithValue("@linked", device.Linked);
                 command.Parameters.AddWithValue("@idDevice", device.Id);
 
@@ -146,7 +144,6 @@ namespace DAL
                     await reader.ReadAsync();
 
                     device = new Device(Convert.ToString(reader["codePlaque"]), Convert.ToString(reader["place"]),
-                           reader["geography"] is DBNull ? null : Convert.ToString(reader["geography"]),
                            (bool)reader["configured"], usersOfDevice, Convert.ToDateTime(reader["inserted"]));
 
                 }

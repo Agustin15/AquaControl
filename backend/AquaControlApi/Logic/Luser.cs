@@ -100,14 +100,9 @@ namespace Logic
             if (!match) throw new Exception("Usuario o contraseña incorrectas");
 
             //creacion del token de acceso y de actualizacion
-            List<Device> devices = await new Ldevice().GetDevicesByIdUser(userFound.Id);
-            string roleInDevice = "";
-
-            if (devices.Count > 0 && devices.Exists(device => device.UsersOfDevice.Exists(ud => ud.User.Id == userFound.Id && ud.Role == "Operador")))
-                roleInDevice = "Operador";
-
-            string jwtAccessTokenSerialized = authentication.GenerateAccessJWTtoken(userFound, roleInDevice: roleInDevice);
-            string jwtRefreshTokenSerialized = authentication.GenerateRefreshJWTtoken(userFound, roleInDevice: roleInDevice);
+   
+            string jwtAccessTokenSerialized = authentication.GenerateAccessJWTtoken(userFound);
+            string jwtRefreshTokenSerialized = authentication.GenerateRefreshJWTtoken(userFound);
 
             return new
             {

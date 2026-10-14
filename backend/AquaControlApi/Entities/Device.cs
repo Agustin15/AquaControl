@@ -13,7 +13,6 @@ namespace Entities
     {
         string id;
         string placeName;
-        string location;
         bool linked = false;
         List<UserOfDevice> usersOfDevice;
         DateTime? created;
@@ -31,15 +30,6 @@ namespace Entities
         {
             set { placeName = value; }
             get { return placeName; ; }
-        }
-
-
-        [Required(ErrorMessage = "Debe indicar una ubicacion")]
-        [RegularExpression(@"^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+,\s*[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$", ErrorMessage = "Formato de ubicacion incorrecto")]
-        public string Location
-        {
-            set { location = value; }
-            get { return location; }
         }
 
         [Required(ErrorMessage = "Debe indicar si el dispositivo se ha configurado o no")]
@@ -64,12 +54,11 @@ namespace Entities
 
         public Device() { }
 
-        public Device(string id, string placeName, string location,bool linked, List<UserOfDevice> usersOfDevice, DateTime created)
+        public Device(string id, string placeName, bool linked, List<UserOfDevice> usersOfDevice, DateTime created)
         {
 
             Id = id;
             PlaceName = placeName?.Trim();
-            Location = location?.Trim();
             Linked = linked;
             UsersOfDevice = usersOfDevice;
             Created = created;
