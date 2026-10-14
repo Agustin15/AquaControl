@@ -55,7 +55,7 @@ EXEC AddCropType 'Tulipán','https://res.cloudinary.com/prw3eivq/image/upload/v17
 
 --------------------------------------------------Devices---------------------------------------------------------- 
 
-EXEC AddDevice 'ESP32-00001','Hogar' ,'Montevideo,Uruguay' 
+EXEC AddDevice 'ESP32-00001','Hogar'
 
 EXEC AddUserDevice 1,'ESP32-00001','Operador'
 

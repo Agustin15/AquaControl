@@ -15,11 +15,9 @@ joined DATETIME NOT NULL DEFAULT GETDATE()
 CREATE TABLE Devices(
 idDevice VARCHAR(25) PRIMARY KEY,
 placeName VARCHAR(15) NOT NULL,
-location VARCHAR(25) CHECK(location NOT LIKE '%[^A-Z,]%' and location LIKE '%,%'),
 linked BIT NOT NULL,
 created DATETIME NOT NULL DEFAULT GETDATE(),
 )
-
 
 CREATE TABLE Users_Devices(
 idDevice VARCHAR(25) FOREIGN KEY REFERENCES Devices(idDevice) ON DELETE CASCADE,
@@ -77,6 +75,7 @@ idDevice VARCHAR(25) NOT NULL,
 FOREIGN KEY (idPlantation,idDevice) REFERENCES Plantations(id,idDevice) ON DELETE CASCADE,
 )
 
+
 CREATE TABLE WaterPlantationLogs(
 id INT IDENTITY(1,1) PRIMARY KEY,
 datetimeStart DATETIME NOT NULL DEFAULT GETDATE(),
@@ -133,7 +132,7 @@ select idUser as code,username as entity,email as correspondence,password as ent
 GO
 
 CREATE OR ALTER  VIEW Plaques AS
-select idDevice as codePlaque, placeName as place,location as geography,linked as configured,created as inserted from Devices;
+select idDevice as codePlaque, placeName as place,linked as configured,created as inserted from Devices;
 
 GO
 
@@ -262,11 +261,11 @@ GO
 
   
 ------------------------------------------------------------Devices--------------------------------------------------------------
-CREATE OR ALTER PROCEDURE AddDevice @idDevice VARCHAR(25), @placeName VARCHAR(15),@location VARCHAR(35) AS
+CREATE OR ALTER PROCEDURE AddDevice @idDevice VARCHAR(25), @placeName VARCHAR(15) AS
 BEGIN
 
 BEGIN TRY 
-INSERT INTO Devices(idDevice,placeName,location) Values(@idDevice,@placeName,@location)
+INSERT INTO Devices(idDevice,placeName) Values(@idDevice,@placeName)
 
 RETURN IDENT_CURRENT('Devices')
 
@@ -303,12 +302,12 @@ END
 
 GO
 
-CREATE OR ALTER PROCEDURE UpdateDevice @placeName VARCHAR(15),@location VARCHAR(35),@idDevice VARCHAR(25),@linked BIT AS
+CREATE OR ALTER PROCEDURE UpdateDevice @placeName VARCHAR(15),@idDevice VARCHAR(25),@linked BIT AS
 BEGIN
 
 BEGIN TRY
 
-UPDATE Devices set placeName=@placeName,location=@location,linked=@linked where idDevice=@idDevice 
+UPDATE Devices set placeName=@placeName,linked=@linked where idDevice=@idDevice 
 END TRY
 
 BEGIN CATCH
@@ -335,6 +334,7 @@ CREATE OR ALTER PROCEDURE AddUserDevice @idUser INT,@idDevice VARCHAR(25),@role 
 BEGIN
 
 BEGIN TRY 
+
 INSERT INTO Users_Devices(idUser,idDevice,role) Values(@idUser,@idDevice,@role)
 END TRY
 
@@ -662,7 +662,7 @@ END
 
 GO
 
-CREATE OR ALTER PROCEDURE HumidityPlantationLogsLastWeek @idLand INT,@codePlaque INT AS
+CREATE OR ALTER PROCEDURE HumidityPlantationLogsLastWeek @idLand INT,@codePlaque VARCHAR(25)AS
 BEGIN
 
 DECLARE @dateStartWeek DATETIME 
@@ -997,19 +997,13 @@ GO
 CREATE OR ALTER TRIGGER ValidAddDevice ON Devices INSTEAD OF INSERT AS
 BEGIN
 
-IF NOT EXISTS(select * from inserted where location NOT LIKE '%[^A-Z,]%' and location LIKE '%,%' )
-BEGIN
-RAISERROR('Formato de ubicacion incorrecto',16,1)
-RETURN
-END 
-
 IF EXISTS(select * from Devices where idDevice=(select idDevice from inserted))
 BEGIN
 RAISERROR('Dispositivo de riego con este ID ya existente',16,1)
 RETURN
 END 
 
-INSERT INTO Devices(idDevice,placeName,location,linked) select idDevice,placeName,location,linked from inserted
+INSERT INTO Devices(idDevice,placeName,linked) select idDevice,placeName,linked from inserted
 
 END
 
@@ -1018,13 +1012,7 @@ GO
 CREATE OR ALTER TRIGGER ValidUpdateDevice ON Devices INSTEAD OF UPDATE AS
 BEGIN
 
-IF NOT EXISTS(select * from inserted where location NOT LIKE '%[^A-Z,]%' and location LIKE '%,%' )
-BEGIN
-RAISERROR('Formato de ubicacion incorrecto',16,1)
-RETURN
-END 
-
-UPDATE Devices SET placeName=(select placeName from inserted),location=(select location from inserted),linked=(select linked from inserted)
+UPDATE Devices SET placeName=(select placeName from inserted),linked=(select linked from inserted)
 where idDevice=(select idDevice from inserted)
 
 END
@@ -1041,7 +1029,6 @@ BEGIN
 RAISERROR('Rol no valido',16,1)
 RETURN
 END 
-
 
 IF NOT EXISTS(select * From Devices where idDevice=(select idDevice from inserted))
 BEGIN
@@ -1680,3 +1667,10 @@ BEGIN
     END
 END
 GO
+
+
+---------------------------------------------------------------Indices--------------------------------------------------------------
+CREATE NONCLUSTERED INDEX IX_HumidityPlantationLogs ON HumidityPlantationLogs(idPlantation,idDevice)
+CREATE NONCLUSTERED INDEX IX_WaterTankLogs ON WaterTankLogs(idTank,idDevice)
+CREATE NONCLUSTERED INDEX IX_WaterPlantationLogs ON WaterPlantationLogs(idTank,idPlantation,idDevice)
+CREATE NONCLUSTERED INDEX IX_UserDevicesTokens ON UserDevicesTokens(idUser)
