@@ -1,7 +1,7 @@
 import styles from "./DeviceIrrigation.module.css";
 import iconDevice from "../../assets/img/device.png";
 import { useState } from "react";
-import { useDevice } from "../../contexts/DeviceContext";
+import { useDevice } from "../../contexts/deviceContext/DeviceContext";
 import { useNavigate } from "react-router";
 import { useWeather } from "../../contexts/WeatherContext";
 import { LogsWeekdayProvider } from "../../contexts/LogsWeekdayContext";
@@ -20,7 +20,7 @@ import { Notification } from "./notification/Notification";
 import { Alerts } from "./alerts/Alerts";
 
 export const DeviceIrrigation = () => {
-  const [optionSelected, setOptionSelected] = useState("Alerts");
+  const [optionSelected, setOptionSelected] = useState("WaterTankLogs");
   const { deviceSelected } = useDevice();
   const { currentWeather } = useWeather();
 

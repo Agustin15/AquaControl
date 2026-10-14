@@ -2,7 +2,7 @@ import styles from "./Users.module.css";
 import iconNoUsers from "../../../../assets/img/noUsers.png";
 import iconAdd from "../../../../assets/img/add.png";
 import { useUserDevice } from "../../../../contexts/UsersDeviceContext";
-import { useDevice } from "../../../../contexts/DeviceContext";
+import { useDevice } from "../../../../contexts/deviceContext/DeviceContext";
 import { createPortal } from "react-dom";
 import { Modal } from "../../../modal/Modal";
 import { Info } from "./info/Info";

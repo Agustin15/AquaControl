@@ -2,19 +2,19 @@ import styles from "./List.module.css";
 import iconMore from "../../../assets/img/more.png";
 import iconDevice from "../../../assets/img/device.png";
 import { useState } from "react";
-import { useDevice } from "../../../contexts/DeviceContext";
+import { useOptionsDevice } from "../../../contexts/deviceContext/OptionsDeviceContext";
+import { useDevice } from "../../../contexts/deviceContext/DeviceContext";
 import { useNavigate } from "react-router";
 import { Info } from "../info/Info";
 import { Modal } from "../../modal/Modal";
 import { createPortal } from "react-dom";
 import { Options } from "./Options";
-import { AddDevice } from "../addDevice/AddDevice";
 import { EditDevice } from "../editDevice/EditDevice";
 
 export const List = () => {
-  const { devices, fetchSelectDevice } = useDevice();
+  const { devices } = useDevice();
+  const { fetchSelectDevice } = useOptionsDevice();
   const [showOption, setShowOption] = useState(false);
-  const [deviceToLink, setDeviceToLink] = useState(null);
   const [infoDevice, setInfoDevice] = useState(null);
   const [editDevice, setEditDevice] = useState(null);
   let navigate = useNavigate();
@@ -41,7 +41,6 @@ export const List = () => {
             {showOption && (
               <Options
                 device={device}
-                setDeviceToLink={setDeviceToLink}
                 setEditDevice={setEditDevice}
                 setInfoDevice={setInfoDevice}
               />
@@ -64,16 +63,6 @@ export const List = () => {
         createPortal(
           <Modal>
             <Info infoDevice={infoDevice} setInfoDevice={setInfoDevice} />
-          </Modal>,
-          document.getElementById("containDevices"),
-        )}
-      {deviceToLink &&
-        createPortal(
-          <Modal>
-            <AddDevice
-              deviceToLink={deviceToLink}
-              setDeviceToLink={setDeviceToLink}
-            />
           </Modal>,
           document.getElementById("containDevices"),
         )}

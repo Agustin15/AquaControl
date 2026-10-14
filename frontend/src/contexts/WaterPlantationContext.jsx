@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { getAuthTokenSaved } from "../securityStorage.js";
 import { useAuth } from "./AuthContext.jsx";
-import { useDevice } from "./DeviceContext.jsx";
+import { useDevice } from "./deviceContext/DeviceContext.jsx";
 import { useTank } from "./tankContext/TankContext.jsx";
 import { usePlantation } from "./plantationContext/PlantationContext.jsx";
 import { useMqtt } from "./MqttContext.jsx";

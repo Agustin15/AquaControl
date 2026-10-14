@@ -4,7 +4,7 @@ import iconNoPlantations from "../../../assets/img/noPlantations.png";
 import { useEffect } from "react";
 import { useWeekdayLogs } from "../../../contexts/LogsWeekdayContext";
 import { usePlantation } from "../../../contexts/plantationContext/PlantationContext";
-import { useDevice } from "../../../contexts/DeviceContext";
+import { useDevice } from "../../../contexts/deviceContext/DeviceContext";
 import { LogsWeekday } from "./logsWeekday/LogsWeekday";
 
 export const HumidityPlantationLogs = () => {

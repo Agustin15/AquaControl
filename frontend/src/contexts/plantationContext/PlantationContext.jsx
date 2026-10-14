@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { useDevice } from "../DeviceContext.jsx";
+import { useDevice } from "../deviceContext/DeviceContext.jsx";
 import { useAuth } from "../AuthContext.jsx";
 import { useMqtt } from "../MqttContext.jsx";
 import { getAuthTokenSaved } from "../../securityStorage.js";

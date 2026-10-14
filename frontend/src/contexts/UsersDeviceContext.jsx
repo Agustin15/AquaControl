@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { getAuthTokenSaved, saveInfo } from "../securityStorage.js";
 import { useAuth } from "./AuthContext.jsx";
-import { useDevice } from "./DeviceContext.jsx";
+import { useDevice } from "./deviceContext/DeviceContext.jsx";
 import { alertError, alertSuccess } from "../components/alertSwal/alertSwal.js";
 
 const localhostBackend = import.meta.env.VITE_BACKEND_LOCALHOST;

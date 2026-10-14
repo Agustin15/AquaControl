@@ -7,6 +7,7 @@
     justify-content: start;
     gap: 1.5rem;
     flex-wrap: wrap;
+    overflow-y: scroll;
 
 }
 

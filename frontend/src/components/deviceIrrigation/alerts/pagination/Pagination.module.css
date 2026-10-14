@@ -9,4 +9,9 @@
 .pagination input {
     width: 1.8rem;
     height: 1.4rem;
+    background: #275a8e;
+    color: white;
+    border: 1px solid white;
+    border-radius: 3px;
+
 }

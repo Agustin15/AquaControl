@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useMqtt } from "../contexts/MqttContext";
-import { useDevice } from "./DeviceContext";
+import { useDevice } from "./deviceContext/DeviceContext";
 
 const WeatherContext = createContext();
 

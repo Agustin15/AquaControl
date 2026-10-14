@@ -3,7 +3,7 @@ import iconLogo from "../../assets/img/logo.png";
 import iconAvatar from "../../assets/img/avatar.png";
 import iconNoDevices from "../../assets/img/noDevices.png";
 import iconRefresh from "../../assets/img/refresh.png";
-import { useDevice } from "../../contexts/DeviceContext";
+import { useDevice } from "../../contexts/deviceContext/DeviceContext";
 import { useAuth } from "../../contexts/AuthContext";
 import { useEffect, useState } from "react";
 import { List } from "./list/List.jsx";

@@ -4,7 +4,7 @@ import iconEdit from "../../../../../assets/img/edit.png";
 import iconInfo from "../../../../../assets/img/info.png";
 import iconReader from "../../../../../assets/img/comunUser.png";
 import iconOperator from "../../../../../assets/img/admin.png";
-import { useDevice } from "../../../../../contexts/DeviceContext";
+import { useDevice } from "../../../../../contexts/deviceContext/DeviceContext";
 import { useUserDevice } from "../../../../../contexts/UsersDeviceContext";
 
 export const List = () => {

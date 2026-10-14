@@ -8,7 +8,7 @@ import {
 } from "../../../../alertSwal/alertSwal";
 import { getAuthTokenSaved } from "../../../../../securityStorage.js";
 import { useEffect } from "react";
-import { useDevice } from "../../../../../contexts/DeviceContext";
+import { useDevice } from "../../../../../contexts/deviceContext/DeviceContext";
 import { useAuth } from "../../../../../contexts/AuthContext";
 
 export const DeleteUser = ({ deleteUser, setDeleteUser }) => {

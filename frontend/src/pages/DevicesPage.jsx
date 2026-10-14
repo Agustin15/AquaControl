@@ -1,10 +1,13 @@
 import { Devices } from "../components/devices/Devices";
-import { DeviceProvider } from "../contexts/DeviceContext";
+import { DeviceProvider } from "../contexts/deviceContext/DeviceContext";
+import { OptionsDeviceProvider } from "../contexts/deviceContext/OptionsDeviceContext";
 
 export const DevicesPage = () => {
   return (
     <DeviceProvider>
-      <Devices />
+      <OptionsDeviceProvider>
+        <Devices />
+      </OptionsDeviceProvider>
     </DeviceProvider>
   );
 };

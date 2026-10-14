@@ -5,7 +5,7 @@ import { LoadingScreenPage } from "./pages/LoadingScreenPage";
 import { DevicesPage } from "./pages/DevicesPage";
 import { DeviceIrrigationPage } from "./pages/DeviceIrrigationPage";
 import { useAuth } from "./contexts/AuthContext";
-import { DeviceProvider } from "./contexts/DeviceContext";
+import { DeviceProvider } from "./contexts/deviceContext/DeviceContext";
 export const App = () => {
   const { userAuth, loadingAuth } = useAuth();
 

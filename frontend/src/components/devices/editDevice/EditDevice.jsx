@@ -1,16 +1,15 @@
 import iconEdit from "../../../assets/img/edit.png";
 import styles from "./EditDevice.module.css";
 import { useState } from "react";
-import { useAuth } from "../../../contexts/AuthContext.jsx";
-import { useDevice } from "../../../contexts/DeviceContext.jsx";
-import { fetchUpdateDevice } from "./functions.js";
+import { useDevice } from "../../../contexts/deviceContext/DeviceContext.jsx";
+import { useOptionsDevice } from "../../../contexts/deviceContext/OptionsDeviceContext";
+import { alertSuccess } from "../../alertSwal/alertSwal.js";
 
 export const EditDevice = ({ editDevice, setEditDevice }) => {
   const [placeName, setPlacename] = useState(editDevice.placeName);
   const [error, setError] = useState("");
-  const { updateAccessToken } = useAuth();
+  const { fetchUpdateDevice, loadingForm } = useOptionsDevice();
   const { getUserDevices } = useDevice();
-  const [loadingForm, setLoadingForm] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -20,14 +19,13 @@ export const EditDevice = ({ editDevice, setEditDevice }) => {
       setError("Nombre de dispositivo puede estar vacio");
       return;
     }
-    setLoadingForm(true);
-    const result = await fetchUpdateDevice(
-      { ...editDevice, placeName: placeName },
-      updateAccessToken,
-      true,
-    );
-    if (result) await getUserDevices();
-    setLoadingForm(false);
+    const result = await fetchUpdateDevice(editDevice, true);
+
+    if (result) {
+      alertSuccess("Nombre de dispositivo actualizado correctamente");
+      await getUserDevices();
+    }
+    return;
   };
 
   return (

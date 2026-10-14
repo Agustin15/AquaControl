@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { useTank } from "../../../contexts/tankContext/TankContext";
 import { LogsWeekday } from "./logsWeekday/LogsWeekday";
 import { useWeekdayLogs } from "../../../contexts/LogsWeekdayContext";
-import { useDevice } from "../../../contexts/DeviceContext";
+import { useDevice } from "../../../contexts/deviceContext/DeviceContext";
 
 export const WaterTankLogs = () => {
   const {
