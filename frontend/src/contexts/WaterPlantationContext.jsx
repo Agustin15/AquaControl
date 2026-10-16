@@ -2,10 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { getAuthTokenSaved } from "../securityStorage.js";
 import { useAuth } from "./AuthContext.jsx";
 import { useDevice } from "./deviceContext/DeviceContext.jsx";
-import { useTank } from "./tankContext/TankContext.jsx";
-import { usePlantation } from "./plantationContext/PlantationContext.jsx";
 import { useMqtt } from "./MqttContext.jsx";
-import { alertWarning } from "../components/alertSwal/alertSwal.js";
 const localhostBackend = import.meta.env.VITE_BACKEND_LOCALHOST;
 
 const WaterPlantationContext = createContext();
@@ -16,27 +13,11 @@ export const WaterPlantationProvider = ({ children }) => {
   const [waterPlantationLogs, setWaterPlantationLogs] = useState([]);
   const [loadingLogs, setLoadingLogs] = useState(true);
   const [errorWaterPlantation, setErrorWaterPlantation] = useState(null);
-  const [waterPlantationInProgress, setWaterPlantationInProgress] =
-    useState(false);
   const [lastWaterPlantation, setLastWaterPlantation] = useState(null);
-  const { deviceSelected } = useDevice();
-  const { tankSelected } = useTank();
-  const { plantationSelected } = usePlantation();
-  const { updateAccessToken } = useAuth();
-  const { mqttClient } = useMqtt();
 
-  useEffect(() => {
-    if (!deviceSelected || !mqttClient.connected) return;
-    mqttClient.subscribe(
-      `device/${deviceSelected.id}/waterPlantation`,
-      { qos: 2 },
-      (error) => {
-        if (!error) {
-          getStateWaterPlantation();
-        }
-      },
-    );
-  }, [mqttClient.connected, deviceSelected]);
+  const { tankLiveSelected, plantationLiveSelected } = useMqtt();
+  const { deviceSelected } = useDevice();
+  const { updateAccessToken } = useAuth();
 
   const fetchGetLogs = async (idTank, idPlantation, offset, retry) => {
     setErrorWaterPlantation(null);
@@ -86,7 +67,7 @@ export const WaterPlantationProvider = ({ children }) => {
   const fetchGetLastWaterPlantation = async (retry) => {
     let url =
       localhostBackend +
-      `/api/waterPlantationLog/tank/${tankSelected.id}/plantation/${plantationSelected.id}` +
+      `/api/waterPlantationLog/tank/${tankLiveSelected.id}/plantation/${plantationLiveSelected.id}` +
       `/device/${deviceSelected.id}/lastWaterPlantationLog`;
 
     try {
@@ -114,60 +95,10 @@ export const WaterPlantationProvider = ({ children }) => {
       }
     } catch (error) {
       const errorMessage =
-        error?.message || "No se pudo obtener el estado de la última irrigación";
+        error?.message ||
+        "No se pudo obtener el estado de la última irrigación";
       setErrorWaterPlantation(errorMessage);
     }
-  };
-
-  const getStateWaterPlantation = async () => {
-    mqttClient.on("message", async (topic, message) => {
-      if (topic != `device/${deviceSelected.id}/waterPlantation`) return;
-      const { state } = JSON.parse(message.toString());
-
-      if (state == "En curso" && !waterPlantationInProgress) {
-        setWaterPlantationInProgress(true);
-      } else setWaterPlantationInProgress(false);
-
-      await fetchGetLastWaterPlantation();
-    });
-  };
-
-  const sendStartWaterPlantation = async () => {
-    const result = await mqttClient.publishAsync(
-      `device/${deviceSelected.id}/waterPlantation`,
-      JSON.stringify({
-        idPlantation: plantationSelected.id,
-        idTank: tankSelected.id,
-        state: "En curso",
-      }),
-      { qos: 2, retain: true },
-    );
-
-    if (!result)
-      return alertWarning(
-        "Ups,la conexion con el sistema de riego no se pudo establecer",
-      );
-
-    setWaterPlantationInProgress(true);
-  };
-
-  const sendStopWaterPlantation = async () => {
-    const result = await mqttClient.publishAsync(
-      `device/${deviceSelected.id}/waterPlantation`,
-      JSON.stringify({
-        idPlantation: plantationSelected.id,
-        idTank: tankSelected.id,
-        state: "Interrumpido",
-      }),
-      { qos: 2, retain: true },
-    );
-
-    if (!result)
-      return alertWarning(
-        "Ups,la conexion con el sistema de riego no se pudo establecer",
-      );
-
-    setWaterPlantationInProgress(false);
   };
 
   return (
@@ -181,9 +112,6 @@ export const WaterPlantationProvider = ({ children }) => {
         pages,
         setIndex,
         index,
-        sendStartWaterPlantation,
-        sendStopWaterPlantation,
-        waterPlantationInProgress,
         fetchGetLastWaterPlantation,
         lastWaterPlantation,
       }}

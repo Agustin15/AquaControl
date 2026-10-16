@@ -3,10 +3,20 @@ import iconConnected from "../../../assets/img/connected.png";
 import iconNoConnected from "../../../assets/img/noConnected.png";
 import { useMqtt } from "../../../contexts/MqttContext";
 import { useState } from "react";
+import { Modal } from "../../modal/Modal";
+import { createPortal } from "react-dom";
 
 export const StateMqttConnection = () => {
-  const { mqttClient } = useMqtt();
+  const { reconnectToBroker, connected } = useMqtt();
   const [showState, setShowState] = useState(false);
+
+  const handleClick = () => {
+    if (connected) {
+      setShowState(false);
+    } else {
+      reconnectToBroker();
+    }
+  };
 
   return (
     <div className={styles.connectionMqtt}>
@@ -15,16 +25,27 @@ export const StateMqttConnection = () => {
       >
         <img
           className={styles.iconConnected}
-          src={mqttClient.connected == false ? iconNoConnected : iconConnected}
+          src={connected == false ? iconNoConnected : iconConnected}
         ></img>
       </button>
 
-      {showState && (
-        <div className={styles.stateAdvice}>
-          {mqttClient.connected ? "Conectado" : "Sin conexion"}
-          <img src={iconConnected}></img>
-        </div>
-      )}
+      {showState &&
+        createPortal(
+          <Modal>
+            <div className={styles.stateAdvice}>
+              <img src={iconConnected}></img>
+
+              {connected
+                ? "Conectado al servidor"
+                : "Sin conexion con el servidor"}
+
+              <button onClick={handleClick}>
+                {connected ? "Volver" : "Reconectar"}
+              </button>
+            </div>
+          </Modal>,
+          document.getElementById("contentBody"),
+        )}
     </div>
   );
 };

@@ -1,8 +1,8 @@
 import { LoadingScreenPage } from "./LoadingScreenPage";
 import { DeviceIrrigation } from "../components/deviceIrrigation/DeviceIrrigation";
 import { DevicesPage } from "./DevicesPage";
-import { WeatherProvider } from "../contexts/WeatherContext";
 import { useDevice } from "../contexts/deviceContext/DeviceContext";
+import { MqttProvider } from "../contexts/MqttContext";
 
 export const DeviceIrrigationPage = () => {
   const { deviceSelected, loadingDevice } = useDevice();
@@ -12,9 +12,9 @@ export const DeviceIrrigationPage = () => {
       {loadingDevice == true ? (
         <LoadingScreenPage />
       ) : deviceSelected ? (
-        <WeatherProvider>
+        <MqttProvider>
           <DeviceIrrigation />
-        </WeatherProvider>
+        </MqttProvider>
       ) : (
         <DevicesPage />
       )}

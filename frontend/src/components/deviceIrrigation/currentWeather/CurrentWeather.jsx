@@ -2,26 +2,28 @@ import styles from "./CurrentWeather.module.css";
 import iconTemperature from "../../../assets/img/temperatureWeather.png";
 import iconHumidity from "../../../assets/img/humidityIndicator.png";
 import iconNoWeather from "../../../assets/img/noWeather.png";
+import { useMqtt } from "../../../contexts/MqttContext";
 
-export const CurrentWeather = ({ currentWeather }) => {
+export const CurrentWeather = () => {
+  const { liveWeather } = useMqtt();
   return (
     <ul className={styles.currentWeather}>
-      <li className={currentWeather == null ? styles.noWeather : ""}>
+      <li className={liveWeather == null ? styles.noWeather : ""}>
         <img
-          className={currentWeather ? styles.iconSky : ""}
-          src={currentWeather ? `https:${currentWeather.icon}` : iconNoWeather}
+          className={liveWeather ? styles.iconSky : ""}
+          src={liveWeather ? `https:${liveWeather.icon}` : iconNoWeather}
         ></img>
 
-        {currentWeather ? (
+        {liveWeather ? (
           <div className={styles.column}>
             <div>
               <img src={iconTemperature}></img>
-              <span>{currentWeather.temperature}°</span>
+              <span>{liveWeather.temperature}°</span>
             </div>
 
             <div>
               <img src={iconHumidity}></img>
-              <span>{currentWeather.humidity}%</span>
+              <span>{liveWeather.humidity}%</span>
             </div>
           </div>
         ) : (

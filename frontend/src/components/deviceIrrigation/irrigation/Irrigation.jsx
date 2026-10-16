@@ -8,18 +8,21 @@ import { CurrentIrrigation } from "./currentIrrigation/CurrentIrrigation";
 import { Record } from "./record/Record";
 import { Menu } from "./menu/Menu";
 import { WaterPlantationProvider } from "../../../contexts/WaterPlantationContext";
+import { useMqtt } from "../../../contexts/MqttContext.jsx";
 
 export const Irrigation = () => {
   const [optionSelected, setOptionSelected] = useState("Irrigation");
   const [loadingInit, setLoadingInit] = useState(true);
+  const { getPlantations, errorPlantations, plantations } = usePlantation();
+  const { getTanks, errorTanks } = useTank();
+
   const {
-    getPlantations,
-    errorPlantations,
-    plantations,
-    plantationSelected,
-    setPlantationSelected,
-  } = usePlantation();
-  const { getTanks, errorTanks, setTankSelected } = useTank();
+    subscribeHumidityPlantation,
+    subscribeWaterTankLevel,
+    setTankLiveSelected,
+    setPlantationLiveSelected,
+    plantationLiveSelected,
+  } = useMqtt();
 
   useEffect(() => {
     loadInit();
@@ -31,8 +34,14 @@ export const Irrigation = () => {
       const tanks = await getTanks();
       const plantations = await getPlantations();
 
-      if (tanks) setTankSelected(plantations[0]);
-      if (plantations) setPlantationSelected(plantations[0]);
+      if (tanks) {
+        setTankLiveSelected(tanks[0]);
+        subscribeWaterTankLevel(tanks[0]);
+      }
+      if (plantations) {
+        setPlantationLiveSelected(plantations[0]);
+        subscribeHumidityPlantation(plantations[0]);
+      }
     } catch (error) {
     } finally {
       setLoadingInit(false);
@@ -60,37 +69,37 @@ export const Irrigation = () => {
         </div>
       )}
 
-      {!loadingInit &&
-        !errorPlantations &&
-        !errorTanks &&
-        plantationSelected && (
-          <div className={styles.option}>
-            <ul className={styles.crops}>
-              {plantations.map((plantation, index) => (
-                <li
-                  onClick={() => setPlantationSelected(plantation)}
-                  className={
-                    plantation.id == plantationSelected.id
-                      ? styles.selected
-                      : ""
-                  }
-                  key={index}
-                >
-                  <img src={plantation.cropType.image}></img>
-                </li>
-              ))}
-            </ul>
-            {optionSelected == "Irrigation" ? (
-              <WaterPlantationProvider>
-                <CurrentIrrigation />
-              </WaterPlantationProvider>
-            ) : (
-              <WaterPlantationProvider>
-                <Record />
-              </WaterPlantationProvider>
-            )}
-          </div>
-        )}
+      {!loadingInit && plantations && (
+        <div className={styles.option}>
+          <ul className={styles.crops}>
+            {plantations.map((plantation, index) => (
+              <li
+                onClick={() => {
+                  setPlantationLiveSelected(plantation);
+                  subscribeHumidityPlantation(plantations[0]);
+                }}
+                className={
+                  plantation.id == plantationLiveSelected.id
+                    ? styles.selected
+                    : ""
+                }
+                key={index}
+              >
+                <img src={plantation.cropType.image}></img>
+              </li>
+            ))}
+          </ul>
+          {optionSelected == "Irrigation" ? (
+            <WaterPlantationProvider>
+              <CurrentIrrigation />
+            </WaterPlantationProvider>
+          ) : (
+            <WaterPlantationProvider>
+              <Record />
+            </WaterPlantationProvider>
+          )}
+        </div>
+      )}
     </div>
   );
 };

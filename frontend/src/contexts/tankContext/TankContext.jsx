@@ -10,30 +10,13 @@ const TankContext = createContext();
 export const TankProvider = ({ children }) => {
   const [tankSelected, setTankSelected] = useState(null);
   const [tanks, setTanks] = useState([]);
-  const [currentLevelTank, setCurrentLevelTank] = useState(0);
   const [loadingTanks, setLoadingTanks] = useState(false);
   const [errorTanks, setErrorTanks] = useState();
   const [showFormAdd, setShowFormAdd] = useState(false);
   const [editTank, setEditTank] = useState(null);
   const [deleteTank, setDeleteTank] = useState(null);
-
-  const { mqttClient } = useMqtt();
   const { updateAccessToken } = useAuth();
   const { deviceSelected } = useDevice();
-
-  useEffect(() => {
-    if (!tankSelected || !mqttClient.connected) return;
-
-    mqttClient.subscribe(
-      `device/${deviceSelected.id}/tank/${tankSelected.id}/waterLevel`,
-      { qos: 0 },
-      (error) => {
-        if (!error) {
-          getLiveReloadWaterLevel();
-        }
-      },
-    );
-  }, [mqttClient.connected, tankSelected]);
 
   const fetchGet = async (url, retry) => {
     setErrorTanks();
@@ -48,7 +31,7 @@ export const TankProvider = ({ children }) => {
           Authorization: `Bearer ${accessToken}`,
         },
       });
-      
+
       const result = await response.json();
 
       if (!response.ok) {
@@ -79,20 +62,6 @@ export const TankProvider = ({ children }) => {
     return tanks;
   };
 
-  const getLiveReloadWaterLevel = () => {
-    mqttClient.on("message", (topic, message) => {
-      if (
-        topic !=
-        `device/${deviceSelected.id}/tank/${tankSelected.id}/waterLevel`
-      )
-        return;
-
-      const { waterLevel } = JSON.parse(message.toString());
-
-      setCurrentLevelTank(waterLevel);
-    });
-  };
-
   return (
     <TankContext.Provider
       value={{
@@ -106,8 +75,6 @@ export const TankProvider = ({ children }) => {
         setEditTank,
         deleteTank,
         setDeleteTank,
-        getLiveReloadWaterLevel,
-        currentLevelTank,
         tankSelected,
         setTankSelected,
       }}

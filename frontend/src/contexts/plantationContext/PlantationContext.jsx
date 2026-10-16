@@ -11,7 +11,6 @@ export const PlantationProvider = ({ children }) => {
   const [plantations, setPlantations] = useState([]);
   const [loadingPlantations, setLoadingPlantations] = useState(false);
   const [errorPlantations, setErrorPlantations] = useState();
-  const [currentHumidityPlantation, setCurrentHumidityPlantation] = useState(0);
   const [plantationSelected, setPlantationSelected] = useState(null);
   const [showFormAdd, setShowFormAdd] = useState(false);
   const [infoPlantation, setInfoPlantation] = useState(null);
@@ -24,20 +23,6 @@ export const PlantationProvider = ({ children }) => {
   const { mqttClient } = useMqtt();
   const { updateAccessToken } = useAuth();
   const { deviceSelected } = useDevice();
-
-  useEffect(() => {
-    if (!plantationSelected || !mqttClient.connected) return;
-
-    mqttClient.subscribe(
-      `device/${deviceSelected.id}/plantation/${plantationSelected.id}/humidity`,
-      { qos: 0 },
-      (error) => {
-        if (!error) {
-          getLiveReloadHumidityPlantation();
-        }
-      },
-    );
-  }, [mqttClient.connected, plantationSelected]);
 
   const fetchGet = async (url, retry) => {
     setErrorPlantations();
@@ -144,8 +129,6 @@ export const PlantationProvider = ({ children }) => {
         setInfoPlantation,
         deletePlantation,
         setDeletePlantation,
-        getLiveReloadHumidityPlantation,
-        currentHumidityPlantation,
         plantationSelected,
         setPlantationSelected,
       }}

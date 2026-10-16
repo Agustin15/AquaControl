@@ -1,6 +1,4 @@
 import styles from "./CurrentIrrigation.module.css";
-import { usePlantation } from "../../../../contexts/plantationContext/PlantationContext";
-import { useTank } from "../../../../contexts/tankContext/TankContext";
 import { HumidityPlantation } from "./humidityPlantation/HumidityPlantation";
 import { WaterTank } from "./waterTank/WaterTank";
 import { DrawingLevelTank } from "../../drawingLevelTank/DrawingLevelTank.jsx";
@@ -10,10 +8,14 @@ import {
   getCustomsToHumidityAccordigMeasure,
   getCustomsToTankAccordigMeasure,
 } from "./function.js";
+import { useMqtt } from "../../../../contexts/MqttContext.jsx";
 
 export const CurrentIrrigation = () => {
-  const { plantationSelected, currentHumidityPlantation } = usePlantation();
-  const { currentLevelTank } = useTank();
+  const {
+    currentHumidityPlantation,
+    currentLevelTank,
+    plantationLiveSelected,
+  } = useMqtt();
 
   const { messageTank, colorMessageTank } =
     getCustomsToTankAccordigMeasure(currentLevelTank);
@@ -26,11 +28,11 @@ export const CurrentIrrigation = () => {
       <div className={styles.tankAndPlantation}>
         <svg width={310} height={150} viewBox="0 0 310 150">
           <WaterTank />
-          <HumidityPlantation plantationSelected={plantationSelected} />
+          <HumidityPlantation />
         </svg>
         <ActionIrrigation />
       </div>
-      
+
       <ul className={styles.details}>
         <li>
           <DrawingLevelTank currentLevelTank={currentLevelTank} />
@@ -41,11 +43,11 @@ export const CurrentIrrigation = () => {
         </li>
 
         <li>
-          <DrawingLevelHumidity humidity={currentHumidityPlantation} />
+          <DrawingLevelHumidity />
           <div className={styles.column}>
             <span>
               Humedad tierra:{currentHumidityPlantation}/
-              {plantationSelected.cropType.humidityMax}%
+              {plantationLiveSelected.cropType.humidityMax}%
             </span>
             <b style={{ color: colorMessageHumidity }}>{messageHumidity}</b>
           </div>

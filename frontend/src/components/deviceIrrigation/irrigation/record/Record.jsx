@@ -1,8 +1,7 @@
 import styles from "./Record.module.css";
 import { useEffect, useState } from "react";
 import { useWaterPlantation } from "../../../../contexts/WaterPlantationContext";
-import { usePlantation } from "../../../../contexts/plantationContext/PlantationContext";
-import { useTank } from "../../../../contexts/tankContext/TankContext";
+import { useMqtt } from "../../../../contexts/MqttContext.jsx";
 import { createPortal } from "react-dom";
 import { Info } from "./info/Info.jsx";
 import { Modal } from "../../../modal/Modal.jsx";
@@ -11,8 +10,7 @@ import { Tbody } from "./Tbody.jsx";
 
 export const Record = () => {
   const { fetchGetLogs, index, pages } = useWaterPlantation();
-  const { plantationSelected } = usePlantation();
-  const { tankSelected } = useTank();
+  const { plantationLiveSelected, tankLiveSelected } = useMqtt();
   const [info, setInfo] = useState(null);
 
   useEffect(() => {
@@ -21,13 +19,20 @@ export const Record = () => {
   }, [index]);
 
   const loadRecord = async (offset) => {
-    await fetchGetLogs(tankSelected.id, plantationSelected.id, offset, true);
+    await fetchGetLogs(
+      tankLiveSelected.id,
+      plantationLiveSelected.id,
+      offset,
+      true,
+    );
   };
 
   return (
     <>
       <div className={styles.record}>
-        <h3>Historial de riegos de plantacion N° {plantationSelected.id}</h3>
+        <h3>
+          Historial de riegos de plantacion N° {plantationLiveSelected.id}
+        </h3>
 
         <table>
           <thead>

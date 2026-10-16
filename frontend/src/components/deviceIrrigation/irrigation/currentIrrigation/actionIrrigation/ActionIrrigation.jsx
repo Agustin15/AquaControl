@@ -4,26 +4,26 @@ import iconNoWater from "../../../../../assets/img/adviceNoWater.png";
 import iconAdviceRainPlantation from "../../../../../assets/img/adviceRainPlantation.png";
 import { alertErrorIrrigation } from "../../../../alertSwal/alertSwal.js";
 import { useWaterPlantation } from "../../../../../contexts/WaterPlantationContext";
-import { useWeather } from "../../../../../contexts/WeatherContext.jsx";
 import { useEffect } from "react";
-import { useTank } from "../../../../../contexts/tankContext/TankContext.jsx";
-import { usePlantation } from "../../../../../contexts/plantationContext/PlantationContext.jsx";
 import { LastWaterPlantation } from "./LastWaterPlantation.jsx";
+import { useMqtt } from "../../../../../contexts/MqttContext.jsx";
 
 export const ActionIrrigation = () => {
-  const { currentWeather } = useWeather();
-  const { currentLevelTank } = useTank();
-  const { currentHumidityPlantation, plantationSelected } = usePlantation();
   const {
+    currentLevelTank,
+    currentHumidityPlantation,
+    liveWeather,
+    plantationLiveSelected,
     sendStartWaterPlantation,
     sendStopWaterPlantation,
-    waterPlantationInProgress,
-    fetchGetLastWaterPlantation,
-    lastWaterPlantation,
-  } = useWaterPlantation();
+    waterPlantationLiveInProgress,
+  } = useMqtt();
+
+  const { fetchGetLastWaterPlantation, lastWaterPlantation } =
+    useWaterPlantation();
 
   const handleStartIrrigation = () => {
-    if (currentHumidityPlantation >= plantationSelected.umbralHumidity)
+    if (currentHumidityPlantation >= plantationLiveSelected.umbralHumidity)
       return alertErrorIrrigation(
         "La plantacion ya esta en su nivel optimo de humedad",
         iconHumidityOptime,
@@ -36,9 +36,9 @@ export const ActionIrrigation = () => {
       );
 
     if (
-      currentWeather &&
-      currentWeather.precipitationChance >= 75 &&
-      plantationSelected.indoor == false
+      liveWeather &&
+      liveWeather.precipitationChance >= 75 &&
+      plantationLiveSelected.indoor == false
     )
       return alertErrorIrrigation(
         "Hay alta probabilidad de lluvia, como su plantacion no esta bajo techo, no es necesario el riego",
@@ -69,17 +69,17 @@ export const ActionIrrigation = () => {
 
       <button
         onClick={() => {
-          waterPlantationInProgress
+          waterPlantationLiveInProgress
             ? handleStopIrrigation()
             : handleStartIrrigation();
         }}
         className={
-          waterPlantationInProgress
+          waterPlantationLiveInProgress
             ? styles.irrigationInCurse
             : styles.irrigationStop
         }
       >
-        {!waterPlantationInProgress ? "Iniciar riego" : "Detener riego"}
+        {!waterPlantationLiveInProgress ? "Iniciar riego" : "Detener riego"}
       </button>
     </li>
   );

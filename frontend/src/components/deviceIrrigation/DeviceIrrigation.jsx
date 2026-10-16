@@ -3,7 +3,6 @@ import iconDevice from "../../assets/img/device.png";
 import { useState } from "react";
 import { useDevice } from "../../contexts/deviceContext/DeviceContext";
 import { useNavigate } from "react-router";
-import { useWeather } from "../../contexts/WeatherContext";
 import { LogsWeekdayProvider } from "../../contexts/LogsWeekdayContext";
 import { PlantationProvider } from "../../contexts/plantationContext/PlantationContext";
 import { TankProvider } from "../../contexts/tankContext/TankContext";
@@ -22,7 +21,6 @@ import { Alerts } from "./alerts/Alerts";
 export const DeviceIrrigation = () => {
   const [optionSelected, setOptionSelected] = useState("WaterTankLogs");
   const { deviceSelected } = useDevice();
-  const { currentWeather } = useWeather();
 
   let navigate = useNavigate();
 
@@ -35,9 +33,8 @@ export const DeviceIrrigation = () => {
       </AlertProvider>
 
       <div className={styles.menuDevice}>
-        {deviceSelected.location && (
-          <CurrentWeather currentWeather={currentWeather} />
-        )}
+        <CurrentWeather />
+
         <StateMqttConnection />
 
         <img src={iconDevice}></img>

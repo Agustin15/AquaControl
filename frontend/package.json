@@ -24,6 +24,7 @@
     "sweetalert2": "^11.26.25"
   },
   "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
     "@capacitor/cli": "^8.4.1",
     "@eslint/js": "^10.0.1",
     "@types/react": "^19.2.17",

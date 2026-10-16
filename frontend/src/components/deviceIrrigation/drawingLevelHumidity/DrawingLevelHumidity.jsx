@@ -1,12 +1,12 @@
 import styles from "./DrawingLevelHumidity.module.css";
 import humidityIcon from "../../../assets/img/humidityIndicator.png";
 import { detailsHumidity } from "./function.js";
-import { usePlantation } from "../../../contexts/plantationContext/PlantationContext";
+import { useMqtt } from "../../../contexts/MqttContext.jsx";
 
-export const DrawingLevelHumidity = ({ humidity }) => {
-  const { plantationSelected } = usePlantation();
+export const DrawingLevelHumidity = () => {
+  const { plantationLiveSelected, currentHumidityPlantation } = useMqtt();
 
-  let optimePercentege = (humidity * 100) / plantationSelected.humidityMax;
+  let optimePercentege = (currentHumidityPlantation * 100) / plantationLiveSelected.humidityMax;
   let heightLevel =
     optimePercentege > 100 ? 100 : (optimePercentege * 41) / 100;
   let colorLevel = detailsHumidity(optimePercentege);
@@ -79,7 +79,7 @@ export const DrawingLevelHumidity = ({ humidity }) => {
           y={40}
           width={25}
           height={25}
-          href={plantationSelected.cropType.image}
+          href={plantationLiveSelected.cropType.image}
         ></image>
       </svg>
     </div>

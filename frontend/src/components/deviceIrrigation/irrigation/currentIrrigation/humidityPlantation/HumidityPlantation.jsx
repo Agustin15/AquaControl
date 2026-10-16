@@ -1,7 +1,10 @@
 import iconGarden from "../../../../../assets/img/garden.png";
 import iconMiniGarden from "../../../../../assets/img/miniGarden.png";
+import { useMqtt } from "../../../../../contexts/MqttContext";
 
-export const HumidityPlantation = ({ plantationSelected }) => {
+export const HumidityPlantation = () => {
+  const { plantationLiveSelected } = useMqtt();
+  
   let xPair = 173;
   let yPair = 30;
   let xImpair = 200;
@@ -9,14 +12,14 @@ export const HumidityPlantation = ({ plantationSelected }) => {
 
   const coordinatesCornsInGarden = [];
 
-  if (plantationSelected.amountPlants > 1) {
+  if (plantationLiveSelected.amountPlants > 1) {
     coordinatesCornsInGarden.push({ x: xPair, y: yPair });
     coordinatesCornsInGarden.push({ x: xImpair, y: yImpair });
 
     let limitDrawingSown =
-      plantationSelected.amountPlants > 10
+      plantationLiveSelected.amountPlants > 10
         ? 10
-        : plantationSelected.amountPlants;
+        : plantationLiveSelected.amountPlants;
 
     for (let i = 3; i <= limitDrawingSown; i++) {
       if (i % 2 == 0) {
@@ -35,7 +38,7 @@ export const HumidityPlantation = ({ plantationSelected }) => {
     <>
       <image
         href={
-          plantationSelected.amountPlants == 1 ? iconMiniGarden : iconGarden
+          plantationLiveSelected.amountPlants == 1 ? iconMiniGarden : iconGarden
         }
         x={30}
         y={-45}
@@ -43,9 +46,9 @@ export const HumidityPlantation = ({ plantationSelected }) => {
         height={275}
       ></image>
 
-      {plantationSelected.amountPlants == 1 && (
+      {plantationLiveSelected.amountPlants == 1 && (
         <image
-          href={plantationSelected.cropType.image}
+          href={plantationLiveSelected.cropType.image}
           x={125}
           y={47}
           width={66}
@@ -57,7 +60,7 @@ export const HumidityPlantation = ({ plantationSelected }) => {
         coordinatesCornsInGarden.map((coordinate, index) => (
           <image
             key={index}
-            href={plantationSelected.cropType.image}
+            href={plantationLiveSelected.cropType.image}
             x={coordinate.x}
             y={coordinate.y}
             width={42}
