@@ -31,31 +31,35 @@ export const getCustomsToTankAccordigMeasure = (currentLevelTank) => {
 
 export const getCustomsToHumidityAccordigMeasure = (
   currentHumidityPlantation,
+  plantationLiveSelected,
 ) => {
+  const percentege =
+    (currentHumidityPlantation * 100) / plantationLiveSelected.humidityMax;
+
   let messageHumidity, colorMessageHumidity;
 
   switch (true) {
-    case currentHumidityPlantation > 100:
+    case percentege > 100:
       messageHumidity = "Exceso de agua en el cultivo";
       colorMessageHumidity = "#e25555";
       break;
-    case currentHumidityPlantation == 100:
+    case percentege == 100:
       messageHumidity = "Humedad maxima, no regar";
       colorMessageHumidity = "#55e26a";
       break;
-    case currentHumidityPlantation >= 70 && currentHumidityPlantation < 100:
+    case percentege >= 70 && percentege < 100:
       messageHumidity = "Humedad adecuada,no regar";
       colorMessageHumidity = "#55cde2";
       break;
-    case currentHumidityPlantation >= 50 && currentHumidityPlantation < 70:
+    case percentege >= 50 && percentege < 70:
       messageHumidity = "Humedad media";
       colorMessageHumidity = "#dde255";
       break;
-    case currentHumidityPlantation >= 25 && currentHumidityPlantation < 50:
+    case percentege >= 25 && percentege < 50:
       messageHumidity = "Suelo seco,riego sugerido";
       colorMessageHumidity = "#e27855";
       break;
-    case currentHumidityPlantation < 25:
+    case percentege < 25:
       messageHumidity = "¡Riego obligatorio!";
       colorMessageHumidity = "#e25555";
       break;

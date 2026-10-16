@@ -23,7 +23,7 @@ export const ActionIrrigation = () => {
     useWaterPlantation();
 
   const handleStartIrrigation = () => {
-    if (currentHumidityPlantation >= plantationLiveSelected.umbralHumidity)
+    if (currentHumidityPlantation >= plantationLiveSelected.humidityMax - 10)
       return alertErrorIrrigation(
         "La plantacion ya esta en su nivel optimo de humedad",
         iconHumidityOptime,

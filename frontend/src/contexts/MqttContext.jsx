@@ -35,7 +35,6 @@ export const MqttProvider = ({ children }) => {
     setConnected(mqttClient.connected);
 
     mqttClient.on("connect", () => {
-      console.log("Reconectado al servidor");
       setConnected(true);
       setReconnecting(false);
     });
@@ -45,22 +44,30 @@ export const MqttProvider = ({ children }) => {
     });
 
     mqttClient.on("offline", () => {
-      console.log("Desconectado del servidor");
       setConnected(false);
     });
 
     mqttClient.on("disconect", () => {
-      console.log("Sin conexion al servidor");
       setConnected(false);
     });
 
     mqttClient.on("reconnect", () => {
-      console.log("Reconectando con el servidor");
+      setConnected(false);
       setReconnecting(true);
     });
-
-    receiveMessages();
   }, [mqttClient]);
+
+  useEffect(() => {
+    if (!deviceSelected) return;
+
+    mqttClient.removeListener("message", receiveMessages);
+    mqttClient.on("message", receiveMessages);
+  }, [
+    deviceSelected,
+    tankLiveSelected,
+    plantationLiveSelected,
+    waterPlantationLiveInProgress,
+  ]);
 
   useEffect(() => {
     if (!deviceSelected) return;
@@ -133,35 +140,35 @@ export const MqttProvider = ({ children }) => {
     }
   };
 
-  const receiveMessages = () => {
-    mqttClient.removeAllListeners();
+  function receiveMessages(topic, message) {
+    switch (true) {
+      case tankLiveSelected &&
+        topic ==
+          `device/${deviceSelected.id}/tank/${tankLiveSelected.id}/waterLevel`:
+        const { waterLevel } = JSON.parse(message.toString());
+        setCurrentLevelTank(waterLevel);
+        break;
+      case plantationLiveSelected &&
+        topic ==
+          `device/${deviceSelected.id}/plantation/${plantationLiveSelected.id}/humidity`:
+        const { humidity } = JSON.parse(message.toString());
+        setCurrentHumidityPlantation(humidity);
+        break;
 
-    mqttClient.on("message", (topic, message) => {
-      switch (topic) {
-        case `device/${deviceSelected.id}/tank/${tankLiveSelected.id}/waterLevel`:
-          const { waterLevel } = JSON.parse(message.toString());
-          setCurrentLevelTank(waterLevel);
-          break;
-        case `device/${deviceSelected.id}/plantation/${plantationLiveSelected.id}/humidity`:
-          const { humidity } = JSON.parse(message.toString());
-          setCurrentHumidityPlantation(humidity);
-          break;
+      case topic == `device/${deviceSelected.id}/waterPlantation`:
+        const { state } = JSON.parse(message.toString());
 
-        case `device/${deviceSelected.id}/waterPlantation`:
-          const { state } = JSON.parse(message.toString());
+        if (state == "En curso" && !waterPlantationLiveInProgress) {
+          setWaterPlantationLiveInProgress(true);
+        } else setWaterPlantationLiveInProgress(false);
+        break;
 
-          if (state == "En curso" && !waterPlantationLiveInProgress) {
-            setWaterPlantationLiveInProgress(true);
-          } else setWaterPlantationLiveInProgress(false);
-          break;
-
-        case `device/${deviceSelected.id}/weather`:
-          const weather = JSON.parse(message.toString());
-          setLiveWeather(weather);
-          break;
-      }
-    });
-  };
+      case topic == `device/${deviceSelected.id}/weather`:
+        const weather = JSON.parse(message.toString());
+        setLiveWeather(weather);
+        break;
+    }
+  }
 
   const sendStartWaterPlantation = async () => {
     const result = await mqttClient.publishAsync(

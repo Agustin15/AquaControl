@@ -21,7 +21,7 @@ export const CurrentIrrigation = () => {
     getCustomsToTankAccordigMeasure(currentLevelTank);
 
   const { messageHumidity, colorMessageHumidity } =
-    getCustomsToHumidityAccordigMeasure(currentHumidityPlantation);
+    getCustomsToHumidityAccordigMeasure(currentHumidityPlantation,plantationLiveSelected);
 
   return (
     <div className={styles.currentIrrigate}>

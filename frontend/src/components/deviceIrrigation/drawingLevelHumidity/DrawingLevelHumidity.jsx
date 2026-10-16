@@ -6,10 +6,10 @@ import { useMqtt } from "../../../contexts/MqttContext.jsx";
 export const DrawingLevelHumidity = () => {
   const { plantationLiveSelected, currentHumidityPlantation } = useMqtt();
 
-  let optimePercentege = (currentHumidityPlantation * 100) / plantationLiveSelected.humidityMax;
-  let heightLevel =
-    optimePercentege > 100 ? 100 : (optimePercentege * 41) / 100;
-  let colorLevel = detailsHumidity(optimePercentege);
+  let percentege =
+    (currentHumidityPlantation * 100) / plantationLiveSelected.humidityMax;
+  let heightLevel = percentege > 100 ? 100 : (percentege * 41) / 100;
+  let colorLevel = detailsHumidity(percentege);
 
   return (
     <div className={styles.levelHumidity}>

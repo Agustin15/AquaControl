@@ -7,7 +7,7 @@ import { Modal } from "../../modal/Modal";
 import { createPortal } from "react-dom";
 
 export const StateMqttConnection = () => {
-  const { reconnectToBroker, connected } = useMqtt();
+  const { reconnectToBroker, reconnecting, connected } = useMqtt();
   const [showState, setShowState] = useState(false);
 
   const handleClick = () => {
@@ -37,6 +37,8 @@ export const StateMqttConnection = () => {
 
               {connected
                 ? "Conectado al servidor"
+                : reconnecting
+                ? "Reconectando al servidor..."
                 : "Sin conexion con el servidor"}
 
               <button onClick={handleClick}>
