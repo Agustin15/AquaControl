@@ -49,6 +49,7 @@ namespace Api.Controllers
 
 
         [AllowAnonymous]
+        [GlobalValidateOrigin]
         [ValidateModelFilter]
         [HttpPost]
         [Route("api/user/login")]

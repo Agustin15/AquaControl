@@ -1,3 +1,4 @@
+using Api.Filters;
 using dotenv.net;
 using Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -8,9 +9,14 @@ using Newtonsoft.Json;
 using System.Security.Claims;
 using System.Text;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<GlobalValidateOrigin>();
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient();
@@ -47,11 +53,6 @@ var jwtEvents = new JwtBearerEvents
     },
 };
 
-builder.Services.Configure<ApiBehaviorOptions>(options =>
-{
-    options.SuppressModelStateInvalidFilter = true;
-
-});
 
 builder.Services.AddCors(options =>
 {
@@ -65,6 +66,13 @@ builder.Services.AddCors(options =>
                           policy.AllowCredentials();
 
                       });
+});
+
+
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.SuppressModelStateInvalidFilter = true;
+
 });
 
 

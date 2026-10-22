@@ -32,12 +32,6 @@ namespace Entities
             get { return placeName; ; }
         }
 
-        [Required(ErrorMessage = "Debe indicar si el dispositivo se ha configurado o no")]
-        public bool Linked
-        {
-            set { linked = value; }
-            get { return linked; }
-        }
 
         [MinLength(1, ErrorMessage = "Debe asociar al menos un usuario al dispositivo")]
         public List<UserOfDevice> UsersOfDevice
@@ -54,12 +48,11 @@ namespace Entities
 
         public Device() { }
 
-        public Device(string id, string placeName, bool linked, List<UserOfDevice> usersOfDevice, DateTime created)
+        public Device(string id, string placeName, List<UserOfDevice> usersOfDevice, DateTime created)
         {
 
             Id = id;
             PlaceName = placeName?.Trim();
-            Linked = linked;
             UsersOfDevice = usersOfDevice;
             Created = created;
 

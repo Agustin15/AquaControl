@@ -1,28 +1,7 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\develop\\AquaControl\\backend\\AquaControlApi\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{171D7675-23B1-490E-958E-EB371170F68F}|DAL\\DAL.csproj|c:\\develop\\aquacontrol\\backend\\aquacontrolapi\\dal\\pdevice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{171D7675-23B1-490E-958E-EB371170F68F}|DAL\\DAL.csproj|solutionrelative:dal\\pdevice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{171D7675-23B1-490E-958E-EB371170F68F}|DAL\\DAL.csproj|c:\\develop\\aquacontrol\\backend\\aquacontrolapi\\dal\\pplantation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{171D7675-23B1-490E-958E-EB371170F68F}|DAL\\DAL.csproj|solutionrelative:dal\\pplantation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{171D7675-23B1-490E-958E-EB371170F68F}|DAL\\DAL.csproj|c:\\develop\\aquacontrol\\backend\\aquacontrolapi\\dal\\phumidityplantationlog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{171D7675-23B1-490E-958E-EB371170F68F}|DAL\\DAL.csproj|solutionrelative:dal\\phumidityplantationlog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1ECA56E5-04A1-493C-AF8B-2C637F7CA81B}|Api\\Api.csproj|c:\\develop\\aquacontrol\\backend\\aquacontrolapi\\api\\controllers\\devicecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1ECA56E5-04A1-493C-AF8B-2C637F7CA81B}|Api\\Api.csproj|solutionrelative:api\\controllers\\devicecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{93838C10-957E-44C0-8A0B-434432666ECA}|Entities\\Entities.csproj|c:\\develop\\aquacontrol\\backend\\aquacontrolapi\\entities\\device.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{93838C10-957E-44C0-8A0B-434432666ECA}|Entities\\Entities.csproj|solutionrelative:entities\\device.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -30,80 +9,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": -1,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Pplantation.cs",
-              "DocumentMoniker": "C:\\develop\\AquaControl\\backend\\AquaControlApi\\DAL\\Pplantation.cs",
-              "RelativeDocumentMoniker": "DAL\\Pplantation.cs",
-              "ToolTip": "C:\\develop\\AquaControl\\backend\\AquaControlApi\\DAL\\Pplantation.cs",
-              "RelativeToolTip": "DAL\\Pplantation.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-14T00:23:18.927Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "PhumidityPlantationLog.cs",
-              "DocumentMoniker": "C:\\develop\\AquaControl\\backend\\AquaControlApi\\DAL\\PhumidityPlantationLog.cs",
-              "RelativeDocumentMoniker": "DAL\\PhumidityPlantationLog.cs",
-              "ToolTip": "C:\\develop\\AquaControl\\backend\\AquaControlApi\\DAL\\PhumidityPlantationLog.cs",
-              "RelativeToolTip": "DAL\\PhumidityPlantationLog.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-14T00:23:16.399Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Pdevice.cs",
-              "DocumentMoniker": "C:\\develop\\AquaControl\\backend\\AquaControlApi\\DAL\\Pdevice.cs",
-              "RelativeDocumentMoniker": "DAL\\Pdevice.cs",
-              "ToolTip": "C:\\develop\\AquaControl\\backend\\AquaControlApi\\DAL\\Pdevice.cs",
-              "RelativeToolTip": "DAL\\Pdevice.cs",
-              "ViewState": "AgIAAH8AAAAAAAAAAAAjwJEAAAByAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-14T00:23:14.453Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Device.cs",
-              "DocumentMoniker": "C:\\develop\\AquaControl\\backend\\AquaControlApi\\Entities\\Device.cs",
-              "RelativeDocumentMoniker": "Entities\\Device.cs",
-              "ToolTip": "C:\\develop\\AquaControl\\backend\\AquaControlApi\\Entities\\Device.cs",
-              "RelativeToolTip": "Entities\\Device.cs",
-              "ViewState": "AgIAACsAAAAAAAAAAAAkwDwAAAAqAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-14T00:22:26.37Z",
-              "EditorCaption": ""
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{eefa5220-e298-11d0-8f78-00a0c9110057}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "DeviceController.cs",
-              "DocumentMoniker": "C:\\develop\\AquaControl\\backend\\AquaControlApi\\Api\\Controllers\\DeviceController.cs",
-              "RelativeDocumentMoniker": "Api\\Controllers\\DeviceController.cs",
-              "ToolTip": "C:\\develop\\AquaControl\\backend\\AquaControlApi\\Api\\Controllers\\DeviceController.cs",
-              "RelativeToolTip": "Api\\Controllers\\DeviceController.cs",
-              "ViewState": "AgIAAG0AAAAAAAAAAAAkwIUAAABFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-14T00:22:21.903Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:1:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
             }
           ]
         }
