@@ -8,11 +8,11 @@ import { createPortal } from "react-dom";
 
 export const StateMqttConnection = () => {
   const { reconnectToBroker, reconnecting, connected } = useMqtt();
-  const [showState, setShowState] = useState(false);
+  const [showStateConnection, setShowStateConnection] = useState(false);
 
   const handleClick = () => {
     if (connected) {
-      setShowState(false);
+      setShowStateConnection(false);
     } else {
       reconnectToBroker();
     }
@@ -21,28 +21,42 @@ export const StateMqttConnection = () => {
   return (
     <div className={styles.connectionMqtt}>
       <button
-        onClick={() => (showState ? setShowState(false) : setShowState(true))}
+        onClick={() =>
+          showStateConnection
+            ? setShowStateConnection(false)
+            : setShowStateConnection(true)
+        }
       >
+        {reconnecting && <span class={styles.loader}></span>}
         <img
-          className={styles.iconConnected}
-          src={connected == false ? iconNoConnected : iconConnected}
+          src={connected || reconnecting ? iconConnected : iconNoConnected}
         ></img>
       </button>
 
-      {showState &&
+      {showStateConnection &&
         createPortal(
           <Modal>
             <div className={styles.stateAdvice}>
-              <img src={iconConnected}></img>
-
+              <div className={styles.title}>
+                {reconnecting && <span class={styles.loader}></span>}
+                <img
+                  src={
+                    connected || reconnecting ? iconConnected : iconNoConnected
+                  }
+                ></img>
+              </div>
               {connected
-                ? "Conectado al servidor"
+                ? "App conectada con el servidor"
                 : reconnecting
                 ? "Reconectando al servidor..."
-                : "Sin conexion con el servidor"}
+                : "App sin conexion con el servidor"}
 
-              <button onClick={handleClick}>
-                {connected ? "Volver" : "Reconectar"}
+              <button disabled={reconnecting} onClick={handleClick}>
+                {connected
+                  ? "Volver"
+                  : reconnecting
+                  ? "Reconectando..."
+                  : "Reconectar"}
               </button>
             </div>
           </Modal>,

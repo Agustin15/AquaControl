@@ -1,11 +1,10 @@
 .connectionMqtt {
-    position: absolute;
-    right: 0;
     width: 4rem;
     height: 2rem;
     display: flex;
     justify-content: center;
-    align-items: end;
+    align-items: center;
+    gap: 1rem;
 }
 
 .connectionMqtt button {
@@ -15,10 +14,13 @@
     border: none;
     color: white;
     font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 
-.connectionMqtt .iconConnected {
+.connectionMqtt button img {
     width: 36px;
     height: 36px;
 }
@@ -39,9 +41,11 @@
     border-radius: 8px;
 }
 
-.stateAdvice img {
-    width: 50px;
-    height: 50px;
+
+.stateAdvice .title {
+    display: flex;
+    justify-content: start;
+    align-items: center;
 }
 
 
@@ -57,5 +61,33 @@
     border-radius: 4px;
     cursor: pointer;
 
+}
 
+.stateAdvice img {
+    width: 50px;
+    height: 50px;
+}
+
+.loader {
+    --color-1: #27dddd;
+    --size: 1px;
+    width: calc(14 * var(--size));
+    height: calc(14 * var(--size));
+    border: calc(2 * var(--size)) solid var(--color-1);
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+    margin-top: 1rem;
+}
+
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }

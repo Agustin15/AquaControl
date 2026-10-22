@@ -1,8 +1,5 @@
 import styles from "./DeviceIrrigation.module.css";
-import iconDevice from "../../assets/img/device.png";
 import { useState } from "react";
-import { useDevice } from "../../contexts/deviceContext/DeviceContext";
-import { useNavigate } from "react-router";
 import { LogsWeekdayProvider } from "../../contexts/LogsWeekdayContext";
 import { PlantationProvider } from "../../contexts/plantationContext/PlantationContext";
 import { TankProvider } from "../../contexts/tankContext/TankContext";
@@ -13,16 +10,12 @@ import { Menu } from "./menu/Menu";
 import { WaterTankLogs } from "./waterTankLogs/WaterTankLogs";
 import { Settings } from "./settings/Settings";
 import { Irrigation } from "./irrigation/Irrigation";
-import { StateMqttConnection } from "./stateMqttConnection/StateMqttConnection";
-import { CurrentWeather } from "./currentWeather/CurrentWeather";
 import { Notification } from "./notification/Notification";
 import { Alerts } from "./alerts/Alerts";
+import { Header } from "./header/Header";
 
 export const DeviceIrrigation = () => {
   const [optionSelected, setOptionSelected] = useState("WaterTankLogs");
-  const { deviceSelected } = useDevice();
-
-  let navigate = useNavigate();
 
   return (
     <div id="contentBody" className={styles.contentBody}>
@@ -32,18 +25,7 @@ export const DeviceIrrigation = () => {
         </UserDevicesTokensProvider>
       </AlertProvider>
 
-      <div className={styles.menuDevice}>
-        <CurrentWeather />
-
-        <StateMqttConnection />
-
-        <img src={iconDevice}></img>
-        <h3>{deviceSelected.placeName}</h3>
-        <button className={styles.back} onClick={() => navigate("/devices")}>
-          Volver
-        </button>
-      </div>
-
+      <Header />
       <div className={styles.row}>
         <Menu
           optionSelected={optionSelected}

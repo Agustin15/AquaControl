@@ -21,8 +21,7 @@ export const List = () => {
 
   const handleClickDevice = async (device) => {
     await fetchSelectDevice(device, true);
-    if (device.linked) navigate("/deviceIrrigate");
-    else setDeviceToLink(device);
+    navigate("/deviceIrrigate");
   };
 
   return (
@@ -53,7 +52,7 @@ export const List = () => {
               onClick={() => handleClickDevice(device)}
               className={styles.watch}
             >
-              {device.linked ? "Ver" : "Vincular"}
+              Ver
             </button>
           </li>
         ))}

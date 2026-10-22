@@ -19,6 +19,7 @@ export const MqttProvider = ({ children }) => {
 
   const [connected, setConnected] = useState(false);
   const [reconnecting, setReconnecting] = useState(false);
+  const [deviceStateConnection, setDeviceStateConnection] = useState("offline");
 
   const [tankLiveSelected, setTankLiveSelected] = useState(null);
   const [plantationLiveSelected, setPlantationLiveSelected] = useState(null);
@@ -167,6 +168,11 @@ export const MqttProvider = ({ children }) => {
         const weather = JSON.parse(message.toString());
         setLiveWeather(weather);
         break;
+
+      case topic == `device/${deviceSelected.id}/state`:
+        const deviceStateConnection = JSON.parse(message.toString());
+        setDeviceStateConnection(deviceStateConnection);
+        break;
     }
   }
 
@@ -227,6 +233,7 @@ export const MqttProvider = ({ children }) => {
         setTankLiveSelected,
         waterPlantationLiveInProgress,
         liveWeather,
+        deviceStateConnection
       }}
     >
       {children}

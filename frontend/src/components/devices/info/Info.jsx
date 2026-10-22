@@ -31,12 +31,7 @@ export const Info = ({ infoDevice, setInfoDevice }) => {
         <b>Lugar del dispositivo</b>
         <span>{infoDevice.placeName}</span>
       </div>
-      <div className={styles.rowDetail}>
-        <b>Ubicacion:</b>
-        <span>
-          {infoDevice.location ? infoDevice.location : "Sin ubicacion"}
-        </span>
-      </div>
+
       <div className={styles.rowDetail}>
         <b>Creado:</b>
         <span>{formatDate(new Date(infoDevice.created))}</span>
