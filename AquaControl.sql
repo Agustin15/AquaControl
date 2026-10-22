@@ -15,9 +15,9 @@ joined DATETIME NOT NULL DEFAULT GETDATE()
 CREATE TABLE Devices(
 idDevice VARCHAR(25) PRIMARY KEY,
 placeName VARCHAR(15) NOT NULL,
-linked BIT NOT NULL,
 created DATETIME NOT NULL DEFAULT GETDATE(),
 )
+
 
 CREATE TABLE Users_Devices(
 idDevice VARCHAR(25) FOREIGN KEY REFERENCES Devices(idDevice) ON DELETE CASCADE,
@@ -132,7 +132,7 @@ select idUser as code,username as entity,email as correspondence,password as ent
 GO
 
 CREATE OR ALTER  VIEW Plaques AS
-select idDevice as codePlaque, placeName as place,linked as configured,created as inserted from Devices;
+select idDevice as codePlaque, placeName as place,created as inserted from Devices;
 
 GO
 
@@ -302,12 +302,12 @@ END
 
 GO
 
-CREATE OR ALTER PROCEDURE UpdateDevice @placeName VARCHAR(15),@idDevice VARCHAR(25),@linked BIT AS
+CREATE OR ALTER PROCEDURE UpdateDevice @placeName VARCHAR(15),@idDevice VARCHAR(25) AS
 BEGIN
 
 BEGIN TRY
 
-UPDATE Devices set placeName=@placeName,linked=@linked where idDevice=@idDevice 
+UPDATE Devices set placeName=@placeName where idDevice=@idDevice 
 END TRY
 
 BEGIN CATCH
@@ -1003,7 +1003,7 @@ RAISERROR('Dispositivo de riego con este ID ya existente',16,1)
 RETURN
 END 
 
-INSERT INTO Devices(idDevice,placeName,linked) select idDevice,placeName,linked from inserted
+INSERT INTO Devices(idDevice,placeName) select idDevice,placeName from inserted
 
 END
 
@@ -1012,8 +1012,7 @@ GO
 CREATE OR ALTER TRIGGER ValidUpdateDevice ON Devices INSTEAD OF UPDATE AS
 BEGIN
 
-UPDATE Devices SET placeName=(select placeName from inserted),linked=(select linked from inserted)
-where idDevice=(select idDevice from inserted)
+UPDATE Devices SET placeName=(select placeName from inserted) where idDevice=(select idDevice from inserted)
 
 END
 
