@@ -71,53 +71,54 @@ EXEC AddHumidityPlantLog @percentege = 70,@weatherData='{
   "Temperature": 15,
   "PrecipitationChance": 50,
   "Icon": "//cdn.weatherapi.com/weather/64x64/night/122.png"
-}', @idPlantation = 1,@idDevice= 1;
+}', @idPlantation = 1,@idDevice= 'ESP32-00001';
 
-EXEC AddWaterTankLog @percentege = 100, @idTank = 1,@idDevice= 1;
+EXEC AddWaterTankLog @percentege = 100, @idTank = 1,@idDevice= 'ESP32-00001';
 
 EXEC AddHumidityPlantLog @percentege = 65,@weatherData='{
   "Humidity": 60,
   "Temperature": 17,
   "PrecipitationChance": 50,
   "Icon": "//cdn.weatherapi.com/weather/64x64/night/122.png"
-}',@idPlantation = 1,@idDevice= 1;
+}',@idPlantation = 1,@idDevice= 'ESP32-00001';
 
-EXEC AddWaterTankLog @percentege = 100, @idTank = 1,@idDevice= 1;
+EXEC AddWaterTankLog @percentege = 100, @idTank = 1,@idDevice= 'ESP32-00001';
 EXEC AddHumidityPlantLog @percentege = 58,@weatherData='{
   "Humidity": 57,
   "Temperature": 17,
   "PrecipitationChance": 45,
   "Icon": "//cdn.weatherapi.com/weather/64x64/night/122.png"
-}',@idPlantation = 1,@idDevice= 1;
+}',@idPlantation = 1,@idDevice= 'ESP32-00001';
 
 EXEC AddHumidityPlantLog @percentege = 44,@weatherData='{
   "Humidity": 50,
   "Temperature": 20,
   "PrecipitationChance": 45,
   "Icon": "//cdn.weatherapi.com/weather/64x64/night/122.png"
-}',@idPlantation = 1,@idDevice= 1;
+}',@idPlantation = 1,@idDevice= 'ESP32-00001';
 
 
-EXEC AddWaterPlantationLog @type='Automatico',@levelTankBefore=100,@humidityBefore=44, @idTank=1, @idPlantation=1,@idDevice= 1;
+EXEC AddWaterPlantationLog @type='Automatico',@levelTankBefore=100,@humidityBefore=44, @idTank=1, @idPlantation=1,@idDevice='ESP32-00001';
 EXEC UpdateWaterPlantationLogFinished @id=1, @state='Completado',@levelTankAfter=90, @humidityAfter=70;
 
-EXEC AddWaterTankLog @percentege = 90, @idTank = 1,@idDevice= 1;
+select * from WaterPlantationLogs
+EXEC AddWaterTankLog @percentege = 90, @idTank = 1,@idDevice= 'ESP32-00001';
 
 EXEC AddHumidityPlantLog @percentege = 67,@weatherData='{
   "Humidity": 60,
   "Temperature": 15,
   "PrecipitationChance": 60,
   "Icon": "//cdn.weatherapi.com/weather/64x64/night/122.png"
-}', @idPlantation = 1,@idDevice= 1;
+}', @idPlantation = 1,@idDevice= 'ESP32-00001';
 
-EXEC AddWaterTankLog @percentege = 90, @idTank = 1,@idDevice= 1;
+EXEC AddWaterTankLog @percentege = 90, @idTank = 1,@idDevice= 'ESP32-00001';
 
 EXEC AddHumidityPlantLog @percentege = 60,@weatherData='{
   "Humidity": 60,
   "Temperature": 15,
   "PrecipitationChance": 58,
   "Icon": "//cdn.weatherapi.com/weather/64x64/day/113.png"
-}', @idPlantation = 1,@idDevice= 1;
+}', @idPlantation = 1,@idDevice= 'ESP32-00001';
 
 EXEC AddWaterTankLog @percentege = 90, @idTank = 1,@idDevice= 1;
 EXEC AddHumidityPlantLog @percentege = 57,@weatherData='{
@@ -126,7 +127,7 @@ EXEC AddHumidityPlantLog @percentege = 57,@weatherData='{
   "PrecipitationChance": 55,
   "Icon": "//cdn.weatherapi.com/weather/64x64/day/113.png"
 }'
-, @idPlantation = 1,@idDevice= 1;
+, @idPlantation = 1,@idDevice= 'ESP32-00001';
 
 EXEC AddWaterTankLog @percentege = 90, @idTank = 1,@idDevice= 1;
 EXEC AddHumidityPlantLog @percentege = 50,@weatherData='{
@@ -135,10 +136,10 @@ EXEC AddHumidityPlantLog @percentege = 50,@weatherData='{
   "PrecipitationChance": 50,
   "Icon": "//cdn.weatherapi.com/weather/64x64/day/113.png"
 }'
-,@idPlantation = 1,@idDevice= 1;
+,@idPlantation = 1,@idDevice= 'ESP32-00001';
 
 
 EXEC AddWaterPlantationLog @type='Automatico',@levelTankBefore=80,@humidityBefore=50, @idTank=1, @idPlantation=1,@idDevice= 1;
 EXEC UpdateWaterPlantationLogFinished @id=2, @state='Completado',@levelTankAfter=84, @humidityAfter=70;
 
-EXEC AddWaterTankLog @percentege = 86, @idTank = 1,@idDevice= 1;
+EXEC AddWaterTankLog @percentege = 86, @idTank = 1,@idDevice= 'ESP32-00001';

@@ -736,7 +736,7 @@ END
 
 GO
 
-CREATE OR ALTER PROCEDURE RecordWaterPlantationOffset @idBowl INT,@idLand INT,@codePlaque INT,@offset INT AS
+CREATE OR ALTER PROCEDURE RecordWaterPlantationOffset @idBowl INT,@idLand INT,@codePlaque VARCHAR(25),@offset INT AS
 BEGIN
 
 select * from PlantationWateringRecords where  momentEnd is not null and idBowl=@idBowl and idLand=@idLand and idPlaque=@codePlaque 
