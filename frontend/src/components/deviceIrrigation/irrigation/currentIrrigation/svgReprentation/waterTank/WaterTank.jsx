@@ -1,6 +1,6 @@
-import { Recipient } from "./recipient/Recipient.jsx";
-import { Liquid } from "./liquid/Liquid.jsx";
-import { useMqtt } from "../../../../../contexts/MqttContext.jsx";
+import { Recipient } from "./Recipient.jsx";
+import { Liquid } from "./Liquid.jsx";
+import { useMqtt } from "../../../../../../contexts/MqttContext.jsx";
 
 export const WaterTank = () => {
   const { currentLevelTank } = useMqtt();

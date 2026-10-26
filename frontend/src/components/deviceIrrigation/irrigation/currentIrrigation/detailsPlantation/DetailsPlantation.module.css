@@ -1,0 +1,117 @@
+.detailsPlantation {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    background: linear-gradient(rgb(34, 123, 171), rgb(22, 98, 138));
+    color: white;
+    border-radius: 5px;
+    gap: 0.7rem;
+    width: 75%;
+    height: auto;
+    padding-bottom: 2rem;
+}
+
+.detailsPlantation .header {
+    width: 100%;
+    height: 3.5rem;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 0.4rem;
+    position: relative;
+    font-size: 12px;
+    border-bottom: 1px solid rgb(28, 104, 146);
+}
+
+
+.detailsPlantation .header img {
+    width: 21px;
+    height: 21px;
+    margin-left: 0.5rem;
+}
+
+.detailsPlantation .header button {
+    background: none;
+    height: auto;
+    width: auto;
+    font-size: 12px;
+    font-weight: bold;
+    border: none;
+    position: absolute;
+    color: white;
+    top: 0.2rem;
+    right: 0.3rem;
+}
+
+
+.info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+}
+
+.info .columnTwo,
+.info .containImage {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+    height: 100%;
+
+}
+
+.info .containImage {
+    width: 40%;
+    height: 100%;
+}
+
+
+
+.info li {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 0.3rem;
+    color: white;
+    font-size: 14px;
+    width: 95%;
+    margin-top: 1rem;
+
+}
+
+.info .image {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 8rem;
+}
+
+
+.info .containImage .image img {
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+}
+
+.info .containImage .noImage {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 99px;
+    width: 7rem;
+    height: 7rem;
+    border: 1px solid rgb(201, 201, 201);
+    font-weight: bold;
+    font-size: 12px;
+
+}
+
+.info .containImage .noImage img {
+    width: 53px;
+    height: 53px;
+}

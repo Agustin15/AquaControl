@@ -3,11 +3,10 @@ import humidityIcon from "../../../assets/img/humidityIndicator.png";
 import { detailsHumidity } from "./function.js";
 import { useMqtt } from "../../../contexts/MqttContext.jsx";
 
-export const DrawingLevelHumidity = () => {
-  const { plantationLiveSelected, currentHumidityPlantation } = useMqtt();
+export const DrawingLevelHumidity = ({ humidity }) => {
+  const { plantationLiveSelected } = useMqtt();
 
-  let percentege =
-    (currentHumidityPlantation * 100) / plantationLiveSelected.humidityMax;
+  let percentege = (humidity * 100) / plantationLiveSelected.humidityMax;
   let heightLevel = percentege > 100 ? 100 : (percentege * 41) / 100;
   let colorLevel = detailsHumidity(percentege);
 
@@ -72,7 +71,7 @@ export const DrawingLevelHumidity = () => {
         <circle r={10} cx={18.2} cy={56} fill={colorLevel}></circle>
         <path d="M 19,46 A 11,11 0 0,1 19,76" fill={"#5555552d"}></path>
 
-        {/* imagen humedad plantationa */}
+        {/* imagen humedad plantacion */}
         <image x={36} y={17} width={18} height={18} href={humidityIcon}></image>
         <image
           x={36}

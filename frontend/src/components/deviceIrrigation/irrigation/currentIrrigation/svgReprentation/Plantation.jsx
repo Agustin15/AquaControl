@@ -2,9 +2,9 @@ import iconGarden from "../../../../../assets/img/garden.png";
 import iconMiniGarden from "../../../../../assets/img/miniGarden.png";
 import { useMqtt } from "../../../../../contexts/MqttContext";
 
-export const HumidityPlantation = () => {
+export const Plantation = () => {
   const { plantationLiveSelected } = useMqtt();
-  
+
   let xPair = 173;
   let yPair = 30;
   let xImpair = 200;

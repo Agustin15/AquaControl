@@ -70,7 +70,7 @@ export const Form = ({ handleSubmit, method }) => {
         </div>
 
         <div className={styles.containCheckbox}>
-          <label>Indoor</label>
+          <label>Cultivo interior</label>
           <input
             onClick={(event) =>
               setValuesForm({

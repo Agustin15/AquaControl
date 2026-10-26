@@ -1,14 +1,14 @@
-import styles from "./ActionIrrigation.module.css";
-import iconHumidityOptime from "../../../../../assets/img/adviceHumidityOptime.png";
-import iconNoWater from "../../../../../assets/img/adviceNoWater.png";
-import iconAdviceRainPlantation from "../../../../../assets/img/adviceRainPlantation.png";
-import { alertErrorIrrigation } from "../../../../alertSwal/alertSwal.js";
-import { useWaterPlantation } from "../../../../../contexts/WaterPlantationContext";
+import styles from "./Irrigate.module.css";
+import iconHumidityOptime from "../../../../../../assets/img/adviceHumidityOptime.png";
+import iconNoWater from "../../../../../../assets/img/adviceNoWater.png";
+import iconAdviceRainPlantation from "../../../../../../assets/img/adviceRainPlantation.png";
+import { alertErrorIrrigation } from "../../../../../alertSwal/alertSwal.js";
+import { useWaterPlantation } from "../../../../../../contexts/WaterPlantationContext.jsx";
 import { useEffect } from "react";
 import { LastWaterPlantation } from "./LastWaterPlantation.jsx";
-import { useMqtt } from "../../../../../contexts/MqttContext.jsx";
+import { useMqtt } from "../../../../../../contexts/MqttContext.jsx";
 
-export const ActionIrrigation = () => {
+export const Irrigate = () => {
   const {
     currentLevelTank,
     currentHumidityPlantation,

@@ -49,7 +49,7 @@ export const Info = () => {
           </li>
 
           <li className={styles.rowDetail}>
-            <b>Indoor:</b>
+            <b>Cultivo interior:</b>
             <span>{infoPlantation.indoor ? "Si" : "No"}</span>
           </li>
         </div>
