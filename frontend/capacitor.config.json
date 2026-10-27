@@ -1,10 +1,11 @@
 {
   "appId": "aquacontrol.app",
-  "appName": "aquacontrol",
+  "appName": "AquaControl",
   "webDir": "dist",
    "bundledWebRuntime": false,
      "server": {
     "url": "http://192.168.1.12:5173",
     "cleartext": true
   }
+  
 }

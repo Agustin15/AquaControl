@@ -6,9 +6,9 @@ import { DevicesPage } from "./pages/DevicesPage";
 import { DeviceIrrigationPage } from "./pages/DeviceIrrigationPage";
 import { useAuth } from "./contexts/AuthContext";
 import { DeviceProvider } from "./contexts/deviceContext/DeviceContext";
+
 export const App = () => {
   const { userAuth, loadingAuth } = useAuth();
-
   return (
     <BrowserRouter>
       <Routes>

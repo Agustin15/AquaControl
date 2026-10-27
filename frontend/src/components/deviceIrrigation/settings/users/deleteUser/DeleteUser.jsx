@@ -15,8 +15,6 @@ export const DeleteUser = ({ deleteUser, setDeleteUser }) => {
   const { deviceSelected, setDeviceSelected } = useDevice();
   const { updateAccessToken } = useAuth();
 
-  console.log(deviceSelected);
-
   useEffect(() => {
     const confirmDelete = async () => {
       let title =
@@ -88,8 +86,6 @@ export const DeleteUser = ({ deleteUser, setDeleteUser }) => {
         error?.message ||
         "No se pudo desvincular el usuario seleccionado del dispositivo";
       alertError(`Ups algo salio mal`, errorMessage);
-    } finally {
-      return;
     }
   };
 };

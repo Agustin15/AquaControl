@@ -5,13 +5,13 @@ import iconTankWarning from "../../../assets/img/tankWarning.png";
 
 export const getIcon = (type) => {
   switch (true) {
-    case type.indexOf("Nivel del tanque de agua") !== -1:
+    case type.toLowerCase().indexOf("nivel del tanque de agua") !== -1:
       return iconTankWarning;
-    case type.indexOf("riego realizado") !== -1:
+    case type.toLowerCase().indexOf("riego realizado") !== -1:
       return iconIrrigationCompleted;
-    case type.indexOf("tierra muy seca en el cultivo") !== -1:
+    case type.toLowerCase().indexOf("tierra muy seca en el cultivo") !== -1:
       return iconCropDry;
-    case type.indexOf("exceso de agua en el cultivo") !== -1:
+    case type.toLowerCase().indexOf("exceso de agua en el cultivo") !== -1:
       return iconCropAwashWarning;
   }
 };

@@ -69,7 +69,7 @@ export const Irrigation = () => {
         </div>
       )}
 
-      {!loadingInit && plantations && (
+      {!loadingInit && !errorPlantations && plantations && (
         <div className={styles.option}>
           <ul className={styles.crops}>
             {plantations.map((plantation, index) => (

@@ -72,8 +72,6 @@ export const Delete = ({}) => {
       const errorMessage =
         error?.message || "No se pudo eliminar el tanque seleccionado";
       alertError(`Ups algo salio mal`, errorMessage);
-    } finally {
-      return;
     }
   };
 };

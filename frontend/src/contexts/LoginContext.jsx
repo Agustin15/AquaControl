@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import { alertError } from "../components/alertSwal/alertSwal.js";
-import { saveAuthToken, saveInfo} from "../securityStorage.js";
+import { saveAuthToken, saveInfo } from "../securityStorage.js";
 import { useAuth } from "./AuthContext.jsx";
 const localhostBackend = import.meta.env.VITE_BACKEND_LOCALHOST;
 
@@ -39,7 +39,6 @@ export const LoginProvider = ({ children }) => {
 
   const fetchLogin = async (navigate) => {
     setLoading(true);
-
     try {
       const response = await fetch(localhostBackend + "/api/user/login", {
         method: "POST",
