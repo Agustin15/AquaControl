@@ -65,7 +65,6 @@ export const Delete = ({}) => {
 
       if (result) {
         alertSuccess(`¡Tanque N° ${deleteTank.id} eliminado exitosamente!`);
-
         await getTanks();
       }
     } catch (error) {
