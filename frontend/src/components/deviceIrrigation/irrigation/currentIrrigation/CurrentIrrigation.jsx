@@ -45,7 +45,10 @@ export const CurrentIrrigation = () => {
         </li>
 
         <li>
-          <DrawingLevelHumidity humidity={currentHumidityPlantation} />
+          <DrawingLevelHumidity
+            humidity={currentHumidityPlantation}
+            plantation={plantationLiveSelected}
+          />
           <div className={styles.column}>
             <span>
               Humedad tierra:{currentHumidityPlantation}/

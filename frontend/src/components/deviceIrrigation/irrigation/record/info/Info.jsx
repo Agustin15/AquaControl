@@ -4,7 +4,6 @@ import { DrawingLevelHumidity } from "../../../drawingLevelHumidity/DrawingLevel
 import { DrawingLevelTank } from "../../../drawingLevelTank/DrawingLevelTank";
 
 export const Info = ({ info, setInfo }) => {
-
   return (
     <div className={styles.info}>
       <div className={styles.header}>
@@ -18,11 +17,17 @@ export const Info = ({ info, setInfo }) => {
           <h3>Plantacion:</h3>
           <div className={styles.detail}>
             <span>Humedad previa: {info.humidityBefore}%</span>
-            <DrawingLevelHumidity humidity={info.humidityBefore} />
+            <DrawingLevelHumidity
+              humidity={info.humidityBefore}
+              plantation={info.plantation}
+            />
           </div>
           <div className={styles.detail}>
             <span>Humedad posterior: {info.humidityAfter}%</span>
-            <DrawingLevelHumidity humidity={info.humidityAfter} />
+            <DrawingLevelHumidity
+              humidity={info.humidityAfter}
+              plantation={info.plantation}
+            />
           </div>
         </div>
 
