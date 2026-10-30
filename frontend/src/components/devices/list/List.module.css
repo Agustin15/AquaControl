@@ -94,3 +94,69 @@
     background: rgb(21, 157, 21);
 
 }
+
+@media (width>=750px) {
+
+    .listDevices {
+        margin-top: 2rem;
+    }
+
+    .listDevices li {
+        padding: 1.8rem;
+        font-size: 21px;
+        font-weight: bold;
+        gap: 0.7rem;
+    }
+
+    .listDevices li .iconDevice {
+        width: 77px;
+        height: 77px;
+    }
+
+
+    .moreOptions img {
+        width: 32px;
+        height: 32px;
+    }
+
+
+    .options {
+        position: absolute;
+        top: 4vh;
+        left: 14.8vw;
+        background: rgb(38, 38, 38);
+        border-top-right-radius: 4px;
+        animation-duration: 0.3s;
+        animation-name: showOption;
+    }
+
+
+    @keyframes showOption {
+        from {
+            width: 0;
+        }
+
+        to {
+            width: 2rem;
+        }
+    }
+
+    .options li {
+        padding: 0.7rem;
+        border-bottom: 1px solid rgb(12, 12, 12);
+    }
+
+    .options li img {
+        width: 32px;
+        height: 32px;
+    }
+
+
+    .listDevices li .watch {
+        width: 8rem;
+        height: 2.3rem;
+        font-size: 19px;
+        border-radius: 4px;
+    }
+
+}

@@ -46,3 +46,27 @@
     width: 20px;
     height: 20px;
 }
+
+@media (width>=750px) {
+    .subMenuProfile {
+        width: 15rem;
+        height: auto;
+        top: 6rem;
+    }
+
+    .subMenuProfile li {
+        font-size: 19px;
+        padding-top: 0.6rem;
+        padding-bottom: 0.6rem;
+    }
+
+    .subMenuProfile li button {
+        font-size: 19px;
+    }
+
+    .subMenuProfile li button img {
+        width: 34px;
+        height: 34px;
+    }
+
+}

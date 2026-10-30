@@ -115,3 +115,83 @@
     width: 53px;
     height: 53px;
 }
+
+@media (width>=750px) {
+    .detailsPlantation {
+        width: 67%;
+    }
+
+    .detailsPlantation .header {
+        width: 100%;
+        height: 4rem;
+        gap: 0.8rem;
+        font-size: 19px;
+    }
+
+
+    .detailsPlantation .header img {
+        width: 39px;
+        height: 39px;
+        margin-left: 1rem;
+    }
+
+    .detailsPlantation .header button {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+
+    .info .columnTwo,
+    .info .containImage {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        width: 50%;
+        height: 100%;
+
+    }
+
+    .info .containImage {
+        width: 45%;
+    }
+
+
+    .info li {
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        gap: 0.3rem;
+        color: white;
+        font-size: 19px;
+        width: 95%;
+        margin-top: 1rem;
+    }
+
+    .info .image {
+        height: 12rem;
+    }
+
+
+    .info .containImage .image img {
+        width: 100%;
+        height: 100%;
+        border-radius: 5px;
+    }
+
+    .info .containImage .noImage {
+        width: 12rem;
+        height: 12rem;
+        font-size: 18px;
+        gap: 1rem;
+
+    }
+
+    .info .containImage .noImage img {
+        width: 77px;
+        height: 77px;
+    }
+
+}
+
+

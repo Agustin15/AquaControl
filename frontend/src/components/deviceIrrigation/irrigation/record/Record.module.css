@@ -43,9 +43,42 @@ td {
 }
 
 .record table td img {
-    width: 22px;
+    width: 24px;
 }
 
 .record table .date {
     width: 8rem;
+}
+
+
+@media (width>=750px) {
+    .record {
+        gap: 1.5rem;
+    }
+
+    .record h3 {
+        font-size: 21px;
+    }
+
+    .record table th,
+    td {
+        font-size: 19px;
+    }
+
+    .record table td {
+        font-size: 18px;
+    }
+
+    .record table td span {
+        font-size: 18px;
+    }
+
+    .record table td img {
+        width: 37px;
+    }
+
+    .record table .date {
+        width: 8rem;
+    }
+
 }

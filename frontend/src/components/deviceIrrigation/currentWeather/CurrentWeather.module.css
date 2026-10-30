@@ -57,3 +57,52 @@
     gap: 0.2rem;
     margin-left: -0.3rem;
 }
+
+@media (width>=750px) {
+
+    .currentWeather {
+        right: 4.5rem;
+    }
+
+    .currentWeather li {
+        font-size: 16px;
+        width: 8rem;
+        height: 4rem;
+    }
+
+    .currentWeather .noWeather {
+        width: 16rem;
+        padding-left: 0.2rem;
+        gap: 0.5rem;
+    }
+
+    .currentWeather .noWeather img {
+        width: 41px;
+        height: 41px;
+    }
+
+    .currentWeather .iconSky {
+        width: 50px;
+        height: 50px;
+    }
+
+    .currentWeather .column {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.3rem;
+    }
+
+    .currentWeather .column img {
+        width: 30px;
+        height: 30px;
+    }
+
+    .currentWeather .column div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.2rem;
+        margin-left: -0.3rem;
+    }
+}

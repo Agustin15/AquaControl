@@ -48,3 +48,36 @@
 .takePhoto .btnDelete:hover {
     background: rgb(139, 32, 32);
 }
+
+@media (width>=750px) {
+    .takePhoto {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        width: 85%;
+        gap: 0.7rem;
+        font-size: 17px;
+    }
+
+    .takePhoto img {
+        width: 380px;
+        height: 230px;
+        border-radius: 10px;
+    }
+
+    .takePhoto .row {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .takePhoto .row button {
+        font-size: 17px;
+        width: 12rem;
+        height: 2.4rem;
+        border-radius: 5px;
+    }
+
+
+}

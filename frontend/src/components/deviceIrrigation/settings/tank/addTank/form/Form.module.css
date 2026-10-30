@@ -57,3 +57,44 @@
 .form .btnUpdate {
     background: rgb(19, 144, 172);
 }
+
+@media (width>=750px) {
+
+    .form {
+        font-size: 18px;
+        width: 85%;
+        margin-top: 0.5rem;
+    }
+
+    .form .columnInput {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        gap: 0.4rem;
+        margin-top: 1rem;
+        font-size: 18px;
+        width: 85%;
+    }
+
+    .form .columnInput input {
+        width: 100%;
+        height: 3.3rem;
+        font-size: 18px;
+    }
+
+
+    .form .columnInput p {
+        color: red;
+        font-size: 16px;
+    }
+
+    .form .btnAdd,
+    .form .btnUpdate {
+     font-size: 19px;
+     width: 16rem;
+     height: 2.7rem;
+     margin-top: 1.5rem;
+    }
+
+
+}

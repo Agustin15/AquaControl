@@ -15,8 +15,9 @@
     display: flex;
     flex-direction: column;
     gap: 0.55rem;
-    width: 7rem;
-    height: 7.8rem;
+    padding: 0.4rem;
+    width: auto;
+    height: auto;
     background: rgba(5, 60, 115, 0.245);
     border-radius: 8px;
     color: white;
@@ -65,4 +66,41 @@
 .options .iconDelete {
     width: 22px;
     height: 22px;
+}
+
+@media (width>=750px) {
+
+    .users li {
+        display: flex;
+        flex-direction: column;
+        gap: 0.55rem;
+        width: 11rem;
+        height: 11rem;
+        background: rgba(5, 60, 115, 0.245);
+        border-radius: 8px;
+        color: white;
+        font-size: 17px;
+        font-weight: bold;
+    }
+
+    .userHeader img {
+        width: 75px;
+        height: 75px;
+    }
+
+    .options {
+        gap: 0.3rem;
+    }
+
+    .options button img {
+        width: 32px;
+        height: 32px;
+    }
+
+    .options .iconDelete {
+        width: 39px;
+        height: 39px;
+    }
+
+
 }

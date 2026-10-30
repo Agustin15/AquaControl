@@ -10,7 +10,6 @@ export const Form = ({ handleSubmit, method }) => {
     useFormPlantation();
   const { cropsTypes } = usePlantation();
 
-  console.log(valuesForm);
   return (
     <form onSubmit={(event) => handleSubmit(event)} className={styles.form}>
       <TakePhoto />

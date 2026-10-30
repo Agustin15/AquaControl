@@ -79,3 +79,79 @@
 .notification p {
     font-size: 12px;
 }
+
+@media (width>=750px) {
+    .notification {
+        top: 1rem;
+        z-index: 1;
+        margin: auto;
+        width: 30rem;
+        height: 7rem;
+        gap: 0.6rem;
+    }
+
+
+    .showNotification {
+        animation-name: showNotification;
+        animation-duration: 0.5s;
+        animation-fill-mode: forwards;
+    }
+
+    @keyframes showNotification {
+        from {
+            top: -5rem;
+        }
+
+        to {
+            top: 1rem;
+        }
+    }
+
+    .hideNotification {
+        animation-name: hideNotification;
+        animation-duration: 0.5s;
+        animation-fill-mode: forwards;
+    }
+
+    @keyframes hideNotification {
+        from {
+            top: 1rem;
+        }
+
+        to {
+            top: -5rem;
+        }
+    }
+
+    .notification .column {
+        gap: 0.3rem;
+        margin-left: 0.5rem;
+        width: 80%;
+    }
+
+    .notification img {
+        width: 60px;
+        height: 60px;
+        margin-left: 0.5rem;
+    }
+
+
+    .notification h3 {
+        font-size: 18px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.3rem;
+    }
+
+    .notification h3 img {
+        width: 29px;
+        height: 29px;
+        margin-left: 0;
+    }
+
+    .notification p {
+        font-size: 18px;
+    }
+
+}

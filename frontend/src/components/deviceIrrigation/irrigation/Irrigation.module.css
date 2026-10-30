@@ -117,3 +117,67 @@
     height: 40px;
 
 }
+
+@media (width>=750px) {
+
+    .irrigate .loadingFilter {
+        gap: 1rem;
+        margin-top: 5rem;
+        font-size: 21px;
+    }
+
+    .noData {
+        font-size: 21px;
+    }
+
+    .noData img {
+        width: 90px;
+        height: 90px;
+    }
+
+    .loader {
+        --color-1: #fff;
+        --color-2: #311e81;
+        --size: 1px;
+        width: calc(57 * var(--size));
+        height: calc(57 * var(--size));
+        border: calc(2 * var(--size)) solid var(--color-1);
+        border-bottom-color: var(--color-2);
+        border-radius: 50%;
+        display: inline-block;
+        box-sizing: border-box;
+        animation: rotation 1s linear infinite;
+    }
+
+    @keyframes rotation {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    .irrigate .option .crops li {
+        width: 4rem;
+        height: 4rem;
+        background: rgb(158, 222, 248);
+        border-radius: 2px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+    }
+
+    .irrigate .option .crops .selected {
+        border: 2px solid orange;
+    }
+
+
+    .irrigate .option .crops li img {
+        width: 60px;
+        height: 60px;
+
+    }
+}

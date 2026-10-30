@@ -1,80 +1,94 @@
 import styles from "./DrawingLevelHumidity.module.css";
 import humidityIcon from "../../../assets/img/humidityIndicator.png";
+import semicircleIcon from "../../../assets/img/semicircle.png";
 import { detailsHumidity } from "./function.js";
 
 export const DrawingLevelHumidity = ({ humidity, plantation }) => {
   let percentege = (humidity * 100) / plantation.humidityMax;
-  let heightLevel = percentege > 100 ? 100 : (percentege * 41) / 100;
+  let heightLevel = percentege > 100 ? 58 : (percentege * 58) / 100;
   let colorLevel = detailsHumidity(percentege);
 
   return (
     <div className={styles.levelHumidity}>
-      <svg width={65} height={70} viewBox="0 0 65 70">
+      <svg width={"8vw"} height={"20vh"}>
         {/*medidor humedad*/}
         <rect
-          x={10.5}
-          y={4}
-          rx={8}
-          ry={8}
-          width={16}
-          height={50}
+          x={"18%"}
+          y={"6%"}
+          rx={"13%"}
+          ry={"13%"}
+          width={"26%"}
+          height={"70%"}
           fill={"#45454598"}
         ></rect>
 
-        <circle r={13} cx={18} cy={56} fill={"#45454598"}></circle>
+        <circle r={"19%"} cx={"30.4%"} cy={"78%"} fill={"#45454598"}></circle>
 
         {/* contenido */}
-        <g transform="translate(0, 50) scale(1, -1)">
+        <g>
           <rect
-            x={14}
-            y={0}
-            rx={4}
-            ry={4}
-            width={9}
-            height={heightLevel}
+            x={"23.6%"}
+            y={"0%"}
+            rx={"6%"}
+            ry={"6%"}
+            width={"14.5%"}
+            height={heightLevel + "%"}
             fill={colorLevel}
           >
             <animate
               attributeName="height"
               dur={"1s"}
-              begin={0}
-              from={0}
-              to={heightLevel}
+              begin={"0%"}
+              from={"0%"}
+              to={heightLevel + "%"}
               repeatCount={1}
             ></animate>
           </rect>
 
           {/* shadow */}
           <rect
-            x={18.6}
-            y={0}
-            rx={4}
-            ry={4}
-            width={4}
-            height={heightLevel}
+            x={"31%"}
+            y={"0%"}
+            rx={"6%"}
+            ry={"6%"}
+            width={"7%"}
+            height={heightLevel + "%"}
             fill={"#5555552d"}
           >
             <animate
               attributeName="height"
               dur={"1s"}
-              begin={0}
-              from={0}
-              to={heightLevel}
+              begin={"0%"}
+              from={"0%"}
+              to={heightLevel + "%"}
               repeatCount={1}
             ></animate>
           </rect>
         </g>
 
-        <circle r={10} cx={18.2} cy={56} fill={colorLevel}></circle>
-        <path d="M 19,46 A 11,11 0 0,1 19,76" fill={"#5555552d"}></path>
+        <circle r={"15%"} cx={"30.5%"} cy={"78%"} fill={colorLevel}></circle>
+        <image
+          x={"15%"}
+          y={"52%"}
+          width={"32%"}
+          height={"50%"}
+          opacity={0.1}
+          href={semicircleIcon}
+        ></image>
 
         {/* imagen humedad plantacion */}
-        <image x={36} y={17} width={18} height={18} href={humidityIcon}></image>
         <image
-          x={36}
-          y={40}
-          width={25}
-          height={25}
+          x={"57%"}
+          y={"21%"}
+          width={"32%"}
+          height={"32%"}
+          href={humidityIcon}
+        ></image>
+        <image
+          x={"52%"}
+          y={"50%"}
+          width={"45%"}
+          height={"45%"}
           href={plantation.cropType.image}
         ></image>
       </svg>

@@ -97,3 +97,55 @@
     border-radius: 5px;
     font-weight: bold;
 }
+
+@media (width>=750px) {
+
+    .edit .header {
+        width: 100%;
+        height: 4rem;
+        gap: 0.6rem;
+        font-size: 17px;
+    }
+
+    .edit .header img {
+        width: 35px;
+        height: 35px;
+        margin-left: 1rem;
+    }
+
+    .edit .header button {
+        font-size: 17px;
+        right: 0.3rem;
+    }
+
+
+
+    .form .columnInput {
+        font-size: 18px;
+        width: 85%;
+    }
+
+    .form .columnInput select {
+        width: 100%;
+        height: 3.5rem;
+        font-size: 18px;
+    }
+
+
+    .form .columnInput .inputError {
+        border: 2px solid rgb(252, 62, 62);
+    }
+
+    .form .columnInput p {
+        color: red;
+        font-size: 16px;
+    }
+
+    .form .btnEdit {
+        background: rgb(16, 103, 195);
+        margin-top: 1.5rem;
+        width: 15rem;
+        padding: 0.6rem 0 0.6rem 0;
+        font-size: 18px;
+    }
+}

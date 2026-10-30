@@ -6,6 +6,13 @@
      "server": {
     "url": "http://192.168.1.12:5173",
     "cleartext": true
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 3000,
+      "launchAutoHide": true,
+      "launchFadeOutDuration": 1000
+    }
   }
   
 }

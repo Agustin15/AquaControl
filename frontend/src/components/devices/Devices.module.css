@@ -171,3 +171,94 @@
         transform: rotate(360deg);
     }
 }
+
+@media (width>=750px) {
+
+    .containDevices {
+        width: 100vw;
+        height: 100vh;
+
+    }
+
+    .containDevices nav {
+        height: 9rem;
+    }
+
+
+    .containDevices .menuProfile li h3 {
+        font-size: 25px;
+    }
+
+
+    .containDevices .menuProfile .logo img {
+        width: 70px;
+        height: 70px;
+    }
+
+    .containDevices .menuProfile .logo span {
+        font-size: 20px;
+    }
+
+    .containDevices .menuProfile .avatar {
+        font-size: 20px;
+        gap: 0.5rem;
+    }
+
+    .containDevices .menuProfile .avatar img {
+        width: 52px;
+        height: 52px;
+    }
+
+
+    .containDevices .btnRefresh img {
+        width: 50px;
+        height: 50px;
+    }
+
+
+    .loadingDevices {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        height: 90%;
+        font-size: 22px;
+    }
+
+
+    .noDevices {
+        width: 99%;
+        height: 80%;
+        font-size: 20px;
+    }
+
+    .noDevices img {
+        width: 97px;
+        height: 97px;
+    }
+
+    .loader {
+        --color-1: #fff;
+        --color-2: #311e81;
+        --size: 1px;
+        width: calc(60 * var(--size));
+        height: calc(60 * var(--size));
+        border: calc(3 * var(--size)) solid var(--color-1);
+        border-bottom-color: var(--color-2);
+        border-radius: 50%;
+        display: inline-block;
+        box-sizing: border-box;
+        animation: rotation 1s linear infinite;
+    }
+
+    @keyframes rotation {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+}

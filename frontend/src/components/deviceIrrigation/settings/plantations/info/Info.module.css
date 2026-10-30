@@ -113,3 +113,82 @@
     width: 53px;
     height: 53px;
 }
+
+@media (width>=750px) {
+
+    .infoPlantation .header {
+        width: 100%;
+        height: 4rem;
+        gap: 0.8rem;
+        position: relative;
+        color: white;
+        font-size: 17px;
+    }
+
+
+    .header img {
+        width: 36px;
+        height: 36px;
+        margin-left: 1rem;
+    }
+
+    .header button {
+        font-size: 17px;
+        color: white;
+        top: 0.2rem;
+        right: 0.3rem;
+    }
+
+    .info {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        width: 100%;
+        padding-bottom: 2rem;
+        padding-top: 2rem;
+
+    }
+
+    .info .columnTwo,
+    .info .containImage {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        width: 50%;
+        height: 100%;
+
+    }
+
+    .info li {
+        font-size: 18px;
+        width: 95%;
+        margin-top: 1rem;
+    }
+
+
+
+    .info .image {
+        width: 100%;
+        height: 12rem;
+    }
+
+
+    .info .containImage .image img {
+        width: 100%;
+        height: 100%;
+        border-radius: 5px;
+    }
+
+    .info .containImage .noImage {
+        width: 12rem;
+        height: 12rem;
+        font-size: 18px;
+
+    }
+
+    .info .containImage .noImage img {
+        width: 75px;
+        height: 75px;
+    }
+}

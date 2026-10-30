@@ -54,3 +54,46 @@
     color: red;
     font-size: 11px;
 }
+
+@media (width>=750px) {
+
+    .columnInput {
+        margin-top: 1rem;
+        font-size: 17px;
+        width: 85%;
+
+    }
+
+    .columnInput span {
+        font-size: 15px;
+        color: rgb(88, 88, 88);
+    }
+
+    .columnInput .row {
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        width: 100%;
+        position: relative;
+    }
+
+    .columnInput .row img {
+        width: 48px;
+        height: 48px;
+        position: absolute;
+        right: 1rem;
+    }
+
+
+
+    .columnInput select {
+        width: 100%;
+        height: 3.5rem;
+        font-size: 17px;
+    }
+
+    .columnInput p {
+        color: red;
+        font-size: 16px;
+    }
+}

@@ -74,3 +74,55 @@
     width: 45px;
     height: 45px;
 }
+
+@media (width>=750px) {
+
+    .containLogsWeekday .containLogs h3 {
+        margin: 0;
+        padding: 0 0 1rem 1rem;
+        width: 98%;
+        font-size: 20px;
+    }
+
+
+    .containLogsWeekday .containLogs {
+        padding-bottom: 1.4rem;
+    }
+
+    .loading,
+    .noLogs {
+        padding: 1rem 0 1rem 0;
+        font-size: 20px;
+
+    }
+
+    .loading .loader {
+        --color-1: #fff;
+        --color-2: #311e81;
+        --size: 1px;
+        width: calc(53 * var(--size));
+        height: calc(53 * var(--size));
+        border: calc(2 * var(--size)) solid var(--color-1);
+        border-bottom-color: var(--color-2);
+        border-radius: 50%;
+        display: inline-block;
+        box-sizing: border-box;
+        animation: rotation 1s linear infinite;
+    }
+
+    @keyframes rotation {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    .noLogs img {
+        width: 75px;
+        height: 75px;
+    }
+
+}

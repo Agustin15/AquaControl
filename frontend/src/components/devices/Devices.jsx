@@ -57,7 +57,7 @@ export const Devices = () => {
           </div>
         )}
 
-        {!loadingDevices && errorDevices && (
+        {loadingDevices && errorDevices && (
           <div className={styles.noDevices}>
             <img src={iconNoDevices}></img>
             <p>{errorDevices}</p>

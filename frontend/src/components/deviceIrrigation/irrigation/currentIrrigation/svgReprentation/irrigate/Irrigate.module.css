@@ -8,10 +8,10 @@
 }
 
 .actionIrrigation .lastIrrigation {
-   display: flex;
-   justify-content: center;
-   align-items: center;
-   gap: 0.3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.3rem;
 }
 
 .actionIrrigation button {
@@ -38,4 +38,29 @@
 
 .actionIrrigation .irrigationStop {
     background: rgb(39, 169, 49);
+}
+
+@media (width>=750px) {
+
+    .actionIrrigation {
+        font-size: 19px;
+        color: white;
+        gap: 1rem;
+    }
+
+
+    .actionIrrigation button {
+        width: 16rem;
+        height: 3.5rem;
+        font-size: 19px;
+        border-radius: 30px;
+
+    }
+
+    .actionIrrigation button:hover {
+        width: 16rem;
+        height: 3.5rem;
+        font-size: 19px;
+
+    }
 }

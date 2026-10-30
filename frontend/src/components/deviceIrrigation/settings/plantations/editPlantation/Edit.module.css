@@ -57,3 +57,34 @@
     border: none;
     font-size: 12px;
 }
+
+@media (width>=750px) {
+    .edit {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 85%;
+        height: 85%;
+        border-radius: 5px;
+        background: white;
+        padding-bottom: 2rem;
+    }
+
+    .edit .header {
+        width: 100%;
+        height: 5rem;
+        font-size: 17px;
+        gap: 1rem;
+    }
+
+    .edit .header img {
+        width: 36px;
+        height: 36px;
+        margin-left: 1rem;
+    }
+
+    .edit .header button {
+        font-size: 17px;
+    }
+
+}

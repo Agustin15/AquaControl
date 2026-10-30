@@ -18,7 +18,7 @@
     background: rgba(5, 32, 95, 0.266);
     border-radius: 8px;
     padding: 1rem 0 1rem 0;
-  
+
 }
 
 .menu li {
@@ -29,6 +29,13 @@
     font-size: 14px;
 }
 
+
+.menu li img {
+    width: 29px;
+    height: 29px;
+
+}
+
 .menu li button {
     background: none;
     border: none;
@@ -37,4 +44,24 @@
 .menu li button:hover,
 .menu li .selected {
     opacity: 0.8;
+}
+
+
+
+@media (width>=750px) {
+
+    .menu ul {
+        gap: 1.5rem;
+        height: 100%;
+        width: 6rem;
+        border-radius: 15px;
+    }
+
+    .menu li img {
+        width: 52px;
+        height: 52px;
+
+    }
+
+
 }

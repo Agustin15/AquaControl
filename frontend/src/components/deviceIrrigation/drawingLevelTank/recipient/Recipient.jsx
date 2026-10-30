@@ -3,24 +3,30 @@ import iconDrop from "../../../../assets/img/drop.svg";
 export const Recipient = () => {
   return (
     <>
-      <image width={14} height={14} x={22} y={29} href={iconDrop}></image>
+      <image
+        width={"25%"}
+        height={"25%"}
+        x={"44%"}
+        y={"41%"}
+        href={iconDrop}
+      ></image>
 
       <ellipse
-        rx={20}
-        ry={8}
-        cx={25}
-        cy={14}
+        rx={"38%"}
+        ry={"13%"}
+        cx={"48%"}
+        cy={"15%"}
         opacity={0.2}
         fill={"rgb(240, 240, 240)"}
       />
 
       <rect
-        rx={5}
-        ry={5}
-        x={5}
-        y={11}
-        width={40}
-        height={51}
+        rx={"20%"}
+        ry={"10%"}
+        x={"10%"}
+        y={"8%"}
+        width={"76%"}
+        height={"87%"}
         opacity={0.1}
         fill={"rgb(174, 171, 171)"}
       ></rect>

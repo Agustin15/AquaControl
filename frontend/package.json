@@ -16,6 +16,7 @@
     "@capacitor/device": "^8.0.3",
     "@capacitor/filesystem": "^8.1.2",
     "@capacitor/push-notifications": "^8.1.2",
+    "@capacitor/splash-screen": "^8.0.2",
     "capacitor-secure-storage-plugin": "^0.13.0",
     "mqtt": "^5.15.2",
     "react": "^19.2.7",

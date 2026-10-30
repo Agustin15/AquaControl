@@ -25,3 +25,18 @@
 .menu .selected {
     background: rgba(121, 178, 221, 0.642);
 }
+
+@media (width>=750px) {
+
+    .menu {
+        gap: 1rem;
+        width: 85%;
+        list-style: none;
+    }
+    .menu li {
+        width: 11rem;
+        height: 3rem;
+        font-size: 17px;
+    }
+
+}

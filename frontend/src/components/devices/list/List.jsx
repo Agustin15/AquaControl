@@ -29,14 +29,14 @@ export const List = () => {
       <ul className={styles.listDevices}>
         {devices.map((device, index) => (
           <li key={index}>
-            {device.linked && (
+          
               <button
                 onClick={() => setShowOption(showOption ? false : true)}
                 className={styles.moreOptions}
               >
                 <img src={iconMore}></img>
               </button>
-            )}
+           
             {showOption && (
               <Options
                 device={device}

@@ -2,64 +2,59 @@ import styles from "./DrawingLevelTank.module.css";
 import { Recipient } from "./recipient/Recipient";
 
 export const DrawingLevelTank = ({ currentLevelTank }) => {
+  
   const liquidHeight =
-    currentLevelTank < 16 ? 0 : (currentLevelTank * 50) / 100;
+    currentLevelTank < 25 ? 25 : (currentLevelTank * 90) / 100;
 
-  const topLiquidHeight =
-    (currentLevelTank * 56) / 100 < 16 ? 16 : (currentLevelTank * 56) / 100;
+  const topLiquidHeight = currentLevelTank < 25 ? 25 : liquidHeight + 2;
 
   return (
     <div className={styles.levelTank}>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 50 65"
-        width={50}
-        height={65}
-      >
+      <svg width={"8vw"} height={"18vh"}>
         {/* base recipiente */}
         <ellipse
-          rx={20}
-          ry={8}
-          cx={25}
-          cy={55}
+          rx={"38%"}
+          ry={"13%"}
+          cx={"48%"}
+          cy={"86%"}
           opacity={0.2}
           fill={"rgb(240, 240, 240)"}
         />
 
         {/* agua*/}
-        <g transform="translate(0, 70) scale(1, -1)">
+        <g>
           <rect
-            rx={14}
-            ry={7}
-            x={11}
-            y={10}
-            width={28}
-            height={liquidHeight}
+            rx={"35%"}
+            ry={"13%"}
+            x={"19%"}
+            y={"12%"}
+            width={"58%"}
+            height={liquidHeight + "%"}
             fill={"rgb(57, 182, 191)"}
           >
             <animate
               attributeName={"height"}
               begin={0}
-              dur={"3s"}
-              from={50}
-              to={liquidHeight}
+              dur={"2s"}
+              from={"90%"}
+              to={liquidHeight + "%"}
               repeatCount={1}
             />
           </rect>
 
           <ellipse
-            rx={14}
-            ry={7}
-            cx={25}
-            cy={topLiquidHeight}
+            rx={"29%"}
+            ry={"10%"}
+            cx={"48%"}
+            cy={topLiquidHeight + "%"}
             fill={"rgb(78, 210, 219)"}
             strokeWidth={2}
           >
             <animate
               attributeName={"cy"}
-              dur={"2.3s"}
-              from={56}
-              to={topLiquidHeight}
+              dur={"2s"}
+              from={"92%"}
+              to={topLiquidHeight + "%"}
               repeatCount={1}
             />
           </ellipse>

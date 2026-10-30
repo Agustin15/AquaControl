@@ -43,3 +43,28 @@
     height: 31px;
     margin-left: 0.5rem;
 }
+
+@media (width>=750px) {
+
+    .currentIrrigate .details {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .currentIrrigate .details li {
+        gap: 0.8rem;
+        padding-left: 0.2rem;
+        width: 25rem;
+        height: 8rem;
+        font-size: 17px;
+
+    }
+
+    .currentIrrigate .details img {
+        width: 46px;
+        height: 46px;
+        margin-left: 0.5rem;
+    }
+}

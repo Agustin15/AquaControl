@@ -115,3 +115,124 @@
     background: rgb(202, 25, 25);
     margin-top: 0;
 }
+
+@media (width>=750px) {
+    .iconCustom {
+        width: 6rem;
+        height: 6rem;
+        margin-top: 1rem;
+    }
+
+    .popupAlertError,
+    .popupAlertSuccess,
+    .popupAlertWarning {
+        width: 30rem;
+    }
+
+    .popupAlertError h2,
+    .popupAlertSuccess h2,
+    .popupAlertWarning h2 {
+        font-size: 18px;
+        margin: 0;
+        padding: 0;
+    }
+
+    .popupAlertError .swal2-icon,
+    .popupAlertSuccess .swal2-icon,
+    .popupAlertWarning .swal2-icon {
+        width:90px;
+        height: 90px;
+        margin-top: 1rem;
+    }
+
+    .popupAlertError .swal2-x-mark-line-left,
+    .popupAlertError .swal2-x-mark-line-right {
+        font-size: 18px;
+    }
+
+    .popupAlertSuccess .swal2-success-line-tip,
+    .popupAlertSuccess .swal2-success-line-long {
+        font-size: 18px;
+    }
+
+    .popupAlertError p,
+    .popupAlertSuccess p {
+        font-size: 18px;
+    }
+
+    .popupAlertError button,
+    .popupAlertSuccess button,
+    .popupAlertWarning button {
+        width: 7rem;
+        height: 3rem;
+        font-size: 18px;
+        background: red;
+        margin: 0;
+    }
+
+    .popupAlertSuccess button {
+        background: rgb(33, 181, 50);
+    }
+
+    .popupAlertWarning button {
+        background: rgb(230, 172, 57);
+    }
+
+    .popupAlertConfirmDelete {
+        width: 36rem;
+    }
+
+    .popupAlertConfirmDelete button {
+        width: 12rem;
+        height: 3rem;
+        font-size: 17px;
+    }
+
+    .popupAlertConfirmDelete .swal2-icon-content,
+    .popupAlertWarning .swal2-icon-content {
+        font-size: 60px;
+    }
+
+    .popupAlertConfirmDelete .confirmButton {
+        background: red;
+    }
+
+    .popupAlertConfirmDelete .denyButton {
+        background: rgb(36, 34, 34);
+    }
+
+    .popupAlertConfirmDelete h2 {
+        font-size: 17px;
+    }
+
+
+    .titleLoading {
+        font-size: 17px;
+    }
+
+    .popupAlertIrrigation {
+        width: 32rem;
+        height: auto;
+    }
+
+    .popupAlertIrrigation img {
+        margin-top: 0.5rem;
+        margin-bottom: 0;
+        padding: 0;
+    }
+
+    .popupAlertIrrigation h2 {
+        margin: 0.5rem 0 0 0;
+        padding: 0;
+        font-size: 19px;
+    }
+
+    .popupAlertIrrigation button {
+        width: 7rem;
+        height: 3rem;
+        font-size: 17px;
+        background: rgb(202, 25, 25);
+        margin-top: 0;
+    }
+
+}

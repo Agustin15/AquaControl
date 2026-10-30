@@ -43,3 +43,38 @@
     right: 0.3rem;
 }
 
+
+@media (width>=750px) {
+
+    .add {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 45%;
+        height: auto;
+        border-radius: 5px;
+        background: white;
+        padding-bottom: 1rem;
+    }
+
+    .add .header {
+        width: 100%;
+        height: 4rem;
+        gap: 0.8rem;
+        position: relative;
+        color: white;
+        font-size: 16px;
+    }
+
+    .add .header img {
+        width: 30px;
+        height: 30px;
+        margin-left: 1rem;
+    }
+
+    .add .header button {
+        font-size: 17px;
+    }
+
+
+}

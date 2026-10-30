@@ -28,7 +28,7 @@ export const alertError = (title, error) => {
     html: `<p>${message}</p>`,
     icon: "error",
     customClass: {
-      popup:"popupAlertError",
+      popup: "popupAlertError",
     },
   });
 };
@@ -38,7 +38,7 @@ export const alertSuccess = (title) => {
     title: title,
     icon: "success",
     customClass: {
-     popup:"popupAlertSuccess",
+      popup: "popupAlertSuccess",
     },
   });
 };
@@ -49,7 +49,7 @@ export const alertWarning = (title) => {
     icon: "warning",
     customClass: {
       icon: "iconCustom",
-      popup:"popupAlertWarning"
+      popup: "popupAlertWarning",
     },
   });
 };
@@ -77,8 +77,8 @@ export const alertErrorIrrigation = (title, icon) => {
   Swal.fire({
     title: title,
     imageUrl: icon,
-    imageHeight: "66",
-    imageWidth: "66",
+    imageHeight: window.innerWidth >= 750 ? "100" : "66",
+    imageWidth: window.innerWidth >= 750 ? "100" : "66",
     customClass: {
       popup: "popupAlertIrrigation",
     },

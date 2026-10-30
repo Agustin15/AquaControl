@@ -19,3 +19,23 @@
     margin-top: -0.5rem;
 
 }
+
+@media (width>=750px) {
+
+    .loadingScreen {
+        font-size: 25px;
+        height: 100vh;
+    }
+
+    .loadingScreen img {
+        width: 172px;
+        height: 172px;
+
+    }
+
+    .loadingScreen h3 {
+        margin-top: -0.5rem;
+
+    }
+
+}

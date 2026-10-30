@@ -1,4 +1,6 @@
 import styles from "./Notification.module.css";
+import iconWarning from "../../../assets/img/warning.png";
+import iconSuccess from "../../../assets/img/tick.png";
 import { useAuth } from "../../../contexts/AuthContext";
 import { useEffect, useState } from "react";
 import { useUserDevicesTokens } from "../../../contexts/UserDevicesTokenContext";
@@ -45,7 +47,13 @@ export const Notification = () => {
           <img src={getIcon(notificationReceived.title)} />
           <div className={styles.column}>
             <h3>
-              <img src={getIcon(notificationReceived.title)} />
+              <img
+                src={
+                  notificationReceived.alertType == "Advertencia"
+                    ? iconWarning
+                    : iconSuccess
+                }
+              />
               {notificationReceived.title}
             </h3>
             <p>{notificationReceived.body}</p>

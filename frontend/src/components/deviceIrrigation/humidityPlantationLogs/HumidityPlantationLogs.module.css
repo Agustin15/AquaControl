@@ -20,12 +20,12 @@
 .humidityPlantationLogs .header .title h3 {
     margin: 0;
     padding: 0;
-    font-size: 16px;
+    font-size: 15px;
 }
 
 .humidityPlantationLogs .header .title img {
-    width: 28px;
-    height: 28px;
+    width: 26px;
+    height: 26px;
 }
 
 .humidityPlantationLogs .header {
@@ -124,10 +124,103 @@
 
 
 .humidityPlantationLogs .plantationList li img {
-    width: 29px;
-    height: 29px;
+    width: 35px;
+    height: 35px;
 }
 
 .humidityPlantationLogs .plantationList .selected {
     border: 2px solid orange;
+}
+
+@media (width>=750px) {
+
+    .humidityPlantationLogs {
+        gap: 1rem;
+    }
+
+    .humidityPlantationLogs .header .title {
+        gap: 0.6rem;
+    }
+
+    .humidityPlantationLogs .header .title h3 {
+        margin: 0;
+        padding: 0;
+        font-size: 24px;
+    }
+
+    .humidityPlantationLogs .header .title img {
+        width: 45px;
+        height: 45px;
+    }
+
+    .humidityPlantationLogs .loadingFilter {
+        gap: 1rem;
+        margin-top: 5rem;
+        font-size: 21px;
+    }
+
+    .humidityPlantationLogs .loadingFilter p,
+    .humidityPlantationLogs .noPlantations p {
+        margin: 0;
+        padding: 0;
+        color: white;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .noPlantations {
+        width: 99%;
+        margin-top: 5rem;
+        font-size: 20px;
+    }
+
+    .noPlantations img {
+        width: 100px;
+        height: 100px;
+    }
+
+    .loader {
+        --color-1: #fff;
+        --color-2: #311e81;
+        --size: 1px;
+        width: calc(55 * var(--size));
+        height: calc(55 * var(--size));
+        border: calc(2 * var(--size)) solid var(--color-1);
+        border-bottom-color: var(--color-2);
+        border-radius: 50%;
+        display: inline-block;
+        box-sizing: border-box;
+        animation: rotation 1s linear infinite;
+    }
+
+    @keyframes rotation {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    .humidityPlantationLogs .plantationList {
+        width: 95%;
+        gap: 1rem;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .humidityPlantationLogs .plantationList li {
+        width: 4rem;
+        height: 4rem;
+    }
+
+
+    .humidityPlantationLogs .plantationList li img {
+        width: 60px;
+        height: 60px;
+    }
+
+
 }

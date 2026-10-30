@@ -57,7 +57,7 @@ export const Irrigate = () => {
   }, []);
 
   return (
-    <li className={styles.actionIrrigation}>
+    <div className={styles.actionIrrigation}>
       <div className={styles.lastIrrigation}>
         Ultimo riego:
         {lastWaterPlantation ? (
@@ -81,6 +81,6 @@ export const Irrigate = () => {
       >
         {!waterPlantationLiveInProgress ? "Iniciar riego" : "Detener riego"}
       </button>
-    </li>
+    </div>
   );
 };

@@ -30,7 +30,7 @@ export const Menu = ({ optionSelected, setOptionSelected }) => {
             onClick={() => setOptionSelected("WaterTankLogs")}
             className={optionSelected == "WaterTankLogs" ? styles.selected : ""}
           >
-            <img width={"34px"} height={"34px"} src={iconWaterTank} />
+            <img src={iconWaterTank} />
           </button>
         </li>
         <li>
@@ -40,23 +40,23 @@ export const Menu = ({ optionSelected, setOptionSelected }) => {
               optionSelected == "HumidityPlantationLogs" ? styles.selected : ""
             }
           >
-            <img width={"30px"} height={"30px"} src={iconHumidity} />
+            <img src={iconHumidity} />
           </button>
         </li>
         <li className={optionSelected == "Irrigation" ? styles.selected : ""}>
           <button onClick={() => setOptionSelected("Irrigation")}>
-            <img width={"31px"} height={"31px"} src={iconWaterPlantation} />
+            <img src={iconWaterPlantation} />
           </button>
         </li>
         <li>
           <button onClick={() => setOptionSelected("Alerts")}>
-            <img width={"33px"} height={"33px"} src={iconAlert} />
+            <img src={iconAlert} />
           </button>
         </li>
         {userIsOperator && (
           <li>
             <button onClick={() => setOptionSelected("Settings")}>
-              <img width={"33px"} height={"33px"} src={iconSetting} />
+              <img src={iconSetting} />
             </button>
           </li>
         )}

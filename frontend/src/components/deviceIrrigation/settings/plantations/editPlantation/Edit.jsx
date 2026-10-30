@@ -12,7 +12,7 @@ import {
 export const Edit = () => {
   const { setEditPlantation, editPlantation, getPlantations } = usePlantation();
 
-  const { fetchPostOrPut, valuesForm, setErrorsForm, clean } =
+  const { fetchPostOrPut, setErrorsForm, clean, valuesForm } =
     useFormPlantation();
 
   const handleSubmit = async (event) => {

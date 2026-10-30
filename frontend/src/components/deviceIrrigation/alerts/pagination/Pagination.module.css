@@ -15,3 +15,17 @@
     border-radius: 3px;
 
 }
+
+@media (width>=750px) {
+
+    .pagination {
+        font-size: 20px;
+    }
+
+    .pagination input {
+        width: 3.5rem;
+        height: 2.5rem;
+        font-size: 20px;
+
+    }
+}

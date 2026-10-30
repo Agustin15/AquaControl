@@ -27,3 +27,13 @@
 .btnClean {
     background: rgb(205, 72, 72);
 }
+
+@media (width>=750px) {
+
+    .options button {
+        margin-top: 1rem;
+        width: 16rem;
+        font-size: 19px;
+    }
+
+}

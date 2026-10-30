@@ -9,3 +9,6 @@
     margin-top: -0.4rem;
 }
 
+.levelHumidity g {
+  transform: translate(0, 69%) scale(1, -1);
+}

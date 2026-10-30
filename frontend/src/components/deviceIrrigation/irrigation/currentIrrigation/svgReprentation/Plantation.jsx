@@ -5,10 +5,10 @@ import { useMqtt } from "../../../../../contexts/MqttContext";
 export const Plantation = () => {
   const { plantationLiveSelected } = useMqtt();
 
-  let xPair = 173;
-  let yPair = 30;
-  let xImpair = 200;
-  let yImpair = 45;
+  let xPair = 55;
+  let yPair = 9;
+  let xImpair = 64
+  let yImpair = 19;
 
   const coordinatesCornsInGarden = [];
 
@@ -23,12 +23,12 @@ export const Plantation = () => {
 
     for (let i = 3; i <= limitDrawingSown; i++) {
       if (i % 2 == 0) {
-        xPair -= 22;
-        yPair += 10;
+        xPair -= 8.5;
+        yPair += 8.5;
         coordinatesCornsInGarden.push({ x: xPair, y: yPair });
       } else if (i % 2 != 0) {
-        xImpair -= 22;
-        yImpair += 10;
+        xImpair -= 8.5;
+        yImpair += 8.5;
         coordinatesCornsInGarden.push({ x: xImpair, y: yImpair });
       }
     }
@@ -40,19 +40,19 @@ export const Plantation = () => {
         href={
           plantationLiveSelected.amountPlants == 1 ? iconMiniGarden : iconGarden
         }
-        x={30}
-        y={-45}
-        width={275}
-        height={275}
+        x={"10%"}
+        y={"7%"}
+        width={"95%"}
+        height={"95%"}
       ></image>
 
       {plantationLiveSelected.amountPlants == 1 && (
         <image
           href={plantationLiveSelected.cropType.image}
-          x={125}
-          y={47}
-          width={66}
-          height={66}
+          x={"34%"}
+          y={"20%"}
+          width={"44%"}
+          height={"44%"}
         ></image>
       )}
 
@@ -61,10 +61,10 @@ export const Plantation = () => {
           <image
             key={index}
             href={plantationLiveSelected.cropType.image}
-            x={coordinate.x}
-            y={coordinate.y}
-            width={42}
-            height={42}
+            x={coordinate.x + "%"}
+            y={coordinate.y + "%"}
+            width={"29%"}
+            height={"29%"}
           ></image>
         ))}
     </>

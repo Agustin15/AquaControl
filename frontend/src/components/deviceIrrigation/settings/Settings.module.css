@@ -57,3 +57,37 @@
 .settings .selected {
     border-bottom: 2px solid white;
 }
+
+@media (width>=750px) {
+
+    .settings h3 {
+        font-size: 21px;
+        color: white;
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        width: 100%;
+        gap: 1rem;
+
+    }
+
+    .settings h3 img {
+        width: 41px;
+        height: 41px;
+    }
+
+    .settings .crud {
+        gap: 1.5rem;
+    }
+
+    .settings .menu {
+        font-size: 19px;
+        height: 4rem;
+    }
+
+    .settings .selected {
+        border-bottom: 3px solid white;
+    }
+
+
+}

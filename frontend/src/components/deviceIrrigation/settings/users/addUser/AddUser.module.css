@@ -63,6 +63,7 @@
     margin-top: 0.5rem;
     overflow-y: scroll;
 }
+
 .form .btnAdd,
 .form .btnAddDisabled {
     background: rgb(55, 195, 16);
@@ -77,4 +78,55 @@
 .form .btnAddDisabled {
     background: rgb(55, 195, 16);
     opacity: 55%;
+}
+
+@media (width>=750px) {
+    .add {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 65%;
+        height: auto;
+    }
+
+    .add .header {
+        gap: 0.4rem;
+        height: 3.7rem;
+        font-size: 17px;
+        width: 100%;
+    }
+
+    .add .header img {
+        width: 27px;
+        height: 27px;
+        margin-left: 1rem;
+    }
+
+    .add .header button {
+        font-size: 17px;
+    }
+
+
+    .form {
+        font-size: 18px;
+        width: 85%;
+        height: 100%;
+        margin-top: 0.5rem;
+        overflow-y: scroll;
+    }
+
+    .form .btnAdd,
+    .form .btnAddDisabled {
+        background: rgb(55, 195, 16);
+        width: 16rem;
+        height: 3rem;
+        font-size: 18px;
+        padding: 0.4rem 0 0.4rem 0;
+    }
+
+    .form .btnAddDisabled {
+        background: rgb(55, 195, 16);
+        opacity: 55%;
+    }
+
 }
